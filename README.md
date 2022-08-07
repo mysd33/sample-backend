@@ -41,7 +41,7 @@
         * BODY 
         ```json
         {
-            "todoTitle": "Hello World!"
+            "todo_title": "Hello World!"
         }        
         ```
     * TODOの登録2
@@ -49,7 +49,7 @@
         * BODY 
         ```json
         {
-            "todoTitle": "Good Afternoon!"
+            "todo_title": "Good Afternoon!"
         }        
         ```
     * TODO一覧の取得

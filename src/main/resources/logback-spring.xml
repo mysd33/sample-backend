@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include
+		resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+	<property name="LOG_FILE"
+		value="${app.log.dir:-log}/osk-application.log" />
+	<!-- <property name="CONSOLE_LOG_PATTERN" value="..."/> -->
+	<!-- <property name="FILE_LOG_PATTERN" value="..."/> -->
+
+	<springProfile name="log_default">
+		<include
+			resource="org/springframework/boot/logging/logback/console-appender.xml" />
+		<include
+			resource="org/springframework/boot/logging/logback/file-appender.xml" />
+		<root level="INFO">
+			<appender-ref ref="CONSOLE" />
+			<appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+	<springProfile name="log_container">
+		<!-- Console Appender in a JSON format -->
+		<appender name="CONSOLE"
+			class="ch.qos.logback.core.ConsoleAppender">
+			<encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+		</appender>
+		<root level="INFO">
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+</configuration>

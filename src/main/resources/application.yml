@@ -1,0 +1,9 @@
+spring:    
+  profiles:
+    active:
+    - dev
+    - log_default  #logging in default format
+#    - log_container  #logging in json format
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
