@@ -1,5 +1,8 @@
 package com.example.fw.web.aspect;
 
+import static com.example.fw.common.message.FrameworkMessageIds.I_FW_0001;
+import static com.example.fw.common.message.FrameworkMessageIds.I_FW_0002;
+
 import java.util.Arrays;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,8 +14,6 @@ import com.example.fw.common.exception.SystemException;
 import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
 import com.example.fw.common.logging.MonitoringLogger;
-import static com.example.fw.common.message.FrameworkMessageIds.I_FW_0001;
-import static com.example.fw.common.message.FrameworkMessageIds.I_FW_0002;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,24 +33,22 @@ public class LogAspect {
 	@Setter
 	private String defaultExceptionMessageId;
 
+	@Around("@within(org.springframework.web.bind.annotation.RestController)")
+	public Object aroundRestControllerLog(final ProceedingJoinPoint jp) throws Throwable {
+		appLogger.debug("RestController開始：{}", jp.getSignature());
+		Object result = jp.proceed();
+		appLogger.debug("RestController終了：{}", jp.getSignature());
+		return result;		
+	}
+
 	@Around("@within(org.springframework.stereotype.Controller)")
 	public Object aroundControllerLog(final ProceedingJoinPoint jp) throws Throwable {
 		appLogger.debug("Controller開始：{}", jp.getSignature());
-		try {
-			Object result = jp.proceed();
-			appLogger.debug("Controller終了：{}", jp.getSignature());
-			return result;
-		} catch (SystemException e) {
-			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
-			monitoringLogger.error(e.getCode(), logFormat, e, e.getArgs());
-			throw e;
-		} catch (Exception e) {
-			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
-			monitoringLogger.error(defaultExceptionMessageId, logFormat, e);
-			throw e;
-		}
+		Object result = jp.proceed();
+		appLogger.debug("Controller終了：{}", jp.getSignature());
+		return result;		
 	}
-
+	
 	@Around("@within(org.springframework.stereotype.Service)")
 	public Object aroundServiceLog(final ProceedingJoinPoint jp) throws Throwable {
 		appLogger.info(I_FW_0001, jp.getSignature(), Arrays.asList(jp.getArgs()));
@@ -60,6 +59,14 @@ public class LogAspect {
 		} catch (BusinessException e) {
 			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
 			appLogger.warn(e.getCode(), logFormat, e, e.getArgs());
+			throw e;
+		} catch (SystemException e) {
+			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
+			monitoringLogger.error(e.getCode(), logFormat, e, e.getArgs());
+			throw e;
+		} catch (Exception e) {
+			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
+			monitoringLogger.error(defaultExceptionMessageId, logFormat, e);
 			throw e;
 		}
 	}

@@ -1,17 +1,20 @@
 package com.example.fw.web.advice;
 
 
+import java.util.Locale;
+
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
-import com.example.fw.common.message.ResultMessage;
-import com.example.fw.common.message.ResultMessageType;
-import static com.example.fw.common.message.FrameworkMessageIds.E_FW_9001;
+import com.example.fw.web.resource.ErrorResponse;
+
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * 
@@ -19,35 +22,31 @@ import static com.example.fw.common.message.FrameworkMessageIds.E_FW_9001;
  *
  */
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalRestControllerAdvice {
-	//TODO:集約例外ハンドリングのブラッシュアップ
+	private final MessageSource messageSource;
+	
+	@Setter
+	private String defaultExceptionMessageId;
+		
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse bussinessExceptionHandler(final BusinessException e) {
+    	String message = messageSource.getMessage(e.getCode(), e.getArgs(), Locale.getDefault()); 
+        return ErrorResponse.builder().code(e.getCode()).message(message).build();
+    }
+    
     @ExceptionHandler(SystemException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String systemExceptionHandler(final SystemException e, final Model model) {
-        // 例外クラスのメッセージをModelに登録
-        model.addAttribute(ResultMessage.builder()
-        		.type(ResultMessageType.ERROR)
-        		.code(e.getCode())
-        		.build()
-        );
-        model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR);
-        return "error";
+    public ErrorResponse systemExceptionHandler(final SystemException e) {
+    	String message = messageSource.getMessage(e.getCode(), e.getArgs(), Locale.getDefault()); 
+    	return ErrorResponse.builder().code(e.getCode()).message(message).build();
     }
     
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String exceptionHandler(final Exception e, final Model model) {
-
-        // 例外クラスのメッセージをModelに登録
-        model.addAttribute(ResultMessage.builder()
-        		.type(ResultMessageType.ERROR)
-        		.code(E_FW_9001)
-        		.build()
-        );
-        
-        // HTTPのエラーコード（500）をModelに登録
-        model.addAttribute("status", HttpStatus.INTERNAL_SERVER_ERROR);
-        
-        return "error";
+    public ErrorResponse exceptionHandler(final Exception e) {
+    	String message = messageSource.getMessage(defaultExceptionMessageId, null,  Locale.getDefault()); 
+    	return ErrorResponse.builder().code(defaultExceptionMessageId).message(message).build();        
     }
 }
