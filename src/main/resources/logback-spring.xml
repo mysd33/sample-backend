@@ -4,7 +4,7 @@
 		resource="org/springframework/boot/logging/logback/defaults.xml" />
 
 	<property name="LOG_FILE"
-		value="${app.log.dir:-log}/osk-application.log" />
+		value="${app.log.dir:-log}/backend-application.log" />
 	<!-- <property name="CONSOLE_LOG_PATTERN" value="..."/> -->
 	<!-- <property name="FILE_LOG_PATTERN" value="..."/> -->
 
