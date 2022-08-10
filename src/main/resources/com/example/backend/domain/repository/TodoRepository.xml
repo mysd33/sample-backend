@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.domain.repository.TodoRepository">
+
+    <!-- マッピング定義 -->
+    <resultMap id="todoResultMap" type="Todo">
+        <id property="todoId" column="todo_id" />
+        <result property="todoTitle" column="todo_title" />
+        <result property="finished" column="finished" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <!-- １件検索 -->
+    <select id="findById" parameterType="String" resultMap="todoResultMap">
+    <![CDATA[
+        SELECT
+            todo_id,
+            todo_title,
+            finished,
+            created_at
+        FROM
+            todo
+        WHERE
+            todo_id = #{todoId}
+    ]]>
+    </select>
+
+    <!-- 全件取得 -->
+    <select id="findAll" resultMap="todoResultMap">
+    <![CDATA[
+        SELECT
+            todo_id,
+            todo_title,
+            finished,
+            created_at
+        FROM
+            todo
+    ]]>
+    </select>
+
+    <!-- 登録 -->
+    <insert id="create" parameterType="Todo">
+    <![CDATA[
+        INSERT INTO todo
+        (
+            todo_id,
+            todo_title,
+            finished,
+            created_at
+        )
+        VALUES
+        (
+            #{todoId},
+            #{todoTitle},
+            #{finished},
+            #{createdAt}
+        )
+    ]]>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="Todo">
+    <![CDATA[
+        UPDATE todo
+        SET
+            todo_title = #{todoTitle},
+            finished = #{finished},
+            created_at = #{createdAt}
+        WHERE
+            todo_id = #{todoId}
+    ]]>
+    </update>
+
+    <!-- 削除 -->
+    <delete id="delete" parameterType="Todo">
+    <![CDATA[
+        DELETE FROM
+            todo
+        WHERE
+            todo_id = #{todoId}
+    ]]>
+    </delete>
+
+    <!-- 完了件数取得-->
+    <select id="countByFinished" parameterType="Boolean"
+        resultType="Long">
+    <![CDATA[
+        SELECT
+            COUNT(*)
+        FROM
+            todo
+        WHERE
+            finished = #{finished}
+    ]]>
+    </select>
+
+</mapper>

@@ -15,7 +15,7 @@ import com.example.fw.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 
 /**
- * TodoService実装
+ * TodoServiceの実装クラス
  */
 @Service
 @Transactional

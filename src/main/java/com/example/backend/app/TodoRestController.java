@@ -33,7 +33,7 @@ public class TodoRestController {
         Collection<Todo> todos = todoService.findAll();
         List<TodoResource> todoResources = new ArrayList<>();
         for (Todo todo : todos) {
-            todoResources.add(TodoMapper.INSTANCE.ModelToResource(todo));
+            todoResources.add(TodoMapper.INSTANCE.modelToResource(todo));
         }
         return todoResources;
     }
@@ -42,15 +42,15 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.OK)
     public TodoResource getTodo(@PathVariable("todoId") String todoId) {
         Todo todo = todoService.findOne(todoId); // (3)
-        TodoResource todoResource = TodoMapper.INSTANCE.ModelToResource(todo);
+        TodoResource todoResource = TodoMapper.INSTANCE.modelToResource(todo);
         return todoResource;
     }
     
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) 
     public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) { 
-        Todo createdTodo = todoService.create(TodoMapper.INSTANCE.ResourceToModel(todoResource));
-        TodoResource createdTodoResponse = TodoMapper.INSTANCE.ModelToResource(createdTodo);
+        Todo createdTodo = todoService.create(TodoMapper.INSTANCE.resourceToModel(todoResource));
+        TodoResource createdTodoResponse = TodoMapper.INSTANCE.modelToResource(createdTodo);
         return createdTodoResponse;
     }
   
@@ -59,7 +59,7 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.OK)
     public TodoResource putTodo(@PathVariable("todoId") String todoId) {
         Todo finishedTodo = todoService.finish(todoId);
-        TodoResource finishedTodoResource = TodoMapper.INSTANCE.ModelToResource(finishedTodo);
+        TodoResource finishedTodoResource = TodoMapper.INSTANCE.modelToResource(finishedTodo);
         return finishedTodoResource;
     }
     

@@ -7,3 +7,8 @@ spring:
 
   jackson:
     property-naming-strategy: SNAKE_CASE
+    
+mybatis:
+  type-aliases-package: com.example.backend.domain.model     
+  configuration:
+    map-underscore-to-camel-case: true    

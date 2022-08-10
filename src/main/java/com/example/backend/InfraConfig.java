@@ -14,8 +14,8 @@ import com.example.backend.infra.repository.TodoRepositoryStub;
 @Configuration
 public class InfraConfig {
 
-	//TODO: MyBatisでRDBアクセスするようにいずれ変更	
-	@Bean
+	//MyBatisでRDBアクセスしない場合のスタブ	
+	//@Bean
 	public TodoRepository todoRepository() {
 		return new TodoRepositoryStub();
 	}
