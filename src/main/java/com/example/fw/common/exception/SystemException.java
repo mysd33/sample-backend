@@ -21,6 +21,10 @@ public class SystemException extends RuntimeException {
 	@Getter
 	private final Object[] args;
 
+	// エラーメッセージオブジェクトを返却する
+	@Getter
+	private final ResultMessage resultMessage;
+
 	/**
 	 * コンストラクタ
 	 * 
@@ -53,20 +57,34 @@ public class SystemException extends RuntimeException {
 		Assert.notNull(args, "argsがNullです。");
 		this.code = code;
 		this.args = args;
+		this.resultMessage = ResultMessage.builder().type(ResultMessageType.ERROR).code(code).args(args).build();				
 	}
-
+	
 	/**
-	 * エラーメッセージオブジェクトを返却する
-	 * 
-	 * @return エラーメッセージオブジェクト
+	 * コンストラクタ
+	 * @param resultMessage エラーメッセージオブジェクト
 	 */
-	public ResultMessage getResultMessage() {
-		return ResultMessage.builder().type(ResultMessageType.ERROR).code(code).args(args).build();
+	public SystemException(final ResultMessage resultMessage) {
+		this(null, resultMessage);
 	}
+	
+	/**
+	 * コンストラクタ
+	 * @param cause 原因となったエラーオブジェクト
+	 * @param resultMessage エラーメッセージオブジェクト
+	 */
+	public SystemException(final Throwable cause,  final ResultMessage resultMessage) {
+		super(cause);
+		Assert.notNull(resultMessage, "resutlMessageがNullです。");
+		this.code = resultMessage.getCode();
+		this.args = resultMessage.getArgs();
+		this.resultMessage = resultMessage;		
+	}
+	
 
 	@Override
 	public String getMessage() {
-		return getResultMessage().toString();
+		return this.resultMessage.toString();
 	}
 
 }

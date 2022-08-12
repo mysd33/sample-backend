@@ -21,6 +21,8 @@ public class ResultMessage implements Serializable{
 	private String code;	//コード
 	
 	private Object[] args;		//置換文字列
+	
+	private String message; 	//メッセージ（直接メッセージ格納する場合は優先出力）
 				
 	/**
 	 * 情報レベルのメッセージかどうか

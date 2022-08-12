@@ -19,6 +19,10 @@ public class BusinessException extends RuntimeException {
 		
 	@Getter
 	private final Object[] args;
+	
+	// エラーメッセージオブジェクトを返却する
+	@Getter
+	private final ResultMessage resultMessage; 
 
 	/**
 	 * コンストラクタ
@@ -51,23 +55,37 @@ public class BusinessException extends RuntimeException {
 		Assert.notNull(args, "argsがNullです。");
 		this.code = code;
 		this.args = args;	
-	}
-	
-	/**
-	 * エラーメッセージオブジェクトを返却する
-	 * @return エラーメッセージオブジェクト
-	 */
-	public ResultMessage getResultMessage() {
-		return ResultMessage.builder()
+		this.resultMessage = ResultMessage.builder()
 				.type(ResultMessageType.WARN)
 				.code(code)
 				.args(args)
 				.build();
 	}
 	
+	/**
+	 * コンストラクタ
+	 * @param resultMessage エラーメッセージオブジェクト
+	 */
+	public BusinessException(final ResultMessage resultMessage) {
+		this(null, resultMessage);
+	}
+	
+	/**
+	 * コンストラクタ
+	 * @param cause 原因となったエラーオブジェクト
+	 * @param resultMessage エラーメッセージオブジェクト
+	 */
+	public BusinessException(final Throwable cause,  final ResultMessage resultMessage) {
+		super(cause);
+		Assert.notNull(resultMessage, "resutlMessageがNullです。");
+		this.code = resultMessage.getCode();
+		this.args = resultMessage.getArgs();
+		this.resultMessage = resultMessage;		
+	}
+	
 	@Override
 	public String getMessage() {
-		return getResultMessage().toString();
+		return this.resultMessage.toString();
 	}
 
 }
