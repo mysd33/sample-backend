@@ -1,4 +1,5 @@
-spring:    
+spring:
+  application:    name: sample-backend    
   profiles:
     active:
     - dev
