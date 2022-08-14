@@ -10,7 +10,13 @@ spring:
     driver-class-name: org.h2.Driver 
     username: sa
     password:
-           
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" 
+                   
 logging:
   level:
     org.springframework: INFO
