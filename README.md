@@ -18,7 +18,7 @@
     | Todoの完了 | PUT  | /api/v1/todos/{todoId} | 200(OK) | Todoリソースを完了状態に更新する。 |
     | Todoの削除 | DELETE | /api/v1/todos/{todoId} | 204(No Content) | Todoリソースを削除する。 |
 
-# 事前準備
+## 事前準備
 * 以下のライブラリを用いているので、EclipseのようなIDEを利用する場合には、プラグインのインストールが必要
     * [Lombok](https://projectlombok.org/)
         * [Eclipseへのプラグインインストール](https://projectlombok.org/setup/eclipse)
@@ -26,7 +26,7 @@
     * [Mapstruct](https://mapstruct.org/)
         * [EclipseやIntelliJへのプラグインインストール](https://mapstruct.org/documentation/ide-support/)
 
-# 動作確認
+## EclipseやIntelliJ等での動作確認
 * APIの動作確認のため、PostmanやTarend REST ClientのようなREST APIクライントツールが必要
     * [Postman API Client](https://www.postman.com/product/api-client/)
     * [Tarend REST Client(DHC REST Client)](https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm)
@@ -98,7 +98,32 @@
           "message": "対象のTodoがありません。"
         }        
         ```
+## Dockerでのアプリ起動
+* Mavenビルド
+```sh
+#Windows
+.\mvnw.cmd package
+#Linux/Mac
+./mvnw package
+```
+* ローカルでDockerビルド
+```sh
+docker build -t XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest .
+```
 
+* ローカルでDocker実行（Profileをデフォルトdev,log_defaultでSpringBoot実行）
+```sh
+docker run -d -p 8000:8000 --name samplebackend --env ENV_TYPE=dev,log_default XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+
+#logをjson形式に変更する場合
+docker run -d -p 8000:8000 --name samplebackend --env ENV_TYPE=dev,log_container XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+```
+
+* ECRプッシュ
+```sh
+aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com
+docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+```
 ## ソフトウェアフレームワーク
 * 本サンプルアプリケーションでは、ソフトウェアフレームワーク実装例も同梱している。簡単のため、アプリケーションと同じプロジェクトでソース管理している。
 * ソースコードはcom.example.fwパッケージ配下に格納されている。    
