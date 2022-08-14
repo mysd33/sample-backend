@@ -3,9 +3,10 @@
 ## 概要
 * TODOを管理するREST APIを提供するSpringBootのサンプルアプリケーションである。
 * TODOの取得、TODOの登録、TODOの完了、TODOの削除を行える。
+* 別プロジェクト、別リポジトリで作成している、BFF(Backend For Frontend)のサンプルアプリケーション(sampe-bff)からAPIを利用している。
+![実装イメージ](img/sample-backend.png)
 ## REST API一覧
 * todoテーブルで管理しているデータを操作するためのREST APIを作成している
-* 別プロジェクト、別リポジトリで作成している、BFF(Backend For Frontend)のサンプルアプリケーション(sampe-bff)ら利用している。
 * APIを以下に示す。
     * パス内に含まれている{todoId}は、TodoリソースのIdを示すパス変数
     
@@ -131,5 +132,6 @@
 | ---- | ---- | ---- | ---- | ---- |
 | オンライン | OIDC認証 | Spring Securityの機能でOIDCの認証を行う。 | - | - |
 | オン・バッチ共通 | リトライ・サーキットブレーカ | Spring Cloud Circuit Breaker（Resillience4j）を利用し、REST APIの呼び出しでの一時的な障害に対するリトライやフォールバック処理等を制御する。なお、AWSリソースのAPI呼び出しは、AWS SDKにてエクスポネンシャルバックオフによるリトライ処理を提供済。 | - | - |
+| | 非同期実行依頼 | Spring JMS、AWS SQS Java Messaging Libraryを利用し、SQSの標準キューを介した非同期実行依頼のメッセージを送信する。 | - | - |
 | | プロパティ管理（SSM） | Spring Cloud for AWS機能により、APから環境依存のパラメータをAWSのSSMパラメータストアに切り出し、プロファイルによって動作環境に応じたパラメータ値に置き換え可能とする。 | - | - |
 | | テストコード作成支援 | JUnit、Mockito、Springのテスト機能を利用して、単体テストコードや結合テストコードの実装を支援する機能を提供する。 | - | - |
