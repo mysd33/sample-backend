@@ -59,7 +59,7 @@
         ```
     * TODO一覧の取得
         * GET http://localhost:8000/api/v1/todos
-        * HTTPステータス201で2件取得できる
+        * HTTPステータス200で2件取得できる
 
     * TODO一件取得
         * GET http://localhost:8000/api/v1/todos/(TodoId)    
@@ -67,7 +67,7 @@
         * HTTPステータス200で該当のTODOを取得できる
     * TODOの完了
         * PUT http://localhost:8000/api/v1/todos/(TodoId)    
-        * HTTPステータス201で該当のTODOのfinishedプロパティがtrueになる
+        * HTTPステータス200で該当のTODOのfinishedプロパティがtrueになる
     * TODOの削除
         * DELETE http://localhost:8000/api/v1/todos/(TodoId)   
         * HTTPステータス204で返却
