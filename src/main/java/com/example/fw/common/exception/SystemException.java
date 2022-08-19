@@ -11,7 +11,7 @@ import lombok.Getter;
  * システム例外を表すクラス
  *
  */
-public class SystemException extends RuntimeException {
+public class SystemException extends RuntimeException implements ErrorCodeProvider {
 
 	private static final long serialVersionUID = 2366112591444733405L;
 
@@ -57,30 +57,31 @@ public class SystemException extends RuntimeException {
 		Assert.notNull(args, "argsがNullです。");
 		this.code = code;
 		this.args = args;
-		this.resultMessage = ResultMessage.builder().type(ResultMessageType.ERROR).code(code).args(args).build();				
+		this.resultMessage = ResultMessage.builder().type(ResultMessageType.ERROR).code(code).args(args).build();
 	}
-	
+
 	/**
 	 * コンストラクタ
+	 * 
 	 * @param resultMessage エラーメッセージオブジェクト
 	 */
 	public SystemException(final ResultMessage resultMessage) {
 		this(null, resultMessage);
 	}
-	
+
 	/**
 	 * コンストラクタ
-	 * @param cause 原因となったエラーオブジェクト
+	 * 
+	 * @param cause         原因となったエラーオブジェクト
 	 * @param resultMessage エラーメッセージオブジェクト
 	 */
-	public SystemException(final Throwable cause,  final ResultMessage resultMessage) {
+	public SystemException(final Throwable cause, final ResultMessage resultMessage) {
 		super(cause);
 		Assert.notNull(resultMessage, "resutlMessageがNullです。");
 		this.code = resultMessage.getCode();
 		this.args = resultMessage.getArgs();
-		this.resultMessage = resultMessage;		
+		this.resultMessage = resultMessage;
 	}
-	
 
 	@Override
 	public String getMessage() {

@@ -1,20 +1,24 @@
 package com.example.fw.web.advice;
 
-
-import java.util.Locale;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
-import com.example.fw.web.resource.ErrorResponse;
+import com.example.fw.common.resource.ErrorResponse;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  * 
@@ -23,30 +27,84 @@ import lombok.Setter;
  */
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class GlobalRestControllerAdvice {
-	private final MessageSource messageSource;
-	
-	@Setter
-	private String defaultExceptionMessageId;
-		
-    @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse bussinessExceptionHandler(final BusinessException e) {
-    	String message = messageSource.getMessage(e.getCode(), e.getArgs(), Locale.getDefault()); 
-        return ErrorResponse.builder().code(e.getCode()).message(message).build();
-    }
-    
-    @ExceptionHandler(SystemException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse systemExceptionHandler(final SystemException e) {
-    	String message = messageSource.getMessage(e.getCode(), e.getArgs(), Locale.getDefault()); 
-    	return ErrorResponse.builder().code(e.getCode()).message(message).build();
-    }
-    
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse exceptionHandler(final Exception e) {
-    	String message = messageSource.getMessage(defaultExceptionMessageId, null,  Locale.getDefault()); 
-    	return ErrorResponse.builder().code(defaultExceptionMessageId).message(message).build();        
-    }
+public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
+	private final ErrorResponseCreator errorResponseCreator;
+
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		// TODO: なんかする？
+		return super.handleExceptionInternal(ex, body, headers, status, request);
+	}
+
+	/**
+	 * 入力エラーのハンドリング （MethodArgumentNotValidException）
+	 * リクエストBODYに指定されたJSONに対する入力チェックでエラーが発生した場合
+	 */
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		return handleBindingResult(ex, ex.getBindingResult(), headers, status, request);
+	}
+
+	/**
+	 * 入力エラーのハンドリング （BindException） リクエストパラメータに対する入力チェックでエラーが発生した場合
+	 */
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+			WebRequest request) {
+		return handleBindingResult(ex, ex.getBindingResult(), headers, status, request);
+	}
+
+	/**
+	 * 入力エラーのハンドリング （HttpMessageNotReadableException）
+	 * JSONからResourceオブジェクトを生成する際にエラーが発生した場合
+	 */
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		if (ex.getCause() instanceof Exception) {
+			return handleExceptionInternal((Exception) ex.getCause(), null, headers, status, request);
+		} else {
+			return handleExceptionInternal(ex, null, headers, status, request);
+		}
+	}
+
+	@Autowired
+	MessageSource messageSource;
+
+	private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		ErrorResponse body = errorResponseCreator.createInputErrorResponse(bindingResult, request);
+
+		return handleExceptionInternal(ex, body, headers, status, request);
+	}
+
+	/**
+	 * 業務エラーのハンドリング
+	 */
+	@ExceptionHandler(BusinessException.class)
+	public ResponseEntity<Object> bussinessExceptionHandler(final BusinessException e, WebRequest request) {
+		ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
+		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	/**
+	 * システムエラーのハンドリング
+	 */
+	@ExceptionHandler(SystemException.class)
+	public ResponseEntity<Object> systemExceptionHandler(final SystemException e, WebRequest request) {
+		ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
+		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
+
+	/**
+	 * システムエラー（予期せぬ例外）のハンドリング
+	 */
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> exceptionHandler(final Exception e, WebRequest request) {
+		ErrorResponse body = errorResponseCreator.createUnknownErrorResponse(e, request);
+		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
+
 }

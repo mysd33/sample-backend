@@ -1,6 +1,7 @@
-package com.example.fw.web.resource;
+package com.example.fw.common.resource;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +17,7 @@ public class ErrorResponse  implements Serializable {
 
     private String code;
     private String message;
+    private List<String> details;
+    
 
 }
