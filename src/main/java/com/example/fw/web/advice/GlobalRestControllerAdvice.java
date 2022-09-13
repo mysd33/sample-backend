@@ -30,13 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 	private final ErrorResponseCreator errorResponseCreator;
 
-	@Override
-	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
-		// TODO: なんかする？
-		return super.handleExceptionInternal(ex, body, headers, status, request);
-	}
-
 	/**
 	 * 入力エラーのハンドリング （MethodArgumentNotValidException）
 	 * リクエストBODYに指定されたJSONに対する入力チェックでエラーが発生した場合
@@ -69,9 +62,6 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 			return handleExceptionInternal(ex, null, headers, status, request);
 		}
 	}
-
-	@Autowired
-	MessageSource messageSource;
 
 	private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
