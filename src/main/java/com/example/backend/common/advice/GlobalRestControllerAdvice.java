@@ -1,4 +1,4 @@
-package com.example.fw.web.advice;
+package com.example.backend.common.advice;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
  * 集約例外ハンドリングのためのRestControllerAdviceクラス
  *
  */
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.example.backend.api")
 @RequiredArgsConstructor
 public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 	private final ErrorResponseCreator errorResponseCreator;
@@ -72,7 +72,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 	 * 業務エラーのハンドリング
 	 */
 	@ExceptionHandler(BusinessException.class)
-	public ResponseEntity<Object> bussinessExceptionHandler(final BusinessException e, WebRequest request) {
+	public ResponseEntity<Object> bussinessExceptionHandler(final BusinessException e, final WebRequest request) {
 		ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
 		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
@@ -81,7 +81,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 	 * システムエラーのハンドリング
 	 */
 	@ExceptionHandler(SystemException.class)
-	public ResponseEntity<Object> systemExceptionHandler(final SystemException e, WebRequest request) {
+	public ResponseEntity<Object> systemExceptionHandler(final SystemException e, final WebRequest request) {
 		ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
 		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
@@ -90,7 +90,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 	 * システムエラー（予期せぬ例外）のハンドリング
 	 */
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> exceptionHandler(final Exception e, WebRequest request) {
+	public ResponseEntity<Object> exceptionHandler(final Exception e, final WebRequest request) {
 		ErrorResponse body = errorResponseCreator.createUnknownErrorResponse(e, request);
 		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}

@@ -1,4 +1,4 @@
-package com.example.backend.app;
+package com.example.backend.api;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

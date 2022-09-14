@@ -1,4 +1,4 @@
-package com.example.backend.app;
+package com.example.backend.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
