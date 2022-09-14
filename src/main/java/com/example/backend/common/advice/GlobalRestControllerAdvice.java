@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.example.backend.api.APIPackage;
+import com.example.backend.common.resource.ErrorResponse;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
-import com.example.fw.common.resource.ErrorResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,7 @@ import lombok.RequiredArgsConstructor;
  * 集約例外ハンドリングのためのRestControllerAdviceクラス
  *
  */
-@RestControllerAdvice(basePackages = "com.example.backend.api")
+@RestControllerAdvice(basePackageClasses = { APIPackage.class })
 @RequiredArgsConstructor
 public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 	private final ErrorResponseCreator errorResponseCreator;

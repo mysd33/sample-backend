@@ -1,4 +1,4 @@
-package com.example.fw.common.resource;
+package com.example.backend.common.resource;
 
 import java.io.Serializable;
 import java.util.List;
