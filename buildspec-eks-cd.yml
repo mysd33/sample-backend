@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:      
+      - echo kubectl install...      
+      - curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - IMAGE_TAG=$(cat imageTag.txt)
+      - export IMAGE_TAG      
+  build:
+    commands:
+      - aws eks --region $AWS_REGION update-kubeconfig --name $CLUSTER_NAME
+# backend app deployoment manifest apply      
+      - echo deployoment manifest apply      
+      - envsubst < k8s/k8s-backend-deployment.yaml | kubectl apply -f -
