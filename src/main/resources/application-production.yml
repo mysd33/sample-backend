@@ -1,0 +1,25 @@
+server:
+  port: 8000
+
+spring:
+  sql:
+    init:
+      platform: h2
+  datasource:    
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver 
+    username: sa
+    password:
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*" 
+                   
+logging:
+  level:
+    org.springframework: INFO
+    org.springframework.jdbc: INFO
+#    org.thymeleaf: DEBUG
+    com.example: DEBUG
