@@ -113,10 +113,10 @@ docker build -t XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend
 
 * ローカルでDocker実行（Profileをデフォルトdev,log_defaultでSpringBoot実行）
 ```sh
-docker run -d -p 8000:8000 --name samplebackend --env ENV_TYPE=dev,log_default XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_default XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
 
 #logをjson形式に変更する場合
-docker run -d -p 8000:8000 --name samplebackend --env ENV_TYPE=dev,log_container XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_container XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
 ```
 
 * ECRプッシュ

@@ -11,4 +11,4 @@ WORKDIR /home/$USERNAME/
 
 COPY target/sample-backend-0.1.0-SNAPSHOT.jar /home/$USERNAME
 
-CMD java -jar -Dspring.profiles.active=$ENV_TYPE /home/app/sample-backend-0.1.0-SNAPSHOT.jar
+CMD java -jar /home/app/sample-backend-0.1.0-SNAPSHOT.jar
