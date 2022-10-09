@@ -98,6 +98,20 @@
           "message": "対象のTodoがありません。"
         }        
         ```
+
+
+## PostgreSQLのローカル起動
+* Profileが「production」に切り替えてSpringBootアプリケーションを実行する場合、DBがPostgreSQLで動作する設定になっているため、事前にPostgreSQLを起動する必要がある。
+```sh
+#Postgres SQLの起動
+docker run --name test-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres
+#Postgresのコンテナにシェルで入って、psqlコマンドで接続
+docker exec -i -t test-postgres /bin/bash
+> psql -U postgres
+
+# psqlで、testdbデータベースを作成
+postgres> CREATE DATABASE testdb;
+```
 ## Dockerでのアプリ起動
 * Mavenビルド
 ```sh
@@ -111,12 +125,21 @@
 docker build -t XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest .
 ```
 
-* ローカルでDocker実行（Profileをデフォルトdev,log_defaultでSpringBoot実行）
+* ローカルでDocker実行（Profileを「dev」でSpringBoot実行する場合）
 ```sh
 docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_default XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
 
 #logをjson形式に変更する場合
 docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_container XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+```
+
+* ローカルでDocker実行（Profileを「production」でSpringBoot実行する場合）
+    * ※Redisのローカル起動、PostgreSQLのローカル起動も必要
+```sh
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=production,log_default --env SERVER_PORT=8000 --env SPRING_DATASOURCE_URL=jdbc:postgresql://(ローカルPCのプライベートIP):5432/testdb XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+
+#logをjson形式に変更する場合
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=production,log_container --env SERVER_PORT=8000 --env SPRING_DATASOURCE_URL=jdbc:postgresql://(ローカルPCのプライベートIP):5432/testdb XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
 ```
 
 * ECRプッシュ
