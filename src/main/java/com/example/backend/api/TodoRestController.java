@@ -41,7 +41,7 @@ public class TodoRestController {
     @GetMapping("{todoId}") 
     @ResponseStatus(HttpStatus.OK)
     public TodoResource getTodo(@PathVariable("todoId") String todoId) {
-        Todo todo = todoService.findOne(todoId); // (3)
+        Todo todo = todoService.findOne(todoId); 
         TodoResource todoResource = TodoMapper.INSTANCE.modelToResource(todo);
         return todoResource;
     }
