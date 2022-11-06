@@ -28,6 +28,14 @@ public interface TodoService {
      * @return 作成したTodo
      */
     Todo create(Todo todo);
+    
+    /**
+     * Todoを作成する
+     * Batch用に作成数に制限を置かない。
+     * @param todo 作成するTodo
+     * @return 作成したTodo
+     */
+    Todo createForBatch(Todo todo);
 
     /**
      * Todoを完了する

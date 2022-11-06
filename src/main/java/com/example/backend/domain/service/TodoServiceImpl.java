@@ -33,7 +33,7 @@ public class TodoServiceImpl implements TodoService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Todo findOne(String todoId) {		
+	public Todo findOne(String todoId) {
 		return todoRepository.findById(todoId).orElseThrow(() -> {
 			// 対象Todoがない場合、業務エラー
 			return new BusinessException(MessageIds.W_EX_2001);
@@ -47,15 +47,24 @@ public class TodoServiceImpl implements TodoService {
 			// 未完了のTodoが、5件以上の場合、業務エラー
 			throw new BusinessException(MessageIds.W_EX_2002, MAX_UNFINISHED_COUNT);
 		}
+		doCreate(todo);
+		return todo;
+	}
+	
+	@Override
+	public Todo createForBatch(Todo todo) {
+		doCreate(todo);
 
+		return todo;
+	}
+	
+	private void doCreate(Todo todo) {
 		String todoId = UUID.randomUUID().toString();
 		Date createdAt = new Date();
 		todo.setTodoId(todoId);
 		todo.setCreatedAt(createdAt);
 		todo.setFinished(false);
 		todoRepository.create(todo);
-
-		return todo;
 	}
 
 	@Override

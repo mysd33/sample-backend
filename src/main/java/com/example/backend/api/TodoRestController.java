@@ -53,6 +53,14 @@ public class TodoRestController {
         TodoResource createdTodoResponse = TodoMapper.INSTANCE.modelToResource(createdTodo);
         return createdTodoResponse;
     }
+    
+    @PostMapping("batch")
+    @ResponseStatus(HttpStatus.CREATED) 
+    public TodoResource postTodosForBatch(@RequestBody @Validated TodoResource todoResource) { 
+        Todo createdTodo = todoService.createForBatch(TodoMapper.INSTANCE.resourceToModel(todoResource));
+        TodoResource createdTodoResponse = TodoMapper.INSTANCE.modelToResource(createdTodo);
+        return createdTodoResponse;
+    }
   
 
     @PutMapping("{todoId}")
