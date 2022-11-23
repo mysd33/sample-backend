@@ -21,9 +21,7 @@ public class MessageIdConstClassGens {
 	public static void main(String[] args) throws IOException {
 		// message properties file
 		InputStream inputStream = new FileInputStream("src/main/resources/messages.properties");
-		InputStream inputStreamLog = new FileInputStream("src/main/resources/log-messages.properties");
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-		BufferedReader brLog = new BufferedReader(new InputStreamReader(inputStreamLog));
 		Class<?> targetClazz = MessageIds.class;
 		File output = new File("src/main/java/" + targetClazz.getName().replaceAll(Pattern.quote("."), "/") + ".java");
 		System.out.println("write " + output.getAbsolutePath());
@@ -39,9 +37,6 @@ public class MessageIdConstClassGens {
 
 			String line;
 			while ((line = br.readLine()) != null) {
-				writeConst(pw, line);
-			}
-			while ((line = brLog.readLine()) != null) {
 				writeConst(pw, line);
 			}
 			pw.println("}");

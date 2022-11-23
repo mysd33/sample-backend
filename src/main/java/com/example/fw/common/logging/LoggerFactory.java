@@ -13,7 +13,7 @@ public final class LoggerFactory {
 
 	static {
 		messageSource.setDefaultEncoding("UTF-8"); 
-		messageSource.setBasenames("messages", "log-messages"); 
+		messageSource.setBasenames("messages"); 
 	}
 	
 	private  LoggerFactory() {

@@ -1,7 +1,6 @@
 package com.example.fw.web.aspect;
 
-import static com.example.fw.common.message.FrameworkMessageIds.I_FW_0001;
-import static com.example.fw.common.message.FrameworkMessageIds.I_FW_0002;
+import com.example.fw.web.message.WebFrameworkMessageIds;
 
 import java.util.Arrays;
 
@@ -51,10 +50,10 @@ public class LogAspect {
 	
 	@Around("@within(org.springframework.stereotype.Service)")
 	public Object aroundServiceLog(final ProceedingJoinPoint jp) throws Throwable {
-		appLogger.info(I_FW_0001, jp.getSignature(), Arrays.asList(jp.getArgs()));
+		appLogger.info(WebFrameworkMessageIds.I_ON_FW_0001, jp.getSignature(), Arrays.asList(jp.getArgs()));
 		try {
 			Object result = jp.proceed();
-			appLogger.info(I_FW_0002, jp.getSignature(), Arrays.asList(jp.getArgs()));
+			appLogger.info(WebFrameworkMessageIds.I_ON_FW_0002, jp.getSignature(), Arrays.asList(jp.getArgs()));
 			return result;
 		} catch (BusinessException e) {
 			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
