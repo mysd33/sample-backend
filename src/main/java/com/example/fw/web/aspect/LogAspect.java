@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 public class LogAspect {
 	private static final String LOG_FORMAT_PREFIX = "{0}:";
-	private final static ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
-	private final static MonitoringLogger monitoringLogger = LoggerFactory.getMonitoringLogger(log);
+	private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
+	private static final MonitoringLogger monitoringLogger = LoggerFactory.getMonitoringLogger(log);
 
 	@Setter
 	private String defaultExceptionMessageId;
