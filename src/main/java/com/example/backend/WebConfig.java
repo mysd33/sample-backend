@@ -25,7 +25,7 @@ public class WebConfig {
 	 * ロギング機能
 	 */
 	@Bean
-	public LogAspect LogAspect() {
+	public LogAspect logAspect() {
 		LogAspect logAspect = new LogAspect();
 		logAspect.setDefaultExceptionMessageId(MessageIds.E_EX_9001);
 		return logAspect;
