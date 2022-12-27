@@ -10,7 +10,6 @@ phases:
       - aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_URI
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
-      - ECS_TASK_DEFINITION_ARN=Demo-ecstask-backend-app
       - ls /root/.m2/  
   build:
     commands:
@@ -32,8 +31,10 @@ phases:
       - printf '[{"name":"ecsdemo-backend-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 #For ECS Blue Green Deployment Image Definition File (imageDetail.json)
       - printf '{"ImageURI":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+#For ECS Blue Green Deployment appspec.yaml
+      - envsubst < appspec-template.yaml > appspec.yaml 
 #For ECS Blue Green Deployment taskdef.json auto generate when ECS Cluster is running
-      - aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION_ARN --query taskDefinition | jq '.containerDefinitions[0].image="<IMAGE1_NAME>"' > taskdef.json
+      - aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query taskDefinition | jq '.containerDefinitions[0].image="<IMAGE1_NAME>"' > taskdef.json
 #For EKS Rolling Update ImageTag saving file
       - echo $IMAGE_TAG > imageTag.txt
       - ls /root/.m2/  
@@ -45,6 +46,7 @@ artifacts:
 #For ECS Blue Green Deployment
     - imageDetail.json
     - taskdef.json
+    - appspec.yaml
 #For EKS Rolling Update
     - buildspec-eks-cd.yml
     - imageTag.txt
