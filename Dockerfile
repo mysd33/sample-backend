@@ -1,4 +1,4 @@
-FROM public.ecr.aws/amazoncorretto/amazoncorretto:11
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:17
 RUN yum install -y shadow-utils
 ARG USERNAME=app
 ARG GROUPNAME=app
