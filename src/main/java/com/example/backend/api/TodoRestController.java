@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.TodoService;
 
@@ -25,6 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "Todo", description = "Todo API")
+@XRayEnabled
 @RestController
 @RequestMapping("/api/v1/todos")
 @RequiredArgsConstructor
