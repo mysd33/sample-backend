@@ -8,7 +8,7 @@ spring:
     - dev
     - log_default  #logging in default format
 #    - log_container  #logging in json format
-
+#    - xray  #X-Ray Enabled
   jackson:
     property-naming-strategy: SNAKE_CASE
 

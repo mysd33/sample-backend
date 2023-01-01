@@ -10,12 +10,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import com.amazonaws.xray.javax.servlet.AWSXRayServletFilter;
 import com.amazonaws.xray.spring.aop.BaseAbstractXRayInterceptor;
 import com.amazonaws.xray.sql.TracingDataSource;
 import com.zaxxer.hikari.HikariDataSource;
 
+@Profile("xray")
 @Aspect
 @Configuration
 public class XRayConfig extends BaseAbstractXRayInterceptor {
