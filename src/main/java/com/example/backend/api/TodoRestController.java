@@ -25,19 +25,25 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 
+ * Todoを扱うREST APIのRestControllerクラス
+ *
+ */
 @Tag(name = "Todo", description = "Todo API")
 @XRayEnabled
 @RestController
 @RequestMapping("/api/v1/todos")
 @RequiredArgsConstructor
 public class TodoRestController {
-	private final TodoService todoService;
-	
-	/**
-	 * Todoリストを取得する
-	 * @return Todoリスト
-	 */
-	@Operation(summary = "Todoリスト取得", description = "Todoリストを取得する。") 
+    private final TodoService todoService;
+
+    /**
+     * Todoリストを取得する
+     * 
+     * @return Todoリスト
+     */
+    @Operation(summary = "Todoリスト取得", description = "Todoリストを取得する。")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<TodoResource> getTodos() {
@@ -48,70 +54,73 @@ public class TodoRestController {
         }
         return todoResources;
     }
-    
-	/**
-	 * 指定したTodo IDに対応するTodoを取得する
-	 * @param todoId Todo ID
-	 * @return
-	 */
-	@Operation(summary = "Todo取得", description = "指定したTodo IDに対応するTodoを取得する。")
-    @GetMapping("{todoId}") 
+
+    /**
+     * 指定したTodo IDに対応するTodoを取得する
+     * 
+     * @param todoId Todo ID
+     * @return
+     */
+    @Operation(summary = "Todo取得", description = "指定したTodo IDに対応するTodoを取得する。")
+    @GetMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
     public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
-        Todo todo = todoService.findOne(todoId); 
-        TodoResource todoResource = TodoMapper.INSTANCE.modelToResource(todo);
-        return todoResource;
+        Todo todo = todoService.findOne(todoId);
+        return TodoMapper.INSTANCE.modelToResource(todo);
     }
-    
-	/**
-	 * Todoを登録する
-	 * @param todoResource 登録するTodo
-	 * @return 登録したTodo
-	 */
-	@Operation(summary = "Todo登録", description = "Todoを登録する。")
+
+    /**
+     * Todoを登録する
+     * 
+     * @param todoResource 登録するTodo
+     * @return 登録したTodo
+     */
+    @Operation(summary = "Todo登録", description = "Todoを登録する。")
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED) 
-    public TodoResource postTodos(@Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) { 
+    @ResponseStatus(HttpStatus.CREATED)
+    public TodoResource postTodos(
+            @Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
         Todo createdTodo = todoService.create(TodoMapper.INSTANCE.resourceToModel(todoResource));
-        TodoResource createdTodoResponse = TodoMapper.INSTANCE.modelToResource(createdTodo);
-        return createdTodoResponse;
+        return TodoMapper.INSTANCE.modelToResource(createdTodo);
     }
-    
-	/**
-	 * バッチ処理向けに登録件数をチェックせずにTodoを登録する
-	 * @param todoResource 登録するTodo
-	 * @return 登録したTodo
-	 */
-	@Operation(summary = "バッチ処理用Todo登録", description = "バッチ処理向けに登録件数をチェックせずにTodoを登録する。")
+
+    /**
+     * バッチ処理向けに登録件数をチェックせずにTodoを登録する
+     * 
+     * @param todoResource 登録するTodo
+     * @return 登録したTodo
+     */
+    @Operation(summary = "バッチ処理用Todo登録", description = "バッチ処理向けに登録件数をチェックせずにTodoを登録する。")
     @PostMapping("batch")
-    @ResponseStatus(HttpStatus.CREATED) 
-    public TodoResource postTodosForBatch(@Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) { 
+    @ResponseStatus(HttpStatus.CREATED)
+    public TodoResource postTodosForBatch(
+            @Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
         Todo createdTodo = todoService.createForBatch(TodoMapper.INSTANCE.resourceToModel(todoResource));
-        TodoResource createdTodoResponse = TodoMapper.INSTANCE.modelToResource(createdTodo);
-        return createdTodoResponse;
+        return TodoMapper.INSTANCE.modelToResource(createdTodo);
     }
-  
-	/**
-	 * 指定したTodo IDのTodoを完了状態に更新する
-	 * @param todoId Todo ID
-	 * @return 更新したTodo
-	 */
-	@Operation(summary = "Todo完了", description = "指定したTodo IDのTodoを完了状態に更新する。")
+
+    /**
+     * 指定したTodo IDのTodoを完了状態に更新する
+     * 
+     * @param todoId Todo ID
+     * @return 更新したTodo
+     */
+    @Operation(summary = "Todo完了", description = "指定したTodo IDのTodoを完了状態に更新する。")
     @PutMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
     public TodoResource putTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
         Todo finishedTodo = todoService.finish(todoId);
-        TodoResource finishedTodoResource = TodoMapper.INSTANCE.modelToResource(finishedTodo);
-        return finishedTodoResource;
+        return TodoMapper.INSTANCE.modelToResource(finishedTodo);
     }
-    
-	/**
-	 * 指定したTodo IDのTodoを削除する。
-	 * @param todoId Todo ID
-	 */
-	@Operation(summary = "Todo削除", description = "指定したTodo IDのTodoを削除する。")
-    @DeleteMapping("{todoId}") 
-    @ResponseStatus(HttpStatus.NO_CONTENT) 
+
+    /**
+     * 指定したTodo IDのTodoを削除する。
+     * 
+     * @param todoId Todo ID
+     */
+    @Operation(summary = "Todo削除", description = "指定したTodo IDのTodoを削除する。")
+    @DeleteMapping("{todoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
         todoService.delete(todoId);
     }

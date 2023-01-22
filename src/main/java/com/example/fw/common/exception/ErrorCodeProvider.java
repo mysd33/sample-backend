@@ -5,7 +5,15 @@ package com.example.fw.common.exception;
  *
  */
 public interface ErrorCodeProvider {
-	String getCode();
+    /**
+     * エラーコード
+     * @return
+     */
+    String getCode();
 
-	Object[] getArgs();
+    /**
+     * エラーコードに対応するメッセージの置換文字列
+     * @return
+     */
+    String[] getArgs();
 }

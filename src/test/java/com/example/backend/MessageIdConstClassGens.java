@@ -34,6 +34,7 @@ public class MessageIdConstClassGens {
 			pw.println(" * Auto-Generarted By MessageKeysGen Class");
 			pw.println(" */");
 			pw.println("public class " + targetClazz.getSimpleName() + " {");
+			pw.println("    private " + targetClazz.getSimpleName() + "() {}");
 
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -59,7 +60,6 @@ public class MessageIdConstClassGens {
 		String[] vals = line.split("=", 2);
 		if (vals.length > 1) {
 			String key = vals[0].trim();
-			String value = vals[1].trim();
 			pw.println("    public static final String "
 					+ key.toUpperCase().replaceAll(Pattern.quote("."), "_").replaceAll(Pattern.quote("-"), "_")
 					+ " = \"" + key + "\";");

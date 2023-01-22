@@ -1,6 +1,8 @@
 package com.example.fw;
 
-public class FrameworkComponentScanBasePackage {
-	private FrameworkComponentScanBasePackage() {
-	}
+/**
+ * フレームワーク全体をコンポーネントスキャンする場合のパッケージインタフェース
+ *
+ */
+public interface FrameworkComponentScanBasePackage {
 }

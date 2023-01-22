@@ -19,7 +19,7 @@ class SystemExceptionTest {
 			
 			ResultMessage expected = ResultMessage.builder()
 					.type(ResultMessageType.ERROR)
-					.code("e.ex.9001").args(new Object[] {"test"}).build();
+					.code("e.ex.9001").args(new String[] {"test"}).build();
 			assertEquals(expected, e.getResultMessage());
 		}
 	}

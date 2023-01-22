@@ -9,37 +9,40 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  *
  */
 public final class LoggerFactory {
-	private static ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+    private static ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 
-	static {
-		messageSource.setDefaultEncoding("UTF-8"); 
-		messageSource.setBasenames("messages"); 
-	}
-	
-	private  LoggerFactory() {
-	}
+    static {
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setBasenames("messages", "messages-fw-common", "messages-fw-web", "messages-fw-batch"); 
+    }
 
-	/**
-	 * 監査ログ出力オブジェクトを返却する
-	 * @param delegateLogger SLF4Jロガー
-	 */
-	public static AuditLogger getAuditLogger(final Logger delegateLogger) {
-		return new DefaultLogger(delegateLogger, messageSource);
-	}
+    private LoggerFactory() {
+    }
 
-	/**
-	 * アプリケーションログ出力オブジェクトを返却する
-	 * @param delegateLogger SLF4Jロガー
-	 */
-	public static ApplicationLogger getApplicationLogger(final Logger delegateLogger) {
-		return new DefaultLogger(delegateLogger, messageSource);
-	}
+    /**
+     * 監査ログ出力オブジェクトを返却する
+     * 
+     * @param delegateLogger SLF4Jロガー
+     */
+    public static AuditLogger getAuditLogger(final Logger delegateLogger) {
+        return new DefaultLogger(delegateLogger, messageSource);
+    }
 
-	/**
-	 * 監視ログ出力オブジェクトを返却する
-	 * @param delegateLogger SLF4Jロガー
-	 */
-	public static MonitoringLogger getMonitoringLogger(final Logger delegateLogger) {
-		return new DefaultLogger(delegateLogger, messageSource);
-	}
+    /**
+     * アプリケーションログ出力オブジェクトを返却する
+     * 
+     * @param delegateLogger SLF4Jロガー
+     */
+    public static ApplicationLogger getApplicationLogger(final Logger delegateLogger) {
+        return new DefaultLogger(delegateLogger, messageSource);
+    }
+
+    /**
+     * 監視ログ出力オブジェクトを返却する
+     * 
+     * @param delegateLogger SLF4Jロガー
+     */
+    public static MonitoringLogger getMonitoringLogger(final Logger delegateLogger) {
+        return new DefaultLogger(delegateLogger, messageSource);
+    }
 }

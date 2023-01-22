@@ -27,73 +27,73 @@ import lombok.RequiredArgsConstructor;
 @RestControllerAdvice(basePackageClasses = { APIPackage.class })
 @RequiredArgsConstructor
 public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
-	private final ErrorResponseCreator errorResponseCreator;
+    private final ErrorResponseCreator errorResponseCreator;
 
-	/**
-	 * 入力エラーのハンドリング （MethodArgumentNotValidException）
-	 * リクエストBODYに指定されたJSONに対する入力チェックでエラーが発生した場合
-	 */
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return handleBindingResult(ex, ex.getBindingResult(), headers, status, request);
-	}
+    /**
+     * 入力エラーのハンドリング （MethodArgumentNotValidException）
+     * リクエストBODYに指定されたJSONに対する入力チェックでエラーが発生した場合
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return handleBindingResult(ex, ex.getBindingResult(), headers, status, request);
+    }
 
-	/**
-	 * 入力エラーのハンドリング （BindException） リクエストパラメータに対する入力チェックでエラーが発生した場合
-	 */
-	@Override
-	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
-			WebRequest request) {
-		return handleBindingResult(ex, ex.getBindingResult(), headers, status, request);
-	}
+    /**
+     * 入力エラーのハンドリング （BindException） リクエストパラメータに対する入力チェックでエラーが発生した場合
+     */
+    @Override
+    protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+            WebRequest request) {
+        return handleBindingResult(ex, ex.getBindingResult(), headers, status, request);
+    }
 
-	/**
-	 * 入力エラーのハンドリング （HttpMessageNotReadableException）
-	 * JSONからResourceオブジェクトを生成する際にエラーが発生した場合
-	 */
-	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		if (ex.getCause() instanceof Exception) {
-			return handleExceptionInternal((Exception) ex.getCause(), null, headers, status, request);
-		} else {
-			return handleExceptionInternal(ex, null, headers, status, request);
-		}
-	}
+    /**
+     * 入力エラーのハンドリング （HttpMessageNotReadableException）
+     * JSONからResourceオブジェクトを生成する際にエラーが発生した場合
+     */
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+        if (ex.getCause() instanceof Exception cause) {
+            return handleExceptionInternal(cause, null, headers, status, request);
+        } else {
+            return handleExceptionInternal(ex, null, headers, status, request);
+        }
+    }
 
-	private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
-		ErrorResponse body = errorResponseCreator.createInputErrorResponse(bindingResult, request);
+    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
+        ErrorResponse body = errorResponseCreator.createInputErrorResponse(bindingResult, request);
 
-		return handleExceptionInternal(ex, body, headers, status, request);
-	}
+        return handleExceptionInternal(ex, body, headers, status, request);
+    }
 
-	/**
-	 * 業務エラーのハンドリング
-	 */
-	@ExceptionHandler(BusinessException.class)
-	public ResponseEntity<Object> bussinessExceptionHandler(final BusinessException e, final WebRequest request) {
-		ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
-		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
+    /**
+     * 業務エラーのハンドリング
+     */
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Object> bussinessExceptionHandler(final BusinessException e, final WebRequest request) {
+        ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
+        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 
-	/**
-	 * システムエラーのハンドリング
-	 */
-	@ExceptionHandler(SystemException.class)
-	public ResponseEntity<Object> systemExceptionHandler(final SystemException e, final WebRequest request) {
-		ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
-		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
-	}
+    /**
+     * システムエラーのハンドリング
+     */
+    @ExceptionHandler(SystemException.class)
+    public ResponseEntity<Object> systemExceptionHandler(final SystemException e, final WebRequest request) {
+        ErrorResponse body = errorResponseCreator.createGeneralErrorResponse(e, request);
+        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
 
-	/**
-	 * システムエラー（予期せぬ例外）のハンドリング
-	 */
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> exceptionHandler(final Exception e, final WebRequest request) {
-		ErrorResponse body = errorResponseCreator.createUnknownErrorResponse(e, request);
-		return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
-	}
+    /**
+     * システムエラー（予期せぬ例外）のハンドリング
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> exceptionHandler(final Exception e, final WebRequest request) {
+        ErrorResponse body = errorResponseCreator.createUnknownErrorResponse(e, request);
+        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
 
 }

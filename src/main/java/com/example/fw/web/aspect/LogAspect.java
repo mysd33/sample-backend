@@ -25,48 +25,48 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 public class LogAspect {
-	private static final String LOG_FORMAT_PREFIX = "{0}:";
-	private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
-	private static final MonitoringLogger monitoringLogger = LoggerFactory.getMonitoringLogger(log);
+    private static final String LOG_FORMAT_PREFIX = "{0}:";
+    private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
+    private static final MonitoringLogger monitoringLogger = LoggerFactory.getMonitoringLogger(log);
 
-	@Setter
-	private String defaultExceptionMessageId;
+    @Setter
+    private String defaultExceptionMessageId;
 
-	@Around("@within(org.springframework.web.bind.annotation.RestController)")
-	public Object aroundRestControllerLog(final ProceedingJoinPoint jp) throws Throwable {
-		appLogger.debug("RestController開始：{}", jp.getSignature());
-		Object result = jp.proceed();
-		appLogger.debug("RestController終了：{}", jp.getSignature());
-		return result;		
-	}
+    @Around("@within(org.springframework.web.bind.annotation.RestController)")
+    public Object aroundRestControllerLog(final ProceedingJoinPoint jp) throws Throwable {
+        appLogger.debug("RestController開始：{}", jp.getSignature());
+        Object result = jp.proceed();
+        appLogger.debug("RestController終了：{}", jp.getSignature());
+        return result;
+    }
 
-	@Around("@within(org.springframework.stereotype.Controller)")
-	public Object aroundControllerLog(final ProceedingJoinPoint jp) throws Throwable {
-		appLogger.debug("Controller開始：{}", jp.getSignature());
-		Object result = jp.proceed();
-		appLogger.debug("Controller終了：{}", jp.getSignature());
-		return result;		
-	}
-	
-	@Around("@within(org.springframework.stereotype.Service)")
-	public Object aroundServiceLog(final ProceedingJoinPoint jp) throws Throwable {
-		appLogger.info(WebFrameworkMessageIds.I_ON_FW_0001, jp.getSignature(), Arrays.asList(jp.getArgs()));
-		try {
-			Object result = jp.proceed();
-			appLogger.info(WebFrameworkMessageIds.I_ON_FW_0002, jp.getSignature(), Arrays.asList(jp.getArgs()));
-			return result;
-		} catch (BusinessException e) {
-			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
-			appLogger.warn(e.getCode(), logFormat, e, e.getArgs());
-			throw e;
-		} catch (SystemException e) {
-			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
-			monitoringLogger.error(e.getCode(), logFormat, e, e.getArgs());
-			throw e;
-		} catch (Exception e) {
-			String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
-			monitoringLogger.error(defaultExceptionMessageId, logFormat, e);
-			throw e;
-		}
-	}
+    @Around("@within(org.springframework.stereotype.Controller)")
+    public Object aroundControllerLog(final ProceedingJoinPoint jp) throws Throwable {
+        appLogger.debug("Controller開始：{}", jp.getSignature());
+        Object result = jp.proceed();
+        appLogger.debug("Controller終了：{}", jp.getSignature());
+        return result;
+    }
+
+    @Around("@within(org.springframework.stereotype.Service)")
+    public Object aroundServiceLog(final ProceedingJoinPoint jp) throws Throwable {
+        appLogger.info(WebFrameworkMessageIds.I_ON_FW_0001, jp.getSignature(), Arrays.asList(jp.getArgs()));
+        try {
+            Object result = jp.proceed();
+            appLogger.info(WebFrameworkMessageIds.I_ON_FW_0002, jp.getSignature(), Arrays.asList(jp.getArgs()));
+            return result;
+        } catch (BusinessException e) {
+            String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
+            appLogger.warn(e.getCode(), logFormat, e, (Object[]) e.getArgs());
+            throw e;
+        } catch (SystemException e) {
+            String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
+            monitoringLogger.error(e.getCode(), logFormat, e, (Object[]) e.getArgs());
+            throw e;
+        } catch (Exception e) {
+            String logFormat = new StringBuilder(LOG_FORMAT_PREFIX).append(jp.getSignature()).toString();
+            monitoringLogger.error(defaultExceptionMessageId, logFormat, e);
+            throw e;
+        }
+    }
 }

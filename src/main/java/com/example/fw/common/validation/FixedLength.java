@@ -17,29 +17,30 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 import com.example.fw.common.validation.FixedLength.List;
+
 /**
  * 
  * 固定長チェック
  *
-*/
+ */
 @Documented
 @Constraint(validatedBy = { FixedLengthValidator.class })
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Repeatable(List.class)
 public @interface FixedLength {
-	int value() default 0;
+    int value() default 0;
 
-	String message() default "{com.example.fw.validation.FixedLength.message}";
+    String message() default "{com.example.fw.validation.FixedLength.message}";
 
-	Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-	Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-	@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
-	@Retention(RUNTIME)
-	@Documented
-	@interface List {
-		FixedLength[] value();
-	}
+    @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+    @Retention(RUNTIME)
+    @Documented
+    @interface List {
+        FixedLength[] value();
+    }
 }

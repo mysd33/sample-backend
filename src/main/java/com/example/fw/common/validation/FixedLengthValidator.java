@@ -9,18 +9,18 @@ import javax.validation.ConstraintValidatorContext;
  *
  */
 public class FixedLengthValidator implements ConstraintValidator<FixedLength, CharSequence> {
-	private int length;
+    private int length;
 
-	@Override
-	public void initialize(final FixedLength constraintAnnotation) {
-		this.length = constraintAnnotation.value();
-	}
+    @Override
+    public void initialize(final FixedLength constraintAnnotation) {
+        this.length = constraintAnnotation.value();
+    }
 
-	@Override
-	public boolean isValid(final CharSequence value, final ConstraintValidatorContext context) {
-		if (value == null || value.length() == 0) {
-			return true;
-		}
-		return this.length == value.length();
-	}
+    @Override
+    public boolean isValid(final CharSequence value, final ConstraintValidatorContext context) {
+        if (value == null || value.length() == 0) {
+            return true;
+        }
+        return this.length == value.length();
+    }
 }

@@ -1,7 +1,8 @@
 package com.example.backend.api;
 
-public class APIPackage {
-	private APIPackage() {
-	
-	}
+/**
+ * apiパッケージを表すインタフェース
+ *
+ */
+public interface APIPackage {
 }

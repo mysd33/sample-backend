@@ -4,6 +4,7 @@ package com.example.backend.domain.message;
  * Auto-Generarted By MessageKeysGen Class
  */
 public class MessageIds {
+    private MessageIds() {}
     public static final String W_EX_2001 = "w.ex.2001";
     public static final String W_EX_2002 = "w.ex.2002";
     public static final String W_EX_2003 = "w.ex.2003";

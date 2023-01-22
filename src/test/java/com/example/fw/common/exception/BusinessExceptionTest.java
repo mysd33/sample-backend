@@ -20,7 +20,7 @@ class BusinessExceptionTest {
 			
 			ResultMessage expected = ResultMessage.builder()
 					.type(ResultMessageType.WARN)
-					.code("w.ex.0001").args(new Object[] {"test"}).build();
+					.code("w.ex.0001").args(new String[] {"test"}).build();
 			assertEquals(expected, e.getResultMessage());
 		}
 		

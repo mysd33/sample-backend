@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.repository.TodoRepository;
 
-
 /**
  * TodoRepositoryのスタブ実装
  */

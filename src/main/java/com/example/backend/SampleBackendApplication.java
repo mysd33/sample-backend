@@ -8,9 +8,9 @@ import com.amazonaws.xray.AWSXRay;
 @SpringBootApplication
 public class SampleBackendApplication {
 
-	public static void main(String[] args) {
-		AWSXRay.beginSegment("sample-backend");	
-		SpringApplication.run(SampleBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        AWSXRay.beginSegment("sample-backend");
+        SpringApplication.run(SampleBackendApplication.class, args);
+    }
 
 }
