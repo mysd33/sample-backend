@@ -1,6 +1,5 @@
 package com.example.backend.api;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TodoRestController {
     private final TodoService todoService;
+    private final TodoMapper todoMapper;
 
     /**
      * Todoリストを取得する
@@ -48,11 +48,7 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.OK)
     public List<TodoResource> getTodos() {
         Collection<Todo> todos = todoService.findAll();
-        List<TodoResource> todoResources = new ArrayList<>();
-        for (Todo todo : todos) {
-            todoResources.add(TodoMapper.INSTANCE.modelToResource(todo));
-        }
-        return todoResources;
+        return todoMapper.modelsToResources(todos);        
     }
 
     /**
@@ -66,7 +62,7 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.OK)
     public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
         Todo todo = todoService.findOne(todoId);
-        return TodoMapper.INSTANCE.modelToResource(todo);
+        return todoMapper.modelToResource(todo);
     }
 
     /**
@@ -80,8 +76,8 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public TodoResource postTodos(
             @Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
-        Todo createdTodo = todoService.create(TodoMapper.INSTANCE.resourceToModel(todoResource));
-        return TodoMapper.INSTANCE.modelToResource(createdTodo);
+        Todo createdTodo = todoService.create(todoMapper.resourceToModel(todoResource));
+        return todoMapper.modelToResource(createdTodo);
     }
 
     /**
@@ -95,8 +91,8 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public TodoResource postTodosForBatch(
             @Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
-        Todo createdTodo = todoService.createForBatch(TodoMapper.INSTANCE.resourceToModel(todoResource));
-        return TodoMapper.INSTANCE.modelToResource(createdTodo);
+        Todo createdTodo = todoService.createForBatch(todoMapper.resourceToModel(todoResource));
+        return todoMapper.modelToResource(createdTodo);
     }
 
     /**
@@ -110,7 +106,7 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.OK)
     public TodoResource putTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
         Todo finishedTodo = todoService.finish(todoId);
-        return TodoMapper.INSTANCE.modelToResource(finishedTodo);
+        return todoMapper.modelToResource(finishedTodo);
     }
 
     /**

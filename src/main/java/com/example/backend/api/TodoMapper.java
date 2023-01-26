@@ -1,8 +1,10 @@
 package com.example.backend.api;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants.ComponentModel;
-import org.mapstruct.factory.Mappers;
 
 import com.example.backend.domain.model.Todo;
 
@@ -12,10 +14,6 @@ import com.example.backend.domain.model.Todo;
  */
 @Mapper(componentModel = ComponentModel.SPRING)
 public interface TodoMapper {
-    /**
-     * マッパーインスタンス
-     */
-    TodoMapper INSTANCE = Mappers.getMapper(TodoMapper.class);
 
     /**
      * モデルからリソースに変換
@@ -27,4 +25,10 @@ public interface TodoMapper {
      */
     Todo resourceToModel(TodoResource todoResource);
 
+    /**
+     * モデルからリソースに変換
+     */    
+    default List<TodoResource> modelsToResources(Collection<Todo> todos) {
+        return todos.stream().map(this::modelToResource).toList();
+    }
 }
