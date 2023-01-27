@@ -8,7 +8,7 @@
 
 ## プロジェクト構成
 * sample-bff
-    * 別のプロジェクト。当該名称のリポジトリを参照のこと。Spring BootのWebアプリケーションで、APIから非同期実行依頼が可能である。
+    * 別のプロジェクト。当該名称のリポジトリを参照のこと。Spring BootのWebブラウザアプリケーション（Backend for Frontend）で、ユーザがログイン後、TODOやユーザを管理する画面を提供する。また、APIからsample-batchへの非同期実行依頼も可能である。
         * デフォルトでは「spring.profiles.active」プロパティが「dev」になっている。プロファイルdevの場合は、RDB永続化にはh2DBによる組み込みDB、セッション外部化は無効化、SQS接続はsample-batch側で組み込みで起動するElasticMQへ送信するようになっている。
         * プロファイルproductionの場合は、RDB永続化にはPostgreSQL(AWS上はAurora等）、セッション外部化はRedis(ローカル時はRedis on Docker、AWS上はElastiCache for Redis)、SQS接続はSQSへ送信するようになっている。
 * sample-backend（またはsample-backend-dynamodb)
