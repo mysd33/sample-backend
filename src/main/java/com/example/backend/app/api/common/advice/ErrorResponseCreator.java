@@ -1,4 +1,4 @@
-package com.example.backend.common.advice;
+package com.example.backend.app.api.common.advice;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
 
-import com.example.backend.common.resource.ErrorResponse;
+import com.example.backend.app.api.common.resource.ErrorResponse;
 import com.example.fw.common.exception.ErrorCodeProvider;
 
 import lombok.AllArgsConstructor;

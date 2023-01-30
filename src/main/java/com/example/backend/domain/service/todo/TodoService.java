@@ -1,4 +1,4 @@
-package com.example.backend.domain.service;
+package com.example.backend.domain.service.todo;
 
 import java.util.Collection;
 

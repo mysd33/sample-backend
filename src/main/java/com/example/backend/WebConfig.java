@@ -4,7 +4,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.backend.common.advice.ErrorResponseCreator;
+import com.example.backend.app.api.common.advice.ErrorResponseCreator;
 import com.example.backend.domain.message.MessageIds;
 
 import com.example.fw.web.aspect.LogAspect;

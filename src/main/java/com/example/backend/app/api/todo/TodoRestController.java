@@ -1,4 +1,4 @@
-package com.example.backend.api;
+package com.example.backend.app.api.todo;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.example.backend.domain.model.Todo;
-import com.example.backend.domain.service.TodoService;
+import com.example.backend.domain.service.todo.TodoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

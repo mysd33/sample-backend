@@ -1,4 +1,4 @@
-package com.example.backend.api;
+package com.example.backend.app.api.todo;
 
 import java.io.Serializable;
 import java.util.Date;

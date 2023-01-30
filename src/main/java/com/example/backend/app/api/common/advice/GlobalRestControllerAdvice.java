@@ -1,4 +1,4 @@
-package com.example.backend.common.advice;
+package com.example.backend.app.api.common.advice;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.example.backend.api.APIPackage;
-import com.example.backend.common.resource.ErrorResponse;
+import com.example.backend.app.api.APIPackage;
+import com.example.backend.app.api.common.resource.ErrorResponse;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
 
