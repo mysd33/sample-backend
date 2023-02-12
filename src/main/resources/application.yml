@@ -2,7 +2,8 @@ server:
   shutdown: graceful
 
 spring:
-  application:    name: sample-backend    
+  application:
+    name: sample-backend    
   profiles:
     active:
     - dev
