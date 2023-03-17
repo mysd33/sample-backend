@@ -14,6 +14,7 @@ import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
 import com.example.fw.common.logging.MonitoringLogger;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,13 +25,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Aspect
+@RequiredArgsConstructor
 public class LogAspect {
     private static final String LOG_FORMAT_PREFIX = "{0}:";
     private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
     private static final MonitoringLogger monitoringLogger = LoggerFactory.getMonitoringLogger(log);
-
-    @Setter
-    private String defaultExceptionMessageId;
+    
+    private final String defaultExceptionMessageId;
 
     @Around("@within(org.springframework.web.bind.annotation.RestController)")
     public Object aroundRestControllerLog(final ProceedingJoinPoint jp) throws Throwable {

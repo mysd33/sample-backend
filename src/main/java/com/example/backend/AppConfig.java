@@ -35,9 +35,7 @@ public class AppConfig {
      */
     @Bean
     public LogAspect logAspect() {
-        LogAspect logAspect = new LogAspect();
-        logAspect.setDefaultExceptionMessageId(MessageIds.E_EX_9001);
-        return logAspect;
+        return new LogAspect(MessageIds.E_EX_9001);
     }
 
     /**
