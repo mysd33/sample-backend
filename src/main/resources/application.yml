@@ -19,4 +19,8 @@ spring:
 mybatis:
   type-aliases-package: com.example.backend.domain.model     
   configuration:
-    map-underscore-to-camel-case: true    
+    map-underscore-to-camel-case: true
+
+aws:
+  xray:
+    tracing-filter-name: sample-backend    
