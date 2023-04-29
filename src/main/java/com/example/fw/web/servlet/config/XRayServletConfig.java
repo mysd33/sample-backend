@@ -1,6 +1,6 @@
 package com.example.fw.web.servlet.config;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.amazonaws.xray.AWSXRay;
 import com.amazonaws.xray.AWSXRayRecorderBuilder;
-import com.amazonaws.xray.javax.servlet.AWSXRayServletFilter;
+import com.amazonaws.xray.jakarta.servlet.AWSXRayServletFilter;
 import com.amazonaws.xray.plugins.EC2Plugin;
 import com.amazonaws.xray.plugins.ECSPlugin;
 import com.amazonaws.xray.plugins.EKSPlugin;

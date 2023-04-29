@@ -23,4 +23,9 @@ mybatis:
 
 aws:
   xray:
-    tracing-filter-name: sample-backend    
+    tracing-filter-name: sample-backend
+
+# Micrometer Tracing         
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"        

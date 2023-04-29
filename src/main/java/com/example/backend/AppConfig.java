@@ -40,7 +40,7 @@ public class AppConfig {
 
     /**
      * Springdoc-openapiでスネークケースの設定が反映されるようにするための回避策
-     */
+     */    
     @Bean
     public ModelResolver modelResolver(ObjectMapper objectMapper) {
         return new ModelResolver(objectMapper);
