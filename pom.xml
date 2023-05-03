@@ -18,7 +18,7 @@
 		<java.version>17</java.version>
 		<spring.cloud-version>2022.0.2</spring.cloud-version>
 		<mybatis-spring-boot-starter.version>3.0.1</mybatis-spring-boot-starter.version>
-		<logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
+		<logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
 		<springdoc-openapi-ui.version>2.1.0</springdoc-openapi-ui.version>
 		<awsxray.bom.version>2.14.0</awsxray.bom.version>
 		<!-- MapStruct -->
