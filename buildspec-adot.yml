@@ -1,0 +1,56 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:      
+      - echo Logging in to Amazon ECR...      
+      - aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - ls /root/.m2/  
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn install
+      - echo Docker Build      
+      - docker build -t $REPOSITORY_URI:latest -f DockerfileForADOT
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+#TODO: for taskdef.json auto generate error  (to be not continue on failure, but workaround)
+    on-failure: CONTINUE
+    commands:
+      - echo Build completed on `date`
+      - echo ECR Docker Push      
+      - docker push $REPOSITORY_URI:latest      
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+#For ECS Rolling Update Image Definition File (imagedefinitions.json)
+      - printf '[{"name":"ecsdemo-backend-service","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+#For ECS Blue Green Deployment Image Definition File (imageDetail.json)
+      - printf '{"ImageURI":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+#For ECS Blue Green Deployment appspec.yaml
+      - envsubst < appspec-template.yaml > appspec.yaml 
+#For ECS Blue Green Deployment taskdef.json auto generate when ECS Cluster is running
+      - aws ecs describe-task-definition --task-definition $ECS_TASK_DEFINITION --query taskDefinition | jq '.containerDefinitions[0].image="<IMAGE1_NAME>"' > taskdef.json
+#For EKS Rolling Update ImageTag saving file
+      - echo $IMAGE_TAG > imageTag.txt
+      - ls /root/.m2/  
+artifacts:
+  files:
+    #- target/sample-backend-*.jar
+#For ECS Rolling Update
+    - imagedefinitions.json
+#For ECS Blue Green Deployment
+    - imageDetail.json
+    - taskdef.json
+    - appspec.yaml
+#For EKS Rolling Update
+    - buildspec-eks-cd.yml
+    - imageTag.txt
+    - k8s/k8s-backend-deployment.yaml
+cache:
+  paths:
+    - '/root/.m2/**/*'

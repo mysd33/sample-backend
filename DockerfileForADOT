@@ -1,0 +1,22 @@
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:17
+RUN yum install -y shadow-utils
+ARG USERNAME=app
+ARG GROUPNAME=app
+ARG UID=1000
+ARG GID=1000
+
+RUN groupadd -g $GID $GROUPNAME && \
+    useradd -m -s /bin/bash -u $UID -g $GID $USERNAME
+RUN chown -R $USERNAME:$GROUPNAME /tmp
+
+ADD https://github.com/aws-observability/aws-otel-java-instrumentation/releases/latest/download/aws-opentelemetry-agent.jar /opt/aws-opentelemetry-agent.jar
+ENV JAVA_TOOL_OPTIONS=-javaagent:/opt/aws-opentelemetry-agent.jar
+
+USER $USERNAME
+VOLUME [ "/tmp" ]
+WORKDIR /home/$USERNAME/
+
+COPY target/sample-backend-0.1.0-SNAPSHOT.jar /home/$USERNAME/
+ENTRYPOINT [ "java" ]
+CMD [ "-jar", "sample-backend-0.1.0-SNAPSHOT.jar" ]
+EXPOSE 8080
