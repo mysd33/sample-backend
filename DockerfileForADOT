@@ -10,7 +10,8 @@ RUN groupadd -g $GID $GROUPNAME && \
 RUN chown -R $USERNAME:$GROUPNAME /tmp
 
 RUN curl -o /opt/aws-opentelemetry-agent.jar -L https://github.com/aws-observability/aws-otel-java-instrumentation/releases/latest/download/aws-opentelemetry-agent.jar
-ENV JAVA_TOOL_OPTIONS=-javaagent:/opt/aws-opentelemetry-agent.jar
+ENV JAVA_TOOL_OPTIONS=-javaagent:/opt/aws-opentelemetry-agent.jar \
+    OTEL_PROPAGATORS=xray
 
 USER $USERNAME
 VOLUME [ "/tmp" ]
