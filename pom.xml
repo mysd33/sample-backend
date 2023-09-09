@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.6</version>
+		<version>3.1.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -16,10 +16,10 @@
 	<description>Spring Boot Backend Sample</description>
 	<properties>
 		<java.version>17</java.version>
-		<spring.cloud-version>2022.0.2</spring.cloud-version>
-		<mybatis-spring-boot-starter.version>3.0.1</mybatis-spring-boot-starter.version>
-		<logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
-		<springdoc-openapi-ui.version>2.1.0</springdoc-openapi-ui.version>
+		<spring.cloud-version>2022.0.4</spring.cloud-version>
+		<mybatis-spring-boot-starter.version>3.0.2</mybatis-spring-boot-starter.version>
+		<logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
+		<springdoc-openapi-ui.version>2.2.0</springdoc-openapi-ui.version>
 		<awsxray.bom.version>2.14.0</awsxray.bom.version>
 		<!-- MapStruct -->
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
