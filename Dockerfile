@@ -13,7 +13,7 @@ USER $USERNAME
 VOLUME [ "/tmp" ]
 WORKDIR /home/$USERNAME/
 
-COPY target/sample-backend-0.1.0-SNAPSHOT.jar /home/$USERNAME/
+COPY target/*.jar app.jar
 ENTRYPOINT [ "java" ]
-CMD [ "-jar", "sample-backend-0.1.0-SNAPSHOT.jar" ]
+CMD [ "-jar", "app.jar" ]
 EXPOSE 8080
