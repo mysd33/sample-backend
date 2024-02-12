@@ -3,13 +3,18 @@ package com.example.backend.app.api.common.advice;
 import java.util.ArrayList;
 
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
 
 import com.example.backend.app.api.common.resource.ErrorResponse;
+import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.ErrorCodeProvider;
+import com.example.fw.common.exception.SystemException;
+import com.example.fw.web.advice.ErrorResponseCreator;
 
 import lombok.AllArgsConstructor;
 
@@ -18,7 +23,7 @@ import lombok.AllArgsConstructor;
  *
  */
 @AllArgsConstructor
-public class ErrorResponseCreator {
+public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     private final MessageSource messageSource;
     private final String inputErrorMessageId;
     private final String unknowErrorMessageId;
@@ -30,7 +35,8 @@ public class ErrorResponseCreator {
      * @param request       WebRequest
      * @return エラーレスポンス
      */
-    public ErrorResponse createInputErrorResponse(final BindingResult bindingResult, final WebRequest request) {
+    @Override
+    public Object createValidationErrorResponse(final BindingResult bindingResult, final WebRequest request) {
         // 入力エラーの情報を詳細情報に格納し
         ArrayList<String> errorDetails = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -45,17 +51,20 @@ public class ErrorResponseCreator {
         return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
     }
 
-    /**
-     * 業務エラー、システムエラーといった一般的なエラーのエラーレスポンスを作成する
-     * 
-     * @param e       ErrorCodeProviderインタフェースをもつ例外
-     * @param request WebRequest
-     * @return エラーレスポンス
-     */
-    public ErrorResponse createGeneralErrorResponse(final ErrorCodeProvider e, final WebRequest request) {
-        // 例外が持つエラーコードとエラーコードにもとづくメッセージを返却
-        String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
-        return ErrorResponse.builder().code(e.getCode()).message(message).build();
+    @Override
+    public Object createBusinessErrorResponse(final BusinessException e, final WebRequest request) {
+        return createGeneralErrorResponse(e, request);
+    }
+
+    @Override
+    public Object createWarnErrorResponse(Exception e, HttpStatusCode statusCode, WebRequest request) {
+        HttpStatus status = HttpStatus.valueOf(statusCode.value());
+        return ErrorResponse.builder().code(String.valueOf(statusCode.value())).message(status.name()).build();
+    }
+
+    @Override
+    public Object createSystemErrorResponse(final SystemException e, final WebRequest request) {
+        return createGeneralErrorResponse(e, request);
     }
 
     /**
@@ -65,10 +74,24 @@ public class ErrorResponseCreator {
      * @param request WebRequest
      * @return エラーレスポンス
      */
-    public ErrorResponse createUnknownErrorResponse(final Exception e, final WebRequest request) {
+    @Override
+    public Object createUnexpectedErrorResponse(final Exception e, final WebRequest request) {
         // 呼び出し元に例外の情報を必要以上に返却しないようデフォルトのメッセージを返却
         String message = messageSource.getMessage(unknowErrorMessageId, null, request.getLocale());
         return ErrorResponse.builder().code(unknowErrorMessageId).message(message).build();
+    }
+
+    /**
+     * 業務エラー、システムエラーといった一般的なエラーのエラーレスポンスを作成する
+     * 
+     * @param e       ErrorCodeProviderインタフェースをもつ例外
+     * @param request WebRequest
+     * @return エラーレスポンス
+     */
+    private ErrorResponse createGeneralErrorResponse(final ErrorCodeProvider e, final WebRequest request) {
+        // 例外が持つエラーコードとエラーコードにもとづくメッセージを返却
+        String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
+        return ErrorResponse.builder().code(e.getCode()).message(message).build();
     }
 
 }
