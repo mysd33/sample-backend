@@ -12,9 +12,10 @@ spring:
 #    - xray  #X-Ray Enabled
   jackson:
     property-naming-strategy: SNAKE_CASE
-
   lifecycle:
     timeout-per-shutdown-phase: 20s
+  thymeleaf:
+    check-template-location: false    
     
 mybatis:
   type-aliases-package: com.example.backend.domain.model     
