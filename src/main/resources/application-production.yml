@@ -19,5 +19,5 @@ logging:
   level:
     org.springframework: INFO
     org.springframework.jdbc: INFO
-#    org.thymeleaf: DEBUG
-    com.example: DEBUG
+    com.example: INFO
+#    software.amazon.awssdk: DEBUG
