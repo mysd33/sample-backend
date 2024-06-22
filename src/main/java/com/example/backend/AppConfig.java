@@ -3,9 +3,12 @@ package com.example.backend;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import com.example.backend.app.api.common.advice.DefaultErrorResponseCreator;
 import com.example.backend.domain.message.MessageIds;
+import com.example.fw.common.systemdate.SystemDate;
+import com.example.fw.common.systemdate.SystemDateConfig;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +23,8 @@ import io.swagger.v3.oas.models.info.Info;
  *
  */
 @Configuration
+//システム日時機能の追加
+@Import(SystemDateConfig.class)
 public class AppConfig {
 
     /**
@@ -33,9 +38,9 @@ public class AppConfig {
     /**
      * ロギング機能
      */
-    @Bean
-    public LogAspect logAspect() {
-        return new LogAspect(MessageIds.E_EX_9001);
+    @Bean    
+    public LogAspect logAspect(SystemDate systemDate) {
+        return new LogAspect(systemDate, MessageIds.E_EX_9001);
     }
 
     /**
