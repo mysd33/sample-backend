@@ -85,4 +85,20 @@ public class LogAspect {
 		}
 	}
 
+	@Around("@within(org.springframework.stereotype.Repository) || @within(org.apache.ibatis.annotations.Mapper)")
+	public Object aroundRepositoryLog(final ProceedingJoinPoint jp) throws Throwable {
+		appLogger.trace(WebFrameworkMessageIds.T_ON_FW_0001, jp.getSignature(), Arrays.asList(jp.getArgs()));
+		// 処理時間を計測しログ出力
+		long startTime = System.nanoTime();
+		try {
+			return jp.proceed();
+		} finally {
+			// 呼び出し処理実行後、処理時間を計測しログ出力
+			long endTime = System.nanoTime();
+			double elapsedTime = SystemDateUtils.calcElaspedTimeByMilliSecounds(startTime, endTime);
+			appLogger.trace(WebFrameworkMessageIds.T_ON_FW_0002, //
+					jp.getSignature(), Arrays.asList(jp.getArgs()), elapsedTime);
+		}
+	}
+
 }

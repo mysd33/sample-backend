@@ -8,7 +8,9 @@ package com.example.fw.web.message;
 public final class WebFrameworkMessageIds {
     private WebFrameworkMessageIds() {
     }
-
+    
+    public static final String T_ON_FW_0001 = "t.on.fw.0001";
+    public static final String T_ON_FW_0002 = "t.on.fw.0002";
     public static final String I_ON_FW_0001 = "i.on.fw.0001";
     public static final String I_ON_FW_0002 = "i.on.fw.0002";
     public static final String I_ON_FW_0003 = "i.on.fw.0003";
