@@ -192,6 +192,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- Generate Build Information (META-INF/build-info.properties)- -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+					</execution>
+				</executions>				
 				<!-- Lombok -->
 				<configuration>
 					<excludes>
@@ -201,6 +209,11 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<!-- Git Commit Id Plugin -->
+			<plugin>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
 			</plugin>
 			<!-- CycloneDX SBOM -->
 	        <plugin>

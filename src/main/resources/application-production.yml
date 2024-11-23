@@ -12,8 +12,8 @@ spring:
 management:
   endpoints:
     web:
-      exposure:
-        include: "*" 
+      discovery:
+        enabled: false
                    
 logging:
   level:
