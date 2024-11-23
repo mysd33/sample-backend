@@ -187,11 +187,12 @@
 					</annotationProcessorPaths>
 					<release>${java.version}</release>
 				</configuration>
-			</plugin>
-			<!-- Lombok -->
+			</plugin>			
+			<!-- Spring Boot Maven Plugin -->	
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- Lombok -->
 				<configuration>
 					<excludes>
 						<exclude>
@@ -201,6 +202,11 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!-- CycloneDX SBOM -->
+	        <plugin>
+    	        <groupId>org.cyclonedx</groupId>
+        	    <artifactId>cyclonedx-maven-plugin</artifactId>
+        	</plugin>			
 		</plugins>
 	</build>
 </project>
