@@ -1,221 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.6</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>sample-backend</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
-	<name>sample-backend</name>
-	<description>Spring Boot Backend Sample</description>
-	<properties>
-		<java.version>21</java.version>
-		<spring.cloud-version>2023.0.3</spring.cloud-version>
-		<mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
-		<logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
-		<springdoc-openapi-ui.version>2.6.0</springdoc-openapi-ui.version>
-		<awsxray.bom.version>2.18.2</awsxray.bom.version>
-		<!-- MapStruct -->
-		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
-		<org.mapstruct.version>1.6.3</org.mapstruct.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-	</properties>
-	<dependencies>
-		<!-- Spring Boot Web -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<!-- Spring Boot Devtools -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<!-- Spring Boot Test -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Spring Boot Actuator -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-		</dependency>
-		<!-- Spring Boot AOP -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
-		</dependency>	
-		<!-- MyBatis -->
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>${mybatis-spring-boot-starter.version}</version>
-		</dependency>
-		<!-- H2 -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- PostgreSQL -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- MapStruct -->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>${org.mapstruct.version}</version>
-		</dependency>
-		<!-- Logstash Logback Encoder -->
-		<dependency>
-			<groupId>net.logstash.logback</groupId>
-			<artifactId>logstash-logback-encoder</artifactId>
-			<version>${logstash-logback-encoder.version}</version>
-		</dependency>
-		<!-- Micrometer Tracing -->
-		<dependency>
-		    <groupId>io.micrometer</groupId>
-		    <artifactId>micrometer-tracing-bridge-brave</artifactId>
-		</dependency>
-		<!-- Springdoc-openapi -->
-		<dependency>
-    		<groupId>org.springdoc</groupId>
-    		<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    		<version>${springdoc-openapi-ui.version}</version>    	
-		</dependency>		
-		<!-- AWS X-Ray -->
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-xray-recorder-sdk-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-xray-recorder-sdk-aws-sdk</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-xray-recorder-sdk-apache-http</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-xray-recorder-sdk-spring</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-xray-recorder-sdk-sql</artifactId>
-		</dependency>	
-	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<!-- AWS X-Ray -->
-			<dependency>
-				<groupId>com.amazonaws</groupId>
-				<artifactId>aws-xray-recorder-sdk-bom</artifactId>
-				<version>${awsxray.bom.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<!-- Spring Cloud -->
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring.cloud-version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-</dependencyManagement>
-	<build>
-		<plugins>
-			<!-- MapStruct -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.mapstruct</groupId>
-							<artifactId>mapstruct-processor</artifactId>
-							<version>${org.mapstruct.version}</version>
-						</path>
-						<!-- other annotation processors -->
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>${lombok.version}</version>
-						</path>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>${lombok-mapstruct-binding.version}</version>
-						</path>
-					</annotationProcessorPaths>
-					<release>${java.version}</release>
-				</configuration>
-			</plugin>			
-			<!-- Spring Boot Maven Plugin -->	
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!-- Generate Build Information (META-INF/build-info.properties)- -->
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-info</goal>
-						</goals>
-					</execution>
-				</executions>				
-				<!-- Lombok -->
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<!-- Git Commit Id Plugin -->
-			<plugin>
-				<groupId>io.github.git-commit-id</groupId>
-				<artifactId>git-commit-id-maven-plugin</artifactId>
-			</plugin>
-			<!-- CycloneDX SBOM -->
-	        <plugin>
-    	        <groupId>org.cyclonedx</groupId>
-        	    <artifactId>cyclonedx-maven-plugin</artifactId>
-        	</plugin>			
-		</plugins>
-	</build>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.6</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>sample-backend</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>sample-backend</name>
+    <description>Spring Boot Backend Sample</description>
+    <properties>
+        <java.version>21</java.version>
+        <spring.cloud-version>2023.0.3</spring.cloud-version>
+        <mybatis-spring-boot-starter.version>3.0.3</mybatis-spring-boot-starter.version>
+        <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
+        <springdoc-openapi-ui.version>2.6.0</springdoc-openapi-ui.version>
+        <awsxray.bom.version>2.18.2</awsxray.bom.version>
+        <!-- MapStruct -->
+        <m2e.apt.activation>jdt_apt</m2e.apt.activation>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+    </properties>
+    <dependencies>
+        <!-- Spring Boot Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- Spring Boot Devtools -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <!-- Spring Boot Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Spring Boot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <!-- Spring Boot AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!-- MyBatis -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+        <!-- H2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+        <!-- Logstash Logback Encoder -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+        </dependency>
+        <!-- Micrometer Tracing -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+        </dependency>
+        <!-- Springdoc-openapi -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
+        </dependency>
+        <!-- AWS X-Ray -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-xray-recorder-sdk-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-xray-recorder-sdk-aws-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-xray-recorder-sdk-apache-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-xray-recorder-sdk-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-xray-recorder-sdk-sql</artifactId>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!-- AWS X-Ray -->
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-xray-recorder-sdk-bom</artifactId>
+                <version>${awsxray.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <build>
+        <plugins>
+            <!-- MapStruct -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <!-- other annotation processors -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <release>${java.version}</release>
+                </configuration>
+            </plugin>
+            <!-- Spring Boot Maven Plugin -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- Generate Build Information(META-INF/build-info.properties) -->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!-- Lombok -->
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!-- Git Commit Id Plugin -->
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+            </plugin>
+            <!-- CycloneDX SBOM -->
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
