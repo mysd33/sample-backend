@@ -21,6 +21,9 @@
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
         <springdoc-openapi-ui.version>2.6.0</springdoc-openapi-ui.version>
         <awsxray.bom.version>2.18.2</awsxray.bom.version>
+        <!-- logback-access -->
+        <logback-access.version>2.0.6</logback-access.version>
+        <logback.version>1.5.16</logback.version>        
         <!-- MapStruct -->
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
@@ -135,6 +138,28 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-xray-recorder-sdk-sql</artifactId>
         </dependency>
+        <!-- logback-access -->
+        <dependency>
+            <groupId>ch.qos.logback.access</groupId>
+            <artifactId>logback-access-common</artifactId>
+            <version>${logback-access.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.access</groupId>
+            <artifactId>logback-access-tomcat</artifactId>
+            <version>${logback-access.version}</version>
+        </dependency>
+        <!-- https://github.com/qos-ch/logback/issues/908 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>        
     </dependencies>
     <dependencyManagement>
         <dependencies>

@@ -11,6 +11,7 @@ import com.example.fw.common.systemdate.SystemDate;
 import com.example.fw.common.systemdate.SystemDateConfig;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
+import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.v3.core.jackson.ModelResolver;
@@ -23,8 +24,8 @@ import io.swagger.v3.oas.models.info.Info;
  *
  */
 @Configuration
-//システム日時機能の追加
-@Import(SystemDateConfig.class)
+//システム日時機能、Tomcatアクセスログ機能の追加
+@Import({SystemDateConfig.class, TomcatAccessLogConfig.class})
 public class AppConfig {
 
     /**

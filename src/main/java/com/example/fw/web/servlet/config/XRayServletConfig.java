@@ -1,8 +1,5 @@
 package com.example.fw.web.servlet.config;
 
-import jakarta.servlet.Filter;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,17 +13,20 @@ import com.amazonaws.xray.plugins.ECSPlugin;
 import com.amazonaws.xray.plugins.EKSPlugin;
 import com.example.fw.web.aspect.XRayAspect;
 
+import jakarta.servlet.Filter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * 
  * X-Ray設定クラス
  *
  */
+@RequiredArgsConstructor
 @Profile("xray")
 @Configuration
 @EnableConfigurationProperties({XRayServletConfigurationProperties.class})
 public class XRayServletConfig  {
-    @Autowired
-    private XRayServletConfigurationProperties xRayServletConfigurationProperties;
+    private final XRayServletConfigurationProperties xRayServletConfigurationProperties;
     
     static {
         // サービスプラグインの設定

@@ -28,4 +28,9 @@ mybatis:
 
 aws:
   xray:
-    tracing-filter-name: sample-backend      
+    tracing-filter-name: sample-backend
+
+# Tomcat Access Log
+#logback:
+#  access:
+#    enabled: false   
