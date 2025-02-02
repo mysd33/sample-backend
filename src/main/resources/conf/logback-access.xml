@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+  <import class="ch.qos.logback.core.filter.EvaluatorFilter"/>
+  <import class="ch.qos.logback.access.common.boolex.RequestURIEventEvaluator"/>
+  
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- https://logback.qos.ch/manual/filters.html#evaluatorFilter -->
+    <filter class="EvaluatorFilter">
+      <evaluator class="RequestURIEventEvaluator">
+      <regex>^/webjars/|^/css/|^/js/|^/favicon.ico|^/actuator|^/h2-console</regex>
+      </evaluator>
+      <onMatch>DENY</onMatch>
+      <onMismatch>NEUTRAL</onMismatch>
+    </filter>
     <encoder>
       <!-- https://logback.qos.ch/access.html -->
       <!-- https://logback.qos.ch/manual/layouts.html#AccessPatternLayout -->
@@ -18,7 +29,7 @@
            %i{User-Agent}: User agent
       -->
       <Pattern>[Tomcat] %h %a %i{X-Forwarded-For} [%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}] "%r" "%D ms" %s "%S" "%v" "%I" "%i{X-Amzn-Trace-Id}" "%i{User-Agent}"</Pattern>
-    </encoder>
+    </encoder>    
   </appender>
   
   <appender-ref ref="STDOUT" />
