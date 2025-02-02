@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
+      <providers>
+      <!-- https://github.com/logfellow/logstash-logback-encoder?tab=readme-ov-file#accessevent-patterns -->
+      <!-- https://logback.qos.ch/manual/layouts.html#AccessPatternLayout -->
+      <!-- %t: Date and time
+           %h: Remote host
+           %a: Remote IP address
+           %i{X-Forwarded-For}: ALB forwards the original client IP address in the X-Forwarded-For header
+           %r: Request URL
+           %s: HTTP status code
+           %D: elapsed time in milliseconds
+           %S: Session ID
+           %v: Server name
+           %I: Thread Name
+           %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
+           %i{User-Agent}: User agent
+      -->
+        <pattern>
+          <pattern>
+            {
+              "type": "tomcat access log",
+              "@timestamp": "%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}",
+              "remote_host": "%h",
+              "remote_ip": "%a",
+              "x_forwared_for": "%i{X-Forwarded-For}",
+              "request_url": "%r",
+              "http_status": "%s",
+              "elapsed_time": "%D ms",
+              "session_id": "%S",
+              "server_name": "%v",
+              "thread_name": "%I",
+              "x_amzn_trace_Id": "%i{X-Amzn-Trace-Id}",
+              "user_agent": "%i{User-Agent}"
+            }
+          </pattern>
+        </pattern>      
+      </providers>
+    </encoder>
+  </appender>  
+  <appender-ref ref="STDOUT" />
+</configuration>
