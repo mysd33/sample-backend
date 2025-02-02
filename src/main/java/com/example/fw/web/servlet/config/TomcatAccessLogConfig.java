@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.ConfigurableTomcatWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,10 +17,10 @@ import lombok.RequiredArgsConstructor;
 @ConditionalOnProperty(prefix = "logback.access", name = "enabled", havingValue = "true", matchIfMissing = true)
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties({TomcatAccessLogConfigurationProperties.class})
+@EnableConfigurationProperties({ TomcatAccessLogConfigurationProperties.class })
 public class TomcatAccessLogConfig {
     private final TomcatAccessLogConfigurationProperties tomcatAccessLogConfigurationProperties;
-    
+
     @Bean
     public WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> webServerFactoryCustomizer() {
         return factory -> {
@@ -28,4 +29,10 @@ public class TomcatAccessLogConfig {
             factory.addEngineValves(valve);
         };
     }
+
+    @Bean
+    public FilterRegistrationBean<LogMDCFilter> logMDCFilter() {
+        return new FilterRegistrationBean<>(new LogMDCFilter());
+    }
+
 }

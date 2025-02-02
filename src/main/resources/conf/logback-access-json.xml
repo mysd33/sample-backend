@@ -32,7 +32,7 @@
               "session_id": "%S",
               "server_name": "%v",
               "thread_name": "%I",
-              "x_amzn_trace_Id": "%i{X-Amzn-Trace-Id}",
+              "x_amzn_trace_id": "%i{X-Amzn-Trace-Id}",
               "user_agent": "%i{User-Agent}"
             }
           </pattern>

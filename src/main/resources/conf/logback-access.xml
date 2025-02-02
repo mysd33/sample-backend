@@ -17,7 +17,7 @@
            %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
            %i{User-Agent}: User agent
       -->
-      <Pattern>[ACCESS] %h %a %i{X-Forwarded-For} [%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}] "%r" "%D ms" %s "%S" "%v" "%I" "%i{X-Amzn-Trace-Id}" "%i{User-Agent}"</Pattern>
+      <Pattern>[Tomcat] %h %a %i{X-Forwarded-For} [%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}] "%r" "%D ms" %s "%S" "%v" "%I" "%i{X-Amzn-Trace-Id}" "%i{User-Agent}"</Pattern>
     </encoder>
   </appender>
   
