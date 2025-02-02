@@ -24,6 +24,7 @@
            %s: HTTP status code
            %D: elapsed time in milliseconds
            %S: Session ID
+           %reqCookie{SESSION}: Session ID (Not JSESSIONID on ALB + ECS Environment)
            %v: Server name
            %I: Thread Name
            %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
@@ -41,6 +42,7 @@
               "http_status": "%s",
               "elapsed_time": "%D ms",
               "session_id": "%S",
+              "session_id_on_aws": "%reqCookie{SESSION}",
               "server_name": "%v",
               "thread_name": "%I",
               "x_amzn_trace_id": "%i{X-Amzn-Trace-Id}",
