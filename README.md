@@ -145,16 +145,16 @@
     * APログの例
         ```json
         {
-            "@timestamp": "2025-02-02T15:50:14.886365699+09:00",
+            "@timestamp": "2025-02-02T22:15:01.870668662+09:00",
             "@version": "1",
-            "message": "RestController開始: List com.example.backend.app.api.todo.TodoRestController.getTodos(), システム日時:2025-02-02T15:50:14.886237393+09:00[Asia/Tokyo]",
+            "message": "RestController開始: List com.example.backend.app.api.todo.TodoRestController.getTodos(), システム日時:2025-02-02T22:15:01.776268361+09:00[Asia/Tokyo]",
             "logger_name": "com.example.fw.web.aspect.LogAspect",
-            "thread_name": "tomcat-handler-29",
+            "thread_name": "tomcat-handler-30",
             "level": "INFO",
             "level_value": 20000,
-            "traceId": "679f15a65c3286d36d49e17396255fc1",
-            "spanId": "b86e002ddf1ffe46",
-            "x_amzn_trace_id": "Self=1-679f15a6-3975a8b67497e61d3f24524a;Root=1-679f15a6-07b42a852c4609b1765267d5;Parent=4d662ab2b2837f3c;Sampled=1"
+            "traceId": "679f6fd5e9b727ec710a844f4cddbcb6",
+            "spanId": "da75889772444b2b",
+            "x_amzn_trace_id": "Self=1-679f6fd5-1432886c7e273d71356c0314;Root=1-679f6fd5-752842f73e9f1e6923beec17;Parent=393bd1b8af9ef3c0;Sampled=1"
         }
         ```
 
@@ -163,17 +163,18 @@
         ```json
         {
             "type": "tomcat access log",
-            "@timestamp": "2025-02-02T15:50:14.910+09:00",
-            "remote_host": "10.0.3.201",
-            "remote_ip": "10.0.3.201",
-            "x_forwared_for": "10.0.3.19",
+            "@timestamp": "2025-02-02T22:15:02.480+09:00",
+            "remote_host": "10.0.2.44",
+            "remote_ip": "10.0.2.44",
+            "x_forwared_for": "10.0.3.249",
             "request_url": "GET /api/v1/todos HTTP/1.1",
             "http_status": "200",
-            "elapsed_time": "28 ms",
+            "elapsed_time": "792 ms",
             "session_id": "null",
-            "server_name": "internal-demo-privatealb-492694697.ap-northeast-1.elb.amazonaws.com",
-            "thread_name": "tomcat-handler-29",
-            "x_amzn_trace_id": "Self=1-679f15a6-3975a8b67497e61d3f24524a;Root=1-679f15a6-07b42a852c4609b1765267d5;Parent=4d662ab2b2837f3c;Sampled=1",
+            "session_id_on_aws": "-",
+            "server_name": "internal-demo-privatealb-254582377.ap-northeast-1.elb.amazonaws.com",
+            "thread_name": "tomcat-handler-30",
+            "x_amzn_trace_id": "Self=1-679f6fd5-1432886c7e273d71356c0314;Root=1-679f6fd5-752842f73e9f1e6923beec17;Parent=393bd1b8af9ef3c0;Sampled=1",
             "user_agent": "ReactorNetty/1.1.24"
         }
         ```
