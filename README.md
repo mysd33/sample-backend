@@ -120,7 +120,6 @@
         }        
         ```
 
-
 ## OpenAPI
 * Springdoc-openapiにより、RestControllerの実装からAPIドキュメントをリバースエンジニアリングできる
     * アプリケーションを起動し、以下のURLへアクセスするとそれぞれjson、yaml、html形式のドキュメントを表示する。
@@ -130,6 +129,54 @@
         * yaml形式のドキュメント
     * http://localhost:8000/swagger-ui.html
         * html形式（Swagger-UI）のドキュメント
+
+## （メモ）logback-access対応によるTomcatアクセスログ
+* Spring BootのデフォルトのTomcatアクセスログは、ログファイルに出力される形式であるが、logback-accessを利用することで標準出力に出力できるので、APログと一緒に、クラウド・コンテナ実行時にCloudWatch Logsへ転送することができる。
+
+* 開発端末上では、通常のテキスト形式で出力
+
+```
+[Tomcat] 127.0.0.1 127.0.0.1 - [2025-02-02T20:31:16.424+09:00] "GET /api/v1/todos HTTP/1.1" "262 ms" 200 "null" "localhost" "tomcat-handler-0" "-" "ReactorNetty/1.1.24"
+```
+
+* クラウド上（log_containerプロファイル）では、JSON形式で出力
+    * X-AMZN-TRACE-IDヘッダーの値をログに出力することで、APログ側とリクエストを紐づけできるようにしている。
+
+    * APログの例
+        ```json
+        {
+            "@timestamp": "2025-02-02T15:50:14.886365699+09:00",
+            "@version": "1",
+            "message": "RestController開始: List com.example.backend.app.api.todo.TodoRestController.getTodos(), システム日時:2025-02-02T15:50:14.886237393+09:00[Asia/Tokyo]",
+            "logger_name": "com.example.fw.web.aspect.LogAspect",
+            "thread_name": "tomcat-handler-29",
+            "level": "INFO",
+            "level_value": 20000,
+            "traceId": "679f15a65c3286d36d49e17396255fc1",
+            "spanId": "b86e002ddf1ffe46",
+            "x_amzn_trace_id": "Self=1-679f15a6-3975a8b67497e61d3f24524a;Root=1-679f15a6-07b42a852c4609b1765267d5;Parent=4d662ab2b2837f3c;Sampled=1"
+        }
+        ```
+
+    * APログと対応するリクエストのTomcatアクセスログの例
+
+        ```json
+        {
+            "type": "tomcat access log",
+            "@timestamp": "2025-02-02T15:50:14.910+09:00",
+            "remote_host": "10.0.3.201",
+            "remote_ip": "10.0.3.201",
+            "x_forwared_for": "10.0.3.19",
+            "request_url": "GET /api/v1/todos HTTP/1.1",
+            "http_status": "200",
+            "elapsed_time": "28 ms",
+            "session_id": "null",
+            "server_name": "internal-demo-privatealb-492694697.ap-northeast-1.elb.amazonaws.com",
+            "thread_name": "tomcat-handler-29",
+            "x_amzn_trace_id": "Self=1-679f15a6-3975a8b67497e61d3f24524a;Root=1-679f15a6-07b42a852c4609b1765267d5;Parent=4d662ab2b2837f3c;Sampled=1",
+            "user_agent": "ReactorNetty/1.1.24"
+        }
+        ```
 
 ## PostgreSQLのローカル起動
 * Profileが「production」に切り替えてSpringBootアプリケーションを実行する場合、DBがPostgreSQLで動作する設定になっているため、事前にPostgreSQLを起動する必要がある。
