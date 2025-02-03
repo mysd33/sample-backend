@@ -23,8 +23,9 @@
            %r: Request URL
            %s: HTTP status code
            %D: elapsed time in milliseconds
-           %S: Session ID
-           %reqCookie{SESSION}: Session ID (Not JSESSIONID on ALB + ECS Environment)
+           %S: Session ID(JSESSSIONID)
+           %reqCookie{SESSION}: Session ID (Not JSESSIONID but SESSION on Spring Session Default Configuration)
+                                https://docs.spring.io/spring-session/reference/configuration/common.html#custom-cookie-options
            %v: Server name
            %I: Thread Name
            %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header

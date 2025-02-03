@@ -22,7 +22,7 @@
            %r: Request URL
            %D: elapsed time in milliseconds
            %s: HTTP status code
-           %S: Session ID
+           %S: Session ID(JSESSSIONID)
            %v: Server name
            %I: Thread Name
            %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
