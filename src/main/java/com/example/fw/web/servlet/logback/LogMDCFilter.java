@@ -1,4 +1,4 @@
-package com.example.fw.web.servlet.config;
+package com.example.fw.web.servlet.logback;
 
 import java.io.IOException;
 
@@ -18,17 +18,20 @@ import jakarta.servlet.http.HttpServletRequest;
  * 通常のログにMDCでX-Amzn-Trace-Idを追加するためのフィルタ
  */
 public class LogMDCFilter implements Filter {
+    private static final String X_AMZN_TRACE_ID = "X-Amzn-Trace-Id";
+    private static final String MDC_X_AMZN_TRACE_ID_NAME = "x_amzn_trace_id";
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest)request;
         
         // X-Amzn-Trace-Idヘッダを取得
-        String xAmznTraceId = httpRequest.getHeader("X-Amzn-Trace-Id");
+        String xAmznTraceId = httpRequest.getHeader(X_AMZN_TRACE_ID);
         
         if (xAmznTraceId != null) {
             // MDCにX-Amzn-Trace-Idを設定
-            MDC.put("x_amzn_trace_id", xAmznTraceId);
+            MDC.put(MDC_X_AMZN_TRACE_ID_NAME, xAmznTraceId);
         }
         chain.doFilter(request, response);
     }

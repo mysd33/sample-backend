@@ -3,6 +3,10 @@
   <import class="ch.qos.logback.core.filter.EvaluatorFilter"/>
   <import class="ch.qos.logback.access.common.boolex.RequestURIEventEvaluator"/>
   
+  <!-- https://logback.qos.ch/manual/layouts.html#customConversionSpecifier -->
+  <!-- %HS: Hashed SessionID Custom Conveter -->
+  <conversionRule conversionWord="HS" class="com.example.fw.web.servlet.logback.HashedSessionIdConverter"/>
+  
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <!-- https://logback.qos.ch/manual/filters.html#evaluatorFilter -->
     <filter class="EvaluatorFilter">
@@ -22,13 +26,14 @@
            %r: Request URL
            %D: elapsed time in milliseconds
            %s: HTTP status code
-           %S: Session ID(JSESSSIONID)
+           %S: Session ID(JSESSSIONID)           
+           %HS: Hashed Session ID(JSESSIONID or SESSION)           
            %v: Server name
            %I: Thread Name
            %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
            %i{User-Agent}: User agent
       -->
-      <Pattern>[Tomcat] %h %a %i{X-Forwarded-For} [%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}] "%r" "%D ms" %s "%S" "%v" "%I" "%i{X-Amzn-Trace-Id}" "%i{User-Agent}"</Pattern>
+      <Pattern>[Tomcat] %h %a %i{X-Forwarded-For} [%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}] "%r" "%D ms" %s "%S" "%HS" "%v" "%I" "%i{X-Amzn-Trace-Id}" "%i{User-Agent}"</Pattern>
     </encoder>    
   </appender>
   
