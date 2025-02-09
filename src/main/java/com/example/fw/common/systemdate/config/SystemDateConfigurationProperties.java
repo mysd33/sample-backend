@@ -1,4 +1,4 @@
-package com.example.fw.common.systemdate;
+package com.example.fw.common.systemdate.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -25,7 +25,7 @@ public class XRayJDBCConfig {
      */
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSourceProperties dataSourceProperties() {
+    DataSourceProperties dataSourceProperties() {
         return new DataSourceProperties();
     }
 
@@ -33,7 +33,7 @@ public class XRayJDBCConfig {
      * DataSourceでのAWS X-RayのJDBCトレーシング設定
      */
     @Bean
-    public DataSource dataSource(DataSourceProperties dataSourceProperties) {
+    DataSource dataSource(DataSourceProperties dataSourceProperties) {
         // @formatter:off
         return TracingDataSource.decorate(
                 DataSourceBuilder.create()

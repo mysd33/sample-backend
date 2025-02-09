@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import com.example.backend.app.api.common.advice.DefaultErrorResponseCreator;
 import com.example.backend.domain.message.MessageIds;
 import com.example.fw.common.systemdate.SystemDate;
-import com.example.fw.common.systemdate.SystemDateConfig;
+import com.example.fw.common.systemdate.config.SystemDateConfig;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
@@ -32,7 +32,7 @@ public class AppConfig {
      * エラーレスポンス作成クラス
      */
     @Bean
-    public ErrorResponseCreator errorResponseCreator(MessageSource messageSource) {
+    ErrorResponseCreator errorResponseCreator(MessageSource messageSource) {
         return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_5001, MessageIds.E_EX_9001);
     }
 
@@ -40,7 +40,7 @@ public class AppConfig {
      * ロギング機能
      */
     @Bean    
-    public LogAspect logAspect(SystemDate systemDate) {
+    LogAspect logAspect(SystemDate systemDate) {
         return new LogAspect(systemDate, MessageIds.E_EX_9001);
     }
 
@@ -48,7 +48,7 @@ public class AppConfig {
      * Springdoc-openapiでスネークケースの設定が反映されるようにするための回避策
      */    
     @Bean
-    public ModelResolver modelResolver(ObjectMapper objectMapper) {
+    ModelResolver modelResolver(ObjectMapper objectMapper) {
         return new ModelResolver(objectMapper);
     }
 
@@ -56,7 +56,7 @@ public class AppConfig {
      * Springdoc-openapiの定義
      */
     @Bean
-    public OpenAPI springShopOpenAPI() {
+    OpenAPI springShopOpenAPI() {
         return new OpenAPI().info(new Info().title("Todo APIドキュメント").description("Todo管理のためのAPIです。").version("v1.0"));
     }
 

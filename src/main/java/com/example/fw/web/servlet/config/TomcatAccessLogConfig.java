@@ -24,7 +24,7 @@ public class TomcatAccessLogConfig {
     private final TomcatAccessLogConfigurationProperties tomcatAccessLogConfigurationProperties;
 
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> webServerFactoryCustomizer() {
+    WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> webServerFactoryCustomizer() {
         return factory -> {
             LogbackValve valve = new LogbackValve();
             valve.setFilename(tomcatAccessLogConfigurationProperties.getConfig());

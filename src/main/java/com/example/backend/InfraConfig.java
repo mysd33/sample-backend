@@ -15,7 +15,7 @@ public class InfraConfig {
 
 	//MyBatisでRDBアクセスしない場合のスタブ	
 	//@Bean
-	public TodoRepository todoRepository() {
+	TodoRepository todoRepository() {
 		return new TodoRepositoryStub();
 	}
 
