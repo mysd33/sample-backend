@@ -20,7 +20,11 @@ spring:
   threads:
     virtual:
       enabled: true              
-        
+# Dynamic Routing DataSource (disabled on Sample AP Default)
+  datasource:
+    dynamic-routing:
+      enabled: false
+      
 mybatis:
   type-aliases-package: com.example.backend.domain.model     
   configuration:
