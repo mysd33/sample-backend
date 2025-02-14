@@ -25,10 +25,15 @@ public class DynamicRoutingDataSourceConfig {
      * リーダーエンドポイント接続用のDataSourceProperties
      */
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.read")
+    @ConfigurationProperties("spring.datasource.read")
     DataSourceProperties readDataSourceProperties() {
         return new DataSourceProperties();
     }
+
+    // TransactionやMyBatis関連のAutoConfigurationがうまく機能するよう
+    // DataSourceのBean定義が複数あるため、DIされるDataSourceが1つだけになるようにする
+    // メインのDataSource定義以外は、defaultCandidate = falseにしている
+    // https://docs.spring.io/spring-boot/how-to/data-access.html#howto.data-access.configure-two-datasources
 
     /**
      * リーダーエンドポイント接続用のDataSource
@@ -38,11 +43,25 @@ public class DynamicRoutingDataSourceConfig {
         return readDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
+    // @formatter:off
+    // DataSourceBuilderを使うことで、以下のようにDataSourcePropertiesのBean定義なくすことも可能であるが、
+    // HikariCPを使う場合は、HikariDataSourceに「url」プロパティがなく「jdbcUrl」プロパティとなるため
+    // application.yamlの設定が「spring.datasource.read.jdbc-url」になってしまうため、採用していない
+    // 
+    // https://docs.spring.io/spring-boot/how-to/data-access.html#howto.data-access.configure-custom-datasource
+    /*
+       @Bean(defaultCandidate = false)
+       @ConfigurationProperties("spring.datasource.read")
+       DataSource readDataSource() {
+           return DataSourceBuilder.create().build();
+       }
+    // @formatter:on
+
     /**
      * クラスタエンドポイント接続用のDataSourceProperties
      */
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.write")
+    @ConfigurationProperties("spring.datasource.write")
     DataSourceProperties writeDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -67,7 +86,7 @@ public class DynamicRoutingDataSourceConfig {
         customRoutingDataSource.setDefaultTargetDataSource(writeDataSource());
         return customRoutingDataSource;
     }
-    
+
     /**
      * メインのDataSource<br>
      * 
