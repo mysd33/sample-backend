@@ -1,6 +1,3 @@
-server:
-  shutdown: graceful
-
 spring:
   application:
     name: sample-backend    

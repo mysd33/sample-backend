@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 
 import com.example.fw.common.datasource.CustomRoutingDataSource;
@@ -34,8 +33,7 @@ public class DynamicRoutingDataSourceConfig {
     /**
      * リーダーエンドポイント接続用のDataSource
      */
-    // TODO: Spring Boot3.4バージョンアップ後、defaultCandidateをfalseに変更する
-    @Bean(autowireCandidate = false)
+    @Bean(defaultCandidate = false)
     DataSource readDataSource() {
         return readDataSourceProperties().initializeDataSourceBuilder().build();
     }
@@ -52,8 +50,7 @@ public class DynamicRoutingDataSourceConfig {
     /**
      * クラスタエンドポイント接続用のDataSource
      */
-    // TODO: Spring Boot3.4バージョンアップ後、defaultCandidateをfalseに変更する
-    @Bean(autowireCandidate = false)
+    @Bean(defaultCandidate = false)
     DataSource writeDataSource() {
         return writeDataSourceProperties().initializeDataSourceBuilder().build();
     }
@@ -61,8 +58,7 @@ public class DynamicRoutingDataSourceConfig {
     /**
      * 動的ルーティング用のDataSource
      */
-    // TODO: Spring Boot3.4バージョンアップ後、defaultCandidateをfalseに変更する
-    @Bean(autowireCandidate = false)
+    @Bean(defaultCandidate = false)
     DataSource customRoutingDataSource() {
         CustomRoutingDataSource customRoutingDataSource = new CustomRoutingDataSource();
         customRoutingDataSource.setTargetDataSources(//
@@ -79,8 +75,6 @@ public class DynamicRoutingDataSourceConfig {
      * 
      */
     @Bean
-    // TODO: Spring Boot3.4バージョンアップ後、@Primary削除でも動作するか確認する
-    @Primary    // @Primaryアノテーションを付与することで、MybatisのAutoConfigurationによりSQLSessionFactoryがBean定義されるようにする
     DataSource dataSource() {
         return new LazyConnectionDataSourceProxy(customRoutingDataSource());
     }
