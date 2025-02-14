@@ -34,6 +34,7 @@ public class DynamicRoutingDataSourceConfig {
     /**
      * リーダーエンドポイント接続用のDataSource
      */
+    // TODO: Spring Boot3.4バージョンアップ後、defaultCandidateをfalseに変更する
     @Bean(autowireCandidate = false)
     DataSource readDataSource() {
         return readDataSourceProperties().initializeDataSourceBuilder().build();
@@ -51,6 +52,7 @@ public class DynamicRoutingDataSourceConfig {
     /**
      * クラスタエンドポイント接続用のDataSource
      */
+    // TODO: Spring Boot3.4バージョンアップ後、defaultCandidateをfalseに変更する
     @Bean(autowireCandidate = false)
     DataSource writeDataSource() {
         return writeDataSourceProperties().initializeDataSourceBuilder().build();
@@ -59,6 +61,7 @@ public class DynamicRoutingDataSourceConfig {
     /**
      * 動的ルーティング用のDataSource
      */
+    // TODO: Spring Boot3.4バージョンアップ後、defaultCandidateをfalseに変更する
     @Bean(autowireCandidate = false)
     DataSource customRoutingDataSource() {
         CustomRoutingDataSource customRoutingDataSource = new CustomRoutingDataSource();
@@ -76,6 +79,7 @@ public class DynamicRoutingDataSourceConfig {
      * 
      */
     @Bean
+    // TODO: Spring Boot3.4バージョンアップ後、@Primary削除でも動作するか確認する
     @Primary    // @Primaryアノテーションを付与することで、MybatisのAutoConfigurationによりSQLSessionFactoryがBean定義されるようにする
     DataSource dataSource() {
         return new LazyConnectionDataSourceProxy(customRoutingDataSource());
