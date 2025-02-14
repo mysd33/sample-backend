@@ -4,6 +4,8 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
+import com.example.fw.common.message.CommonFrameworkMessageIds;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -25,7 +27,7 @@ public class CustomRoutingDataSource extends AbstractRoutingDataSource {
         DataSourceType dataSourceType = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
                 ? DataSourceType.READ
                 : DataSourceType.WRITE;
-        appLogger.debug("determineCurrentLookupKey: {}", dataSourceType);
+        appLogger.info(CommonFrameworkMessageIds.I_CM_FW_0006, dataSourceType);
         return dataSourceType;
 
     }
