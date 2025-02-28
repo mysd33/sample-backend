@@ -2,12 +2,13 @@ package com.example.backend.app.api.todo;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+//import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Todoリソースクラス
@@ -28,10 +29,16 @@ public class TodoResource implements Serializable {
     private String todoTitle;
 
     // 完了かどうか
-    @Schema(description = "完了かどうか")
+    @Schema(description = "完了フラグ")
     private boolean finished;
 
     // 作成日時
     @Schema(description = "作成日時")
+    // @JsonPropertyDescription("作成日時") // @Schemaのdescrptionがあれば定義不要
     private Date createdAt;
+    
+    
+    // TODO: 入れ子のリソースでのテスト。後で削除
+    @Schema(description = "ほげ")
+    private Hoge hoge;
 }

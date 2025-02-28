@@ -1,35 +1,67 @@
 package com.example.backend.app.api.common.advice;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
 
 import com.example.backend.app.api.common.resource.ErrorResponse;
+import com.example.backend.domain.message.MessageIds;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.ErrorCodeProvider;
 import com.example.fw.common.exception.SystemException;
 import com.example.fw.web.advice.ErrorResponseCreator;
+import com.example.fw.web.advice.InvalidFormatField;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * エラーレスポンスの作成クラス
  *
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     private final MessageSource messageSource;
     private final String inputErrorMessageId;
     private final String unknowErrorMessageId;
 
     /**
-     * 入力エラーの場合のエラーレスポンスを作成する
+     * 入力エラー（リクエストメッセージのJavaBean変換に失敗）の場合のエラーレスポンスを作成する
+     * 
+     * @param invalidFields エラーとなったフィールド
+     * @param e             InvalidFormatException
+     * @param request       WebRequest
+     */
+    @Override
+    public Object createValidationErrorResponse(List<InvalidFormatField> invalidFields, InvalidFormatException e,
+            WebRequest request) {
+
+        ArrayList<String> errorDetails = new ArrayList<>();
+        invalidFields.forEach(field -> {
+            if (StringUtils.hasLength(field.getDescription())) {
+                String localizedMessage = messageSource.getMessage(MessageIds.W_EX_5002,
+                        new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
+                errorDetails.add(localizedMessage);
+            } else {
+                String localizedMessage = messageSource.getMessage(MessageIds.W_EX_5003,
+                        new Object[] { field.getFieldName() }, request.getLocale());
+                errorDetails.add(localizedMessage);
+            }
+        });
+        String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
+        return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+    }
+
+    /**
+     * 入力エラー（Validationエラー）の場合のエラーレスポンスを作成する
      * 
      * @param bindingResult BindingResult
      * @param request       WebRequest
@@ -93,5 +125,4 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
         return ErrorResponse.builder().code(e.getCode()).message(message).build();
     }
-
 }

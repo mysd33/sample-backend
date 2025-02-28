@@ -1,10 +1,16 @@
 package com.example.fw.web.advice;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,12 +21,26 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class AbstractRestControllerAdvice extends ResponseEntityExceptionHandler {
     protected final ErrorResponseCreator errorResponseCreator;
+
+    // ObjectMapperのPropertyNamingStrategyを取得するためのフィールド
+    private ObjectMapper objectMapper;
+    // 業務のRestControllerAdviceクラスのコンストラクタが煩雑にならないようSetterインジェクションを利用
+    @Autowired
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * 入力エラーのハンドリング （MethodArgumentNotValidException）
@@ -31,6 +51,22 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         return handleBindingResult(ex, ex.getBindingResult(), headers, statusCode, request);
     }
+    
+    /**
+     * 入力エラー時のBindingResultを元にエラーレスポンスを作成する
+     * @param ex 例外
+     * @param bindingResult BindingResult
+     * @param headers　Httpヘッダー
+     * @param statusCode Httpステータスコード
+     * @param request WebRequest
+     * @return エラーレスポンス
+     */
+    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
+            HttpStatusCode statusCode, WebRequest request) {
+        Object body = errorResponseCreator.createValidationErrorResponse(bindingResult, request);
+
+        return handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
 
     /**
      * 入力エラーのハンドリング （HttpMessageNotReadableException）
@@ -39,18 +75,60 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
             HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        if (ex.getCause() instanceof Exception cause) {
+        if (ex.getCause() instanceof InvalidFormatException cause) {
+            List<InvalidFormatField> fields = new ArrayList<>();
+            cause.getPath().forEach(ref -> {
+                Class<?> fromClass = ref.getFrom().getClass();
+                String jsonFieldName = ref.getFieldName();
+                String propertyDescription = getPropertyDescription(fromClass, jsonFieldName);
+                if (StringUtils.hasLength(propertyDescription)) {
+                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).description(propertyDescription)
+                            .build());
+                } else {
+                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).build());
+                }
+            });
+            Object body = errorResponseCreator.createValidationErrorResponse(fields, cause, request);
+            return handleExceptionInternal(ex, body, headers, statusCode, request);
+        } else if (ex.getCause() instanceof Exception cause) {
             return handleExceptionInternal(cause, null, headers, statusCode, request);
         } else {
             return handleExceptionInternal(ex, null, headers, statusCode, request);
         }
     }
 
-    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
-            HttpStatusCode statusCode, WebRequest request) {
-        Object body = errorResponseCreator.createValidationErrorResponse(bindingResult, request);
+    /**
+     * プロパティに関するDescriptionアノテーションの値を取得する
+     * 
+     * @param clazz         対象のクラス
+     * @param jsonFieldName Jsonのフィールド名
+     * @return JsonPropertyDescriptionアノテーションの値
+     */
+    private String getPropertyDescription(Class<?> clazz, String jsonFieldName) {
+        List<Field> fields = List.of(clazz.getDeclaredFields());
+        for (Field field : fields) {
+            JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
+            // @JsonPropertyが付与されている場合はその値を優先して使用、
+            // 付与されていない場合はPropertyNamingStrategyで変換した値を使用する
+            String fieldName = jsonProperty != null ? jsonProperty.value()
+                    : ((NamingBase) objectMapper.getPropertyNamingStrategy()).translate(field.getName());
+            if (!fieldName.equals(jsonFieldName)) {
+                continue;
+            }
+            // フィルード名が一致する場合に、@JsonPropertyDescriptionがあればその値を返却
+            JsonPropertyDescription jsonPropertyDescription = field.getAnnotation(JsonPropertyDescription.class);
+            if (jsonPropertyDescription != null) {
+                return jsonPropertyDescription.value();
+            }
+            // @Schemaがあれば、そのdescription属性を返却
+            Schema schema = field.getAnnotation(Schema.class);
+            if (schema != null) {
+                return schema.description();
+            }
 
-        return handleExceptionInternal(ex, body, headers, statusCode, request);
+            return null;
+        }
+        return null;
     }
 
     /**
@@ -62,7 +140,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
         Object body = errorResponseCreator.createWarnErrorResponse(ex, statusCode, request);
         return handleExceptionInternal(ex, body, headers, statusCode, request);
     }
-    
+
     /**
      * 405 Method Not Allowedを警告エラーとしてハンドリング
      */
