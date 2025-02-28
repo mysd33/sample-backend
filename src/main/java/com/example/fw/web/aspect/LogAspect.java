@@ -44,7 +44,7 @@ public class LogAspect {
         } finally {
             // 処理時間を計測しログ出力
             ZonedDateTime endDateTime = systemDate.now();
-            double elapsedTime = SystemDateUtils.calcElaspedTimeByMilliSecounds(startDateTime, endDateTime);
+            double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startDateTime, endDateTime);
             appLogger.info(WebFrameworkMessageIds.I_ON_FW_0007, jp.getSignature(), elapsedTime, startDateTime);
         }
     }
@@ -58,7 +58,7 @@ public class LogAspect {
         } finally {
             // 処理時間を計測しログ出力
             ZonedDateTime endDateTime = systemDate.now();
-            double elapsedTime = SystemDateUtils.calcElaspedTimeByMilliSecounds(startDateTime, endDateTime);
+            double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startDateTime, endDateTime);
             appLogger.info(WebFrameworkMessageIds.I_ON_FW_0005, jp.getSignature(), elapsedTime, startDateTime);
         }
     }
@@ -105,7 +105,7 @@ public class LogAspect {
         } finally {
             // 呼び出し処理実行後、処理時間を計測しログ出力
             long endTime = System.nanoTime();
-            double elapsedTime = SystemDateUtils.calcElaspedTimeByMilliSecounds(startTime, endTime);
+            double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
             appLogger.trace(WebFrameworkMessageIds.T_ON_FW_0004, //
                     jp.getSignature(), Arrays.asList(jp.getArgs()), elapsedTime);
         }
@@ -120,7 +120,7 @@ public class LogAspect {
         } finally {
             // 呼び出し処理実行後、処理時間を計測しログ出力
             long endTime = System.nanoTime();
-            double elapsedTime = SystemDateUtils.calcElaspedTimeByMilliSecounds(startTime, endTime);
+            double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
             appLogger.trace(WebFrameworkMessageIds.T_ON_FW_0002, //
                     jp.getSignature(), Arrays.asList(jp.getArgs()), elapsedTime);
         }

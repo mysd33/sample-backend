@@ -18,7 +18,7 @@ public final class SystemDateUtils {
 	 * @param endDateTime   終了時のシステム日時
 	 * @return 処理時間（ミリ秒小数点第三位の精度）
 	 */
-	public static double calcElaspedTimeByMilliSecounds(Temporal startDateTime, Temporal endDateTime) {
+	public static double calcElapsedTimeByMilliSeconds(Temporal startDateTime, Temporal endDateTime) {
 		long durationByNanoUnit = Duration.between(startDateTime, endDateTime).toNanos();
 		// ナノ秒をマイクロ秒の単位に変換後、小数点第三位の精度を持つミリ秒の表現に変換
 		return TimeUnit.NANOSECONDS.toMicros(durationByNanoUnit) / 1000d;
@@ -31,7 +31,7 @@ public final class SystemDateUtils {
 	 * @param endTime   終了時のUnix時間
 	 * @return 処理時間（ミリ秒小数点第三位の精度）
 	 */
-	public static double calcElaspedTimeByMilliSecounds(long startTime, long endTime) {
+	public static double calcElapsedTimeByMilliSeconds(long startTime, long endTime) {
 		return TimeUnit.NANOSECONDS.toMicros(endTime - startTime) / 1000d;
 	}
 
