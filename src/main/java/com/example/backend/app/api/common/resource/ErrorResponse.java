@@ -3,6 +3,8 @@ package com.example.backend.app.api.common.resource;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +26,7 @@ public class ErrorResponse implements Serializable {
     // エラーメッセージ
     private String message;
     // エラーメッセージ詳細
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<String> details;
 
 }

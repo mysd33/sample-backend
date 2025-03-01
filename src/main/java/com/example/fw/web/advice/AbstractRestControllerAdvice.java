@@ -23,9 +23,10 @@ import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,21 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
             HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        if (ex.getCause() instanceof InvalidFormatException cause) {
+        // リソースのフォーマットとしてJSONを使用する場合、HttpMessageNotReadableExceptionの原因例外として格納されるものをハンドリング
+        // (参考) https://terasolunaorg.github.io/guideline/current/ja/ArchitectureInDetail/WebServiceDetail/REST.html#resthowtouseexceptionhandlingforvalidationerror
+        // なお、Resourceオブジェクトに存在しないフィールドがJSONに指定されてUnrecognizedPropertyExceptionがスローされるが
+        // JsonMappingExceptionのサブクラスであるため、JsonParseException、JsonMappingExceptionの２つをハンドリングする
+        // また、Spring Bootの場合、デフォルトでは、ObjectMapperのDeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIESがfalseで作成されるため
+        // UnrecognizedPropertyExceptionはスローされない
+        // spring.jackson.deserialization.fail-on-unknown-properties=trueをapplication.yamlに設定することで、例外発生する。
+        if (ex.getCause() instanceof JsonParseException cause) {
+            // JSONとして不正な構文の場合
+            Object body = errorResponseCreator.createRequestFormatErrorResponse(cause, request);
+            return handleExceptionInternal(ex, body, headers, statusCode, request);
+        } else if (ex.getCause() instanceof JsonMappingException cause) {
+            // JSONからResourceオブジェクトへ変換する際に、値の型変換またはエラーが発生した場合、
+            // もしくは、spring.jackson.deserialization.fail-on-unknown-properties=trueの場合に、
+            // Resourceオブジェクトに存在しないフィールドがJSONに指定された場合に、エラーの原因となったフィールドを抽出
             List<InvalidFormatField> fields = new ArrayList<>();
             cause.getPath().forEach(ref -> {
                 Class<?> fromClass = ref.getFrom().getClass();
@@ -88,12 +103,12 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
                     fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).build());
                 }
             });
-            Object body = errorResponseCreator.createValidationErrorResponse(fields, cause, request);
+            Object body = errorResponseCreator.createRequestMappingErrorResponse(fields, cause, request);
             return handleExceptionInternal(ex, body, headers, statusCode, request);
-        } else if (ex.getCause() instanceof Exception cause) {
-            return handleExceptionInternal(cause, null, headers, statusCode, request);
         } else {
-            return handleExceptionInternal(ex, null, headers, statusCode, request);
+            // その他の例外は想定外のため、警告エラーとしてハンドリングする
+            Object body = errorResponseCreator.createWarnErrorResponse(ex, statusCode, request);
+            return handleExceptionInternal(ex, body, headers, statusCode, request);
         }
     }
 
