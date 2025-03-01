@@ -42,7 +42,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * @return エラーレスポンス
      */
     @Override
-    public Object createRequestFormatErrorResponse(JsonParseException e, WebRequest request) {
+    public Object createRequestParseErrorResponse(JsonParseException e, WebRequest request) {
         ArrayList<String> errorDetails = new ArrayList<>();
         String localizedMessage = messageSource.getMessage(MessageIds.W_EX_5002, null, request.getLocale());
         errorDetails.add(localizedMessage);

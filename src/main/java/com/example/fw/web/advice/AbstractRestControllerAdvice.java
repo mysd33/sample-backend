@@ -85,7 +85,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
         // spring.jackson.deserialization.fail-on-unknown-properties=trueをapplication.yamlに設定することで、例外発生する。
         if (ex.getCause() instanceof JsonParseException cause) {
             // JSONとして不正な構文の場合
-            Object body = errorResponseCreator.createRequestFormatErrorResponse(cause, request);
+            Object body = errorResponseCreator.createRequestParseErrorResponse(cause, request);
             return handleExceptionInternal(ex, body, headers, statusCode, request);
         } else if (ex.getCause() instanceof JsonMappingException cause) {
             // JSONからResourceオブジェクトへ変換する際に、値の型変換またはエラーが発生した場合、

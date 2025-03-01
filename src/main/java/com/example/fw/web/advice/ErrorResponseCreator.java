@@ -23,7 +23,7 @@ public interface ErrorResponseCreator {
      * @param request WebRequest
      * @return エラーレスポンス
      */
-    Object createRequestFormatErrorResponse(JsonParseException e, WebRequest request);
+    Object createRequestParseErrorResponse(JsonParseException e, WebRequest request);
 
     /**
      * 入力エラー（リクエストメッセージからResourceオブジェクトへの変換に失敗）の場合のエラーレスポンスを作成する
