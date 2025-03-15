@@ -16,7 +16,8 @@
     <description>Spring Boot Backend Sample</description>
     <properties>
         <java.version>21</java.version>
-        <spring.cloud-version>2024.0.0</spring.cloud-version>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud-aws.version>3.3.0</spring-cloud-aws.version>
         <mybatis-spring-boot-starter.version>3.0.4</mybatis-spring-boot-starter.version>
         <springdoc-openapi-ui.version>2.8.4</springdoc-openapi-ui.version>
         <awsxray.bom.version>2.18.2</awsxray.bom.version>
@@ -110,6 +111,16 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
+        <!-- Spring Cloud for AWS Parameter Store Integration-->
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-parameter-store</artifactId>
+        </dependency>
+        <!-- Spring Cloud for AWS Secrets Manager Integration-->
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-secrets-manager</artifactId>
+        </dependency>
         <!-- Springdoc-openapi -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -163,7 +174,15 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud-version}</version>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Cloud for AWS -->
+            <dependency>
+                <groupId>io.awspring.cloud</groupId>
+                <artifactId>spring-cloud-aws-dependencies</artifactId>
+                <version>${spring-cloud-aws.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
