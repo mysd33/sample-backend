@@ -1,7 +1,8 @@
-package com.example.fw.common.jdbc.config;
+package com.example.fw.common.datasource.config;
 
 import javax.sql.DataSource;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -18,6 +19,8 @@ import com.zaxxer.hikari.HikariDataSource;
  *
  */
 @Profile("xray")
+//TODO: データソースの動的ルーティングへX-Rayトレーシング設定が対応するまでの暫定対処
+@ConditionalOnProperty(prefix = "spring.datasource.dynamic-routing", name = "enabled", havingValue = "false", matchIfMissing = true)
 @Configuration
 public class XRayJDBCConfig {
     /**
