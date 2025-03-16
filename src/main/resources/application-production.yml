@@ -4,10 +4,10 @@ spring:
       platform: postgresql
       mode: always      
   datasource:    
-    url: jdbc:postgresql://localhost:5432/testdb
+#    url: jdbc:postgresql://localhost:5432/testdb
     driver-class-name: org.postgresql.Driver 
-    username: postgres
-    password: password     
+#    username: postgres
+#    password: password     
 
 # Spring Cloud for AWS Parameter Store & Integration Secreters Manager Integration
   config:

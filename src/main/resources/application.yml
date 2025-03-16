@@ -24,11 +24,6 @@ spring:
   datasource:
     dynamic-routing:
       enabled: false
-# Spring Cloud for AWS Parameter Store & Integration Secreters Manager Integration
-  config:
-    import: 
-    - optional:aws-parameterstore:/config/common;/config/sample-backend
-    - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.
 
 mybatis:
   type-aliases-package: com.example.backend.domain.model     
