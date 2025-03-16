@@ -14,7 +14,7 @@ spring:
     import: 
       - 'aws-parameterstore:/config/common/'
       - 'optional:aws-parameterstore:/config/sample-backend/'
-      - 'aws-secretsmanager:/secrets/database-secrets/?prefix=spring.datasource.'
+      - 'aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.'
 management:
   endpoints:
     web:
