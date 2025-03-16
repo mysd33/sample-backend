@@ -8,13 +8,19 @@ spring:
     driver-class-name: org.postgresql.Driver 
 #    username: postgres
 #    password: password
+# Dynamic Routing DataSource
+    read:
+      driver-class-name: org.postgresql.Driver
+    write:
+      driver-class-name: org.postgresql.Driver
 
 # Spring Cloud for AWS Parameter Store & Integration Secreters Manager Integration
   config:
     import: 
-      - 'aws-parameterstore:/config/common/'
-      - 'optional:aws-parameterstore:/config/sample-backend/'
-      - 'aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.'
+      - 'optional:aws-parameterstore:/config/common/;/config/sample-backend/'
+      - 'optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.'
+      - 'optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.read.'
+      - 'optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.write.'
 management:
   endpoints:
     web:
