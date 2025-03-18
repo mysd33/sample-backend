@@ -39,6 +39,8 @@ public class DynamicRoutingDataSourceConfig {
      * リーダーエンドポイント接続用のDataSource
      */
     @Bean(defaultCandidate = false)
+    // HikariCPを前提に、spring.datasource.hikariプロパティと同じ設定ができるようにする
+    @ConfigurationProperties("spring.datasource.read.hikari")
     DataSource readDataSource() {
         return readDataSourceProperties().initializeDataSourceBuilder().build();
     }
@@ -70,6 +72,8 @@ public class DynamicRoutingDataSourceConfig {
      * クラスタエンドポイント接続用のDataSource
      */
     @Bean(defaultCandidate = false)
+    // HikariCPを前提に、spring.datasource.hikariプロパティと同じ設定ができるようにする
+    @ConfigurationProperties("spring.datasource.write.hikari")
     DataSource writeDataSource() {
         return writeDataSourceProperties().initializeDataSourceBuilder().build();
     }

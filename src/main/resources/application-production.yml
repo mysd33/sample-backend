@@ -11,9 +11,12 @@ spring:
 # Dynamic Routing DataSource
     read:
       driver-class-name: org.postgresql.Driver
+#      hikari:
+#        maximam-pool-size: 30
     write:
       driver-class-name: org.postgresql.Driver
-
+#      hikari:
+#        maximam-pool-size: 30
 # Spring Cloud for AWS Parameter Store & Integration Secreters Manager Integration
   config:
     import: 
