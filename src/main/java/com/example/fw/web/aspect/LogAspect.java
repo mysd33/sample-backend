@@ -1,6 +1,6 @@
 package com.example.fw.web.aspect;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,13 +37,13 @@ public class LogAspect {
 
     @Around("@within(org.springframework.web.bind.annotation.RestController)")
     public Object aroundRestControllerLog(final ProceedingJoinPoint jp) throws Throwable {
-        ZonedDateTime startDateTime = systemDate.now();
+        LocalDateTime startDateTime = systemDate.now();
         appLogger.info(WebFrameworkMessageIds.I_ON_FW_0006, jp.getSignature(), startDateTime);
         try {
             return jp.proceed();
         } finally {
             // 処理時間を計測しログ出力
-            ZonedDateTime endDateTime = systemDate.now();
+            LocalDateTime endDateTime = systemDate.now();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startDateTime, endDateTime);
             appLogger.info(WebFrameworkMessageIds.I_ON_FW_0007, jp.getSignature(), elapsedTime, startDateTime);
         }
@@ -51,13 +51,13 @@ public class LogAspect {
 
     @Around("@within(org.springframework.stereotype.Controller)")
     public Object aroundControllerLog(final ProceedingJoinPoint jp) throws Throwable {
-        ZonedDateTime startDateTime = systemDate.now();
+        LocalDateTime startDateTime = systemDate.now();
         appLogger.info(WebFrameworkMessageIds.I_ON_FW_0004, jp.getSignature(), startDateTime);
         try {
             return jp.proceed();
         } finally {
             // 処理時間を計測しログ出力
-            ZonedDateTime endDateTime = systemDate.now();
+            LocalDateTime endDateTime = systemDate.now();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startDateTime, endDateTime);
             appLogger.info(WebFrameworkMessageIds.I_ON_FW_0005, jp.getSignature(), elapsedTime, startDateTime);
         }

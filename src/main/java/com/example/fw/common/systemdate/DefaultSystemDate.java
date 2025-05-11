@@ -24,7 +24,12 @@ public class DefaultSystemDate implements SystemDate {
     private final String fixedSystemDate;
     
     @Override
-    public ZonedDateTime now() {
+    public LocalDateTime now() {
+        return nowWithZoneInfo().toLocalDateTime();
+    }
+    
+    @Override
+    public ZonedDateTime nowWithZoneInfo() {
         if (fixedSystemDate == null) {       
             return ZonedDateTime.now();
         } else {
@@ -35,4 +40,4 @@ public class DefaultSystemDate implements SystemDate {
             }
         }
     }
-}   
+}
