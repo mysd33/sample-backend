@@ -16,22 +16,22 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import com.example.fw.common.validation.FixedLength.List;
+import com.example.fw.common.validation.MaxLength.List;
 
 /**
  * 
- * サロゲートペア対応の固定文字列長をチェックする単項目チェックルールのアノテーション
+ * サロゲートペア対応の最大文字列長チェックを行う単項目チェックルールのアノテーション
  *
  */
 @Documented
-@Constraint(validatedBy = { FixedLengthValidator.class })
+@Constraint(validatedBy = { MaxLengthValidator.class })
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Repeatable(List.class)
-public @interface FixedLength {
+public @interface MaxLength {
     int value() default 0;
 
-    String message() default "{com.example.fw.common.validation.FixedLength.message}";
+    String message() default "{com.example.fw.common.validation.MaxLength.message}";
 
     Class<?>[] groups() default {};
 
@@ -41,6 +41,6 @@ public @interface FixedLength {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        FixedLength[] value();
+        MaxLength[] value();
     }
 }

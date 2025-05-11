@@ -16,22 +16,18 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import com.example.fw.common.validation.FixedLength.List;
+import com.example.fw.common.validation.DateString.List;
 
 /**
- * 
- * サロゲートペア対応の固定文字列長をチェックする単項目チェックルールのアノテーション
- *
+ * 日付形式の文字列かどうかチェックする単項目チェックルールのアノテーション
  */
 @Documented
-@Constraint(validatedBy = { FixedLengthValidator.class })
+@Constraint(validatedBy = { DateStringValidator.class })
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Repeatable(List.class)
-public @interface FixedLength {
-    int value() default 0;
-
-    String message() default "{com.example.fw.common.validation.FixedLength.message}";
+public @interface DateString {
+    String message() default "{com.example.fw.common.validation.DateString.message}";
 
     Class<?>[] groups() default {};
 
@@ -41,6 +37,6 @@ public @interface FixedLength {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        FixedLength[] value();
+        DateString[] value();
     }
 }

@@ -12,26 +12,25 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import jakarta.validation.ReportAsSingleViolation;
+import jakarta.validation.constraints.Pattern;
 
-import com.example.fw.common.validation.FixedLength.List;
+import com.example.fw.common.validation.HalfWidthAlphabetNumber.List;
 
 /**
- * 
- * サロゲートペア対応の固定文字列長をチェックする単項目チェックルールのアノテーション
- *
+ * 半角英数字形式の文字列かどうか検証する単項目チェックルールのアノテーション
  */
 @Documented
-@Constraint(validatedBy = { FixedLengthValidator.class })
+@Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Repeatable(List.class)
-public @interface FixedLength {
-    int value() default 0;
-
-    String message() default "{com.example.fw.common.validation.FixedLength.message}";
+@ReportAsSingleViolation
+@Pattern(regexp = "^[a-zA-Z0-9]*$")
+public @interface HalfWidthAlphabetNumber {
+    String message() default "{com.example.fw.common.validation.HalfWidghAlphabetNumber.message}";
 
     Class<?>[] groups() default {};
 
@@ -41,6 +40,6 @@ public @interface FixedLength {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        FixedLength[] value();
+        HalfWidthAlphabetNumber[] value();
     }
 }

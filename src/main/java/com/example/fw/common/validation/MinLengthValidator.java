@@ -7,14 +7,14 @@ import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * 
- * サロゲートペア対応の固定文字列長チェックを行うValidatorクラス
+ * サロゲートペア対応の最大文字列長チェックを行うValidatorクラス
  *
  */
-public class FixedLengthValidator implements ConstraintValidator<FixedLength, String> {
+public class MinLengthValidator implements ConstraintValidator<MinLength, String> {
     private int length;
 
     @Override
-    public void initialize(final FixedLength constraintAnnotation) {
+    public void initialize(final MinLength constraintAnnotation) {
         this.length = constraintAnnotation.value();
     }
 
@@ -23,6 +23,6 @@ public class FixedLengthValidator implements ConstraintValidator<FixedLength, St
         if (value == null || value.isBlank()) {
             return true;
         }
-        return JapaneseStringUtils.getCodePointLength(value) == this.length;
+        return JapaneseStringUtils.getCodePointLength(value) >= this.length;
     }
 }
