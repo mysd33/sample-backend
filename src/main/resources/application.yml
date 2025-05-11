@@ -20,11 +20,24 @@ spring:
   threads:
     virtual:
       enabled: true              
+
 # Dynamic Routing DataSource (disabled on Sample AP Default)
   datasource:
     dynamic-routing:
       enabled: false
+# HikariCP AutoCommit false
+    hikari:
+      auto-commit: false
+# Dynamic Routing DataSource HikariCP AutoCommit false
+    read:
+      hikari:
+        auto-commit: false
+    write:
+      hikari:
+        auto-commit: false
 
+       
+      
 mybatis:
   type-aliases-package: com.example.backend.domain.model     
   configuration:
