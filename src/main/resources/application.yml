@@ -20,7 +20,9 @@ spring:
   threads:
     virtual:
       enabled: true              
-
+# Transaction Rollback
+  transaction:
+    rollback-on-commit-failure: true
 # Dynamic Routing DataSource (disabled on Sample AP Default)
   datasource:
     dynamic-routing:
