@@ -17,10 +17,10 @@ import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraints.Pattern;
 
-import com.example.fw.common.validation.HalfWidthKana.List;
+import com.example.fw.common.validation.HalfWidthNumber.List;
 
 /**
- * 半角カナ形式の文字列かどうか検証する単項目チェックルールのアノテーション
+ * 半角数字の文字列かどうか検証する単項目チェックルールのアノテーション
  */
 @Documented
 @Constraint(validatedBy = {})
@@ -28,9 +28,9 @@ import com.example.fw.common.validation.HalfWidthKana.List;
 @Retention(RUNTIME)
 @Repeatable(List.class)
 @ReportAsSingleViolation
-@Pattern(regexp = "^[ｦ-ﾟ]*$")
-public @interface HalfWidthKana {
-    String message() default "{com.example.fw.common.validation.HalfWidthKana.message}";
+@Pattern(regexp = "^\\d*$")
+public @interface HalfWidthNumber {
+    String message() default "{com.example.fw.common.validation.HalfWidthNumber.message}";
 
     Class<?>[] groups() default {};
 
@@ -40,6 +40,6 @@ public @interface HalfWidthKana {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        HalfWidthKana[] value();
+        HalfWidthNumber[] value();
     }
 }

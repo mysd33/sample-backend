@@ -30,7 +30,7 @@ import com.example.fw.common.validation.HalfWidthAlphabetNumberSymbol.List;
 @ReportAsSingleViolation
 @Pattern(regexp = "^[a-zA-Z0-9!-/:-@\\[-`{-~]*$")
 public @interface HalfWidthAlphabetNumberSymbol {
-    String message() default "{com.example.fw.common.validation.HalfWidghAlphabetNumberSymbol.message}";
+    String message() default "{com.example.fw.common.validation.HalfWidthAlphabetNumberSymbol.message}";
 
     Class<?>[] groups() default {};
 

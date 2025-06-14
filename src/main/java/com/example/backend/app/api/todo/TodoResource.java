@@ -3,11 +3,11 @@ package com.example.backend.app.api.todo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.example.fw.common.validation.RangeLength;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 //import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -27,7 +27,7 @@ public class TodoResource implements Serializable {
     // タイトル
     @Schema(description = "タイトル")
     @NotNull
-    @Size(min = 1, max = 30)
+    @RangeLength(min = 1, max = 30)
     private String todoTitle;
 
     // 完了かどうか

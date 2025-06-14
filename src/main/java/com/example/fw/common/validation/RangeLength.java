@@ -13,24 +13,32 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
+import jakarta.validation.OverridesAttribute;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-import jakarta.validation.constraints.Pattern;
 
-import com.example.fw.common.validation.Number.List;
+import com.example.fw.common.validation.RangeLength.List;
 
 /**
- * 半角数字の文字列かどうか検証する単項目チェックルールのアノテーション
+ * 
+ * サロゲートペア対応の文字列長の範囲チェックを行う単項目チェックルールのアノテーション
+ * 
  */
 @Documented
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Repeatable(List.class)
+@MinLength(0)
+@MaxLength(Integer.MAX_VALUE)
 @ReportAsSingleViolation
-@Pattern(regexp = "^\\d*$")
-public @interface Number {
-    String message() default "{com.example.fw.common.validation.Number.message}";
+public @interface RangeLength {
+    @OverridesAttribute(constraint = MinLength.class, name = "value")
+    int min() default 0;
+    @OverridesAttribute(constraint = MaxLength.class, name = "value")
+    int max() default Integer.MAX_VALUE;
+
+    String message() default "{com.example.fw.common.validation.RangeLength.message}";
 
     Class<?>[] groups() default {};
 
@@ -40,6 +48,7 @@ public @interface Number {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        Number[] value();
+        RangeLength[] value();
     }
+
 }

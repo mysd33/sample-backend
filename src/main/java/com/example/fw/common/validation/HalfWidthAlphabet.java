@@ -17,7 +17,7 @@ import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraints.Pattern;
 
-import com.example.fw.common.validation.HalfWidghAlphabet.List;
+import com.example.fw.common.validation.HalfWidthAlphabet.List;
 
 /**
  * 半角英字形式の文字列かどうか検証する単項目チェックルールのアノテーション
@@ -29,8 +29,8 @@ import com.example.fw.common.validation.HalfWidghAlphabet.List;
 @Repeatable(List.class)
 @ReportAsSingleViolation
 @Pattern(regexp = "^[a-zA-Z]*$")
-public @interface HalfWidghAlphabet {
-    String message() default "{com.example.fw.common.validation.HalfWidghAlphabet.message}";
+public @interface HalfWidthAlphabet {
+    String message() default "{com.example.fw.common.validation.HalfWidthAlphabet.message}";
 
     Class<?>[] groups() default {};
 
@@ -40,6 +40,6 @@ public @interface HalfWidghAlphabet {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        HalfWidghAlphabet[] value();
+        HalfWidthAlphabet[] value();
     }
 }
