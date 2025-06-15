@@ -3,6 +3,7 @@ package com.example.backend.app.api.todo;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.example.fw.common.validation.CharSet;
 import com.example.fw.common.validation.RangeLength;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -28,6 +29,7 @@ public class TodoResource implements Serializable {
     @Schema(description = "タイトル")
     @NotNull
     @RangeLength(min = 1, max = 30)
+    @CharSet
     private String todoTitle;
 
     // 完了かどうか
