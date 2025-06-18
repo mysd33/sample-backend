@@ -13,10 +13,10 @@ import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import com.example.fw.common.validation.DateString.List;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-
-import com.example.fw.common.validation.DateString.List;
 
 /**
  * 日付形式の文字列かどうかチェックする単項目チェックルールのアノテーション

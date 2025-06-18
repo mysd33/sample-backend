@@ -12,12 +12,13 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import com.example.fw.common.validation.HalfWidthNumber.List;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraints.Pattern;
-
-import com.example.fw.common.validation.HalfWidthNumber.List;
 
 /**
  * 半角数字の文字列かどうか検証する単項目チェックルールのアノテーション

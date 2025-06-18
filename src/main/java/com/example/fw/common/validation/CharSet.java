@@ -28,10 +28,11 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_LatinLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_SpecialChars;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
+import com.example.fw.common.validation.CharSet.List;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-import com.example.fw.common.validation.CharSet.List;
 
 /**
  * 本システムが許容する文字集合を検証する単項目チェックルールのアノテーション

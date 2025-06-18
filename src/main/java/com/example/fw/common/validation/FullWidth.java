@@ -22,10 +22,11 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_Katakana;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_LatinLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
+import com.example.fw.common.validation.FullWidth.List;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-import com.example.fw.common.validation.FullWidth.List;
 
 /**
  * 全角文字列（記号を除く）かどうか検証する単項目チェックルールのアノテーション

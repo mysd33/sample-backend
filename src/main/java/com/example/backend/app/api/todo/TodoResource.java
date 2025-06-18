@@ -5,10 +5,9 @@ import java.util.Date;
 
 import com.example.fw.common.validation.CharSet;
 import com.example.fw.common.validation.RangeLength;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 //import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -27,7 +26,7 @@ public class TodoResource implements Serializable {
 
     // タイトル
     @Schema(description = "タイトル")
-    @NotNull
+    @NotBlank
     @RangeLength(min = 1, max = 30)
     @CharSet
     private String todoTitle;
@@ -40,10 +39,9 @@ public class TodoResource implements Serializable {
     @Schema(description = "作成日時")
     // @JsonPropertyDescription("作成日時") // @Schemaのdescrptionがあれば定義不要
     private Date createdAt;
-    
-    
+
     // TODO: 入れ子のリソースでのテスト。後で削除
-    //@Schema(description = "ほげ")
-    //@JsonInclude(JsonInclude.Include.NON_NULL)
-    //private Hoge hoge;
+    // @Schema(description = "ほげ")
+    // @JsonInclude(JsonInclude.Include.NON_NULL)
+    // private Hoge hoge;
 }

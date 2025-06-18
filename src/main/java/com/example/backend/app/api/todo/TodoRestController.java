@@ -48,7 +48,7 @@ public class TodoRestController {
     @ResponseStatus(HttpStatus.OK)
     public List<TodoResource> getTodos() {
         Collection<Todo> todos = todoService.findAll();
-        return todoMapper.modelsToResources(todos);        
+        return todoMapper.modelsToResources(todos);
     }
 
     /**
@@ -60,7 +60,7 @@ public class TodoRestController {
     @Operation(summary = "Todo取得", description = "指定したTodo IDに対応するTodoを取得する。")
     @GetMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
-    public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
+    public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable String todoId) {
         Todo todo = todoService.findOne(todoId);
         return todoMapper.modelToResource(todo);
     }
@@ -104,7 +104,7 @@ public class TodoRestController {
     @Operation(summary = "Todo完了", description = "指定したTodo IDのTodoを完了状態に更新する。")
     @PutMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
-    public TodoResource putTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
+    public TodoResource putTodo(@Parameter(description = "Todo ID") @PathVariable String todoId) {
         Todo finishedTodo = todoService.finish(todoId);
         return todoMapper.modelToResource(finishedTodo);
     }
@@ -117,7 +117,7 @@ public class TodoRestController {
     @Operation(summary = "Todo削除", description = "指定したTodo IDのTodoを削除する。")
     @DeleteMapping("{todoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTodo(@Parameter(description = "Todo ID") @PathVariable("todoId") String todoId) {
+    public void deleteTodo(@Parameter(description = "Todo ID") @PathVariable String todoId) {
         todoService.delete(todoId);
     }
 }

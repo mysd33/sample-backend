@@ -12,12 +12,13 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import com.example.fw.common.validation.RangeLength.List;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.OverridesAttribute;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-
-import com.example.fw.common.validation.RangeLength.List;
 
 /**
  * 
@@ -35,6 +36,7 @@ import com.example.fw.common.validation.RangeLength.List;
 public @interface RangeLength {
     @OverridesAttribute(constraint = MinLength.class, name = "value")
     int min() default 0;
+
     @OverridesAttribute(constraint = MaxLength.class, name = "value")
     int max() default Integer.MAX_VALUE;
 
