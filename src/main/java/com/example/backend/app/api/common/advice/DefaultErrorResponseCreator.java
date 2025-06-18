@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.context.request.WebRequest;
 
 import com.example.backend.app.api.common.resource.ErrorResponse;
@@ -30,9 +32,46 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class DefaultErrorResponseCreator implements ErrorResponseCreator {
+    private static final String PLACEHOLDER_ZERO = "{0}";
     private final MessageSource messageSource;
     private final String inputErrorMessageId;
     private final String unknowErrorMessageId;
+
+    /**
+     * 入力エラー（パスパラメータやクエリパラメータのバリデーションエラー）の場合のエラーレスポンスを作成する
+     */
+    @Override
+    public Object createParameterValidationErrorResponse(List<ParameterValidationResult> parameterValidationResults,
+            WebRequest request) {
+        // 入力エラーの情報を詳細情報に格納
+        ArrayList<String> errorDetails = new ArrayList<>();
+        for (ParameterValidationResult result : parameterValidationResults) {
+            // パラメータ名を取得
+            String parameterName = result.getMethodParameter().getParameterName();
+            // パラメータ名に対するメッセージを取得
+            String parameterLabel = messageSource.getMessage(parameterName, null, request.getLocale());
+            if (!StringUtils.hasLength(parameterLabel)) {
+                // パラメータ名がメッセージソースに登録されていない場合は、パラメータ名をそのまま使用
+                parameterLabel = parameterName;
+            }
+            
+            List<MessageSourceResolvable> errors =  result.getResolvableErrors();
+            for (MessageSourceResolvable error : errors) {
+                // 各エラーのメッセージ取得
+                String message = error.getDefaultMessage();
+                                
+                // メッセージに{0}を含むか正規表現でチェックして置換
+                if (StringUtils.hasLength(message) && message.contains(PLACEHOLDER_ZERO)) {
+                    // {0}をパラメータ名に置換
+                    message = message.replace(PLACEHOLDER_ZERO, parameterLabel);
+                }
+                errorDetails.add(message);
+            }            
+        }        
+        String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
+        return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+
+    }
 
     /**
      * 入力エラー（リクエストメッセージのJSONが不正な構文でパースに失敗）の場合のエラーレスポンスを作成する
@@ -87,7 +126,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      */
     @Override
     public Object createValidationErrorResponse(final BindingResult bindingResult, final WebRequest request) {
-        // 入力エラーの情報を詳細情報に格納し
+        // 入力エラーの情報を詳細情報に格納
         ArrayList<String> errorDetails = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             String localizedMessage = messageSource.getMessage(fieldError, request.getLocale());

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.context.request.WebRequest;
 
 import com.example.fw.common.exception.BusinessException;
@@ -16,6 +17,15 @@ import com.fasterxml.jackson.databind.JsonMappingException;
  *
  */
 public interface ErrorResponseCreator {
+    /**
+     * 入力エラー（パスパラメータやクエリパラメータのバリデーションエラー）の場合のエラーレスポンスを作成する
+     * @param parameterValidationResults
+     * @param request
+     * @return
+     */
+    Object createParameterValidationErrorResponse(List<ParameterValidationResult> parameterValidationResults,
+            WebRequest request);
+    
     /**
      * 入力エラー（リクエストメッセージのJSONが不正な構文でパースに失敗）の場合のエラーレスポンスを作成する
      * 

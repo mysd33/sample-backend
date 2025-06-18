@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
@@ -37,10 +39,22 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
 
     // ObjectMapperのPropertyNamingStrategyを取得するためのフィールド
     private ObjectMapper objectMapper;
+
     // 業務のRestControllerAdviceクラスのコンストラクタが煩雑にならないようSetterインジェクションを利用
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+    }
+
+    /**
+     * パスパラメータ、クエリパラメータなどの入力エラーのハンドリング （HandlerMethodValidationException）
+     */
+    @Override
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        List<ParameterValidationResult> validationResults = ex.getParameterValidationResults();
+        Object body = errorResponseCreator.createParameterValidationErrorResponse(validationResults, request);
+        return handleExceptionInternal(ex, body, headers, status, request);
     }
 
     /**
@@ -52,14 +66,15 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         return handleBindingResult(ex, ex.getBindingResult(), headers, statusCode, request);
     }
-    
+
     /**
      * 入力エラー時のBindingResultを元にエラーレスポンスを作成する
-     * @param ex 例外
+     * 
+     * @param ex            例外
      * @param bindingResult BindingResult
-     * @param headers　Httpヘッダー
-     * @param statusCode Httpステータスコード
-     * @param request WebRequest
+     * @param headers       Httpヘッダー
+     * @param statusCode    Httpステータスコード
+     * @param request       WebRequest
      * @return エラーレスポンス
      */
     private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
@@ -77,10 +92,12 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
             HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
         // リソースのフォーマットとしてJSONを使用する場合、HttpMessageNotReadableExceptionの原因例外として格納されるものをハンドリング
-        // (参考) https://terasolunaorg.github.io/guideline/current/ja/ArchitectureInDetail/WebServiceDetail/REST.html#resthowtouseexceptionhandlingforvalidationerror
+        // (参考)
+        // https://terasolunaorg.github.io/guideline/current/ja/ArchitectureInDetail/WebServiceDetail/REST.html#resthowtouseexceptionhandlingforvalidationerror
         // なお、Resourceオブジェクトに存在しないフィールドがJSONに指定されてUnrecognizedPropertyExceptionがスローされるが
         // JsonMappingExceptionのサブクラスであるため、JsonParseException、JsonMappingExceptionの２つをハンドリングする
-        // また、Spring Bootの場合、デフォルトでは、ObjectMapperのDeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIESがfalseで作成されるため
+        // また、Spring
+        // Bootの場合、デフォルトでは、ObjectMapperのDeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIESがfalseで作成されるため
         // UnrecognizedPropertyExceptionはスローされない
         // spring.jackson.deserialization.fail-on-unknown-properties=trueをapplication.yamlに設定することで、例外発生する。
         if (ex.getCause() instanceof JsonParseException cause) {
