@@ -135,9 +135,38 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         for (ObjectError objectError : bindingResult.getGlobalErrors()) {
             String localizedMessage = messageSource.getMessage(objectError, request.getLocale());
             errorDetails.add(localizedMessage);
-        }
+        }                
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
+        // Bean全体に対する日本語名を取得
+        String objectLabel = getObjectLabel(bindingResult, request);
+        // メッセージに{0}を含むか正規表現でチェックして置換
+        if (StringUtils.hasLength(message) && message.contains(PLACEHOLDER_ZERO)) {
+            // {0}をパラメータ名に置換
+            message = message.replace(PLACEHOLDER_ZERO, objectLabel);
+        }
         return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+    }
+    
+    private String getObjectLabel(final BindingResult bindingResult, final WebRequest request) {
+        // オブジェクト名を取得
+        String objectName = bindingResult.getObjectName();
+        // メッセージ定義からオブジェクト名に対する日本語ラベルを取得
+        String objectLabel = messageSource.getMessage(objectName, null, request.getLocale());
+        if (!StringUtils.hasLength(objectLabel)) {
+            // オブジェクト名で登録されていない場合は、オブジェクトのクラス名で日本語ラベルを取得
+            String targetClassName = bindingResult.getTarget().getClass().getSimpleName();            
+            objectLabel = messageSource.getMessage(targetClassName, null, request.getLocale());
+        }
+        if (!StringUtils.hasLength(objectLabel)) {
+            // クラス名も登録されていない場合は、クラスのFQDNを使用して日本語ラベルを取得
+            String targetClassFQDN = bindingResult.getTarget().getClass().getName();
+            objectLabel = messageSource.getMessage(targetClassFQDN, null, request.getLocale());
+        } 
+        if (!StringUtils.hasLength(objectLabel)) {
+            // それでも取得できない場合は、オブジェクト名をそのまま使用
+            objectLabel = objectName;
+        }
+        return objectLabel;
     }
 
     /**
