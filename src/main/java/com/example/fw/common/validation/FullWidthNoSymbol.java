@@ -22,6 +22,7 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_Katakana;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_LatinLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
+import com.example.fw.common.codepoints.catalog.CustomFullWidthCharSet;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_SpecialHiragana;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_SpecialKatakana;
 import com.example.fw.common.validation.FullWidthNoSymbol.List;
@@ -51,7 +52,8 @@ import jakarta.validation.ReportAsSingleViolation;
         JIS_X_0213_Kanji.class, // JIS第1～4水準の漢字の集合
         JIS_X_0213_SpecialHiragana.class, // JIS X 0213 の特殊ひらがなの集合
         JIS_X_0213_SpecialKatakana.class, // JIS X 0213 の特殊カタカナの集合
-        
+        CustomFullWidthCharSet.class // 上記以外で独自に追加定義する全角文字の集合（長音 U+30FC）
+
 })
 public @interface FullWidthNoSymbol {
     String message() default "{com.example.fw.common.validation.FullWidth.message}";
