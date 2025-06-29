@@ -28,6 +28,9 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_LatinLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_SpecialChars;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_AddedSymbol;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_SpecialHiragana;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_SpecialKatakana;
 import com.example.fw.common.validation.CharSet.List;
 
 import jakarta.validation.Constraint;
@@ -56,10 +59,10 @@ import jakarta.validation.ReportAsSingleViolation;
         JIS_X_0208_GreekLetters.class, // JIS X 0208 の6区：ギリシャ文字の集合
         JIS_X_0208_CyrillicLetters.class, // JIS X 0208 の7区：キリル文字の集合
         JIS_X_0208_BoxDrawingChars.class, // JIS X 0208 の8区：罫線素片の集合
-        JIS_X_0213_Kanji.class // JIS第1～4水準の漢字の集合
-
-// TODO: JIS X0213の追加漢字の集合を定義し追加予定
-
+        JIS_X_0213_Kanji.class, // JIS第1～4水準の漢字の集合
+        JIS_X_0213_SpecialHiragana.class, // JIS X 0213 の特殊ひらがなの集合
+        JIS_X_0213_SpecialKatakana.class, // JIS X 0213 の特殊カタカナの集合
+        JIS_X_0213_AddedSymbol.class // JIS X 0213 の追加記号の集合
 })
 public @interface CharSet {
     String message() default "{com.example.fw.common.validation.CharSet.message}";

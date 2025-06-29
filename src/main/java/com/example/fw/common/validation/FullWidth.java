@@ -15,6 +15,7 @@ import java.lang.annotation.Target;
 
 import org.terasoluna.gfw.common.codepoints.ConsistOf;
 import org.terasoluna.gfw.common.codepoints.catalog.CRLF;
+import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_BoxDrawingChars;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_CyrillicLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_GreekLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_Hiragana;
@@ -22,6 +23,9 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_Katakana;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_LatinLetters;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_AddedSymbol;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_SpecialHiragana;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_SpecialKatakana;
 import com.example.fw.common.validation.FullWidth.List;
 
 import jakarta.validation.Constraint;
@@ -29,7 +33,7 @@ import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
 
 /**
- * 全角文字列（記号を除く）かどうか検証する単項目チェックルールのアノテーション
+ * 全角文字列かどうか検証する単項目チェックルールのアノテーション
  */
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
@@ -45,11 +49,11 @@ import jakarta.validation.ReportAsSingleViolation;
         JIS_X_0208_Katakana.class, // JIS X 0208 の5区：カタカナの集合
         JIS_X_0208_GreekLetters.class, // JIS X 0208 の6区：ギリシャ文字の集合
         JIS_X_0208_CyrillicLetters.class, // JIS X 0208 の7区：キリル文字の集合
-        // JIS X 0208 の8区：罫線素片は除外
-        JIS_X_0213_Kanji.class // JIS第1～4水準の漢字の集合
-
-// TODO: JIS X0213の追加漢字の集合を定義し追加予定
-
+        JIS_X_0208_BoxDrawingChars.class, // JIS X 0208 の8区：罫線素片の集合
+        JIS_X_0213_Kanji.class, // JIS第1～4水準の漢字の集合
+        JIS_X_0213_SpecialHiragana.class, // JIS X 0213 の特殊ひらがなの集合
+        JIS_X_0213_SpecialKatakana.class, // JIS X 0213 の特殊カタカナの集合
+        JIS_X_0213_AddedSymbol.class // JIS X 0213 の追加記号の集合
 })
 public @interface FullWidth {
     String message() default "{com.example.fw.common.validation.FullWidth.message}";
