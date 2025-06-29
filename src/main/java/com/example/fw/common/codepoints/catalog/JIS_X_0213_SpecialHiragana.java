@@ -3,7 +3,7 @@ package com.example.fw.common.codepoints.catalog;
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
 /**
- *  特殊ひらがな（1面4区）の文字集合を表すクラス
+ *  JIS X 0213の特殊ひらがな（1面4区）の文字集合を表すクラス
  */
 public final class JIS_X_0213_SpecialHiragana extends CodePoints {
     private static final long serialVersionUID = 1L;

@@ -3,7 +3,7 @@ package com.example.fw.common.codepoints.catalog;
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
 /**
- *  各種記号（1面2-3区、6-7区、8区）、西欧系各種文字・記号（1面9-11区）、各種数字記号（12-13区）の文字集合を表すクラス
+ *  JIS X 0213で追加された各種記号（1面2-3区、6-7区、8区）、西欧系各種文字・記号（1面9-11区）、各種数字記号（12-13区）の文字集合を表すクラス
  */
 public final class JIS_X_0213_AddedSymbol extends CodePoints {
     private static final long serialVersionUID = 1L;

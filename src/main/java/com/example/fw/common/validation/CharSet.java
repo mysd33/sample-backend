@@ -50,12 +50,12 @@ import jakarta.validation.ReportAsSingleViolation;
         ASCIIControlChars.class, // ASCII制御文字の集合
         ASCIIPrintableChars.class, // ASCII印字可能文字の集合
         CRLF.class, // 改行コードの集合
-        JIS_X_0201_Katakana.class, // JIS X 0201 のカタカナの集合
+        JIS_X_0201_Katakana.class, // JIS X 0201 の半角カタカナの集合
         JIS_X_0201_LatinLetters.class, // JIS X 0201 のラテン文字の集合
-        JIS_X_0208_SpecialChars.class, // JIS X 0208の1-2区：特殊文字の集合
-        JIS_X_0208_LatinLetters.class, // JIS X 0208 の3区：英数字の集合
+        JIS_X_0208_SpecialChars.class, // JIS X 0208の1-2区：全角特殊文字の集合
+        JIS_X_0208_LatinLetters.class, // JIS X 0208 の3区：全角英数字の集合
         JIS_X_0208_Hiragana.class, // JIS X 0208 の4区：ひらがなの集合
-        JIS_X_0208_Katakana.class, // JIS X 0208 の5区：カタカナの集合
+        JIS_X_0208_Katakana.class, // JIS X 0208 の5区：全角カタカナの集合
         JIS_X_0208_GreekLetters.class, // JIS X 0208 の6区：ギリシャ文字の集合
         JIS_X_0208_CyrillicLetters.class, // JIS X 0208 の7区：キリル文字の集合
         JIS_X_0208_BoxDrawingChars.class, // JIS X 0208 の8区：罫線素片の集合
