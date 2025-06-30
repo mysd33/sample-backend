@@ -29,6 +29,7 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_SpecialChars;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_12_13ku_AddedSpecialChars;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_2_3ku_AddedSpecialChars;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_4ku_AddedSpecialHiragana;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_5ku_AddedSpecialKatakana;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_6ku_AddedSpecialCharsKatakana;
@@ -64,13 +65,14 @@ import jakarta.validation.ReportAsSingleViolation;
         JIS_X_0208_CyrillicLetters.class, // JIS X 0208 の7区：キリル文字の集合
         JIS_X_0208_BoxDrawingChars.class, // JIS X 0208 の8区：罫線素片の集合
         JIS_X_0213_Kanji.class, // JIS第1～4水準の漢字の集合
+        JIS_X_0213_2_3ku_AddedSpecialChars.class, // JIS X 0213 第2～3区の追加特殊文字、記号の集合
         JIS_X_0213_4ku_AddedSpecialHiragana.class, // JIS X 0213 第4区の追加特殊ひらがなの集合
         JIS_X_0213_5ku_AddedSpecialKatakana.class, // JIS X 0213 第5区の追加特殊カタカナの集合
-        JIS_X_0213_6ku_AddedSpecialCharsKatakana.class, // JIS X 0213 第6区の追加特殊カタカナの集合
-        JIS_X_0213_7ku_AddedSpecialCharsKatakana.class, // JIS X 0213 第7区の追加特殊カタカナの集合
-        JIS_X_0213_8ku_AddedSpecialChars.class, // JIS X 0213 第8区の追加特殊文字の集合
-        JIS_X_0213_9_11ku_AddedSpecialChars.class, // JIS X 0213 第9～11区の追加特殊文字の集合
-        JIS_X_0213_12_13ku_AddedSpecialChars.class, // JIS X 0213 第12～13区の追加特殊文字の集合
+        JIS_X_0213_6ku_AddedSpecialCharsKatakana.class, // JIS X 0213 第6区の追加特殊文字、特殊カタカナの集合
+        JIS_X_0213_7ku_AddedSpecialCharsKatakana.class, // JIS X 0213 第7区の追加特殊文字、特殊カタカナの集合
+        JIS_X_0213_8ku_AddedSpecialChars.class, // JIS X 0213 第8区の追加特殊文字、記号の集合
+        JIS_X_0213_9_11ku_AddedSpecialChars.class, // JIS X 0213 第9～11区の追加特殊文字、記号の集合
+        JIS_X_0213_12_13ku_AddedSpecialChars.class, // JIS X 0213 第12～13区の追加特殊文字、記号の集合
 })
 public @interface CharSet {
     String message() default "{com.example.fw.common.validation.CharSet.message}";

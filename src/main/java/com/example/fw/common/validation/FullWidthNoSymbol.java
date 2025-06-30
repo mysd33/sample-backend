@@ -50,8 +50,10 @@ import jakarta.validation.ReportAsSingleViolation;
         JIS_X_0208_CyrillicLetters.class, // JIS X 0208 の7区：キリル文字の集合
         // JIS X 0208 の8区：罫線素片は除外
         JIS_X_0213_Kanji.class, // JIS第1～4水準の漢字の集合
+        // JIS X 0213 第2～3区の追加特殊文字、記号の集合は除外
         JIS_X_0213_4ku_AddedSpecialHiragana.class, // JIS X 0213 第4区の追加特殊ひらがなの集合
         JIS_X_0213_5ku_AddedSpecialKatakana.class, // JIS X 0213 第5区の追加特殊カタカナの集合
+        // JIS X 0213 第6～13区の追加特殊文字は除外
         CustomFullWidthCharSet.class // 上記以外で独自に追加定義する全角文字の集合
 })
 public @interface FullWidthNoSymbol {
