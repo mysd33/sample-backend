@@ -3,15 +3,15 @@ package com.example.fw.common.codepoints.catalog;
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
 /**
- *  JIS X 0213の特殊ひらがな（1面4区）の文字集合を表すクラス
+ *  JIS X 0213の追加非漢字の特殊ひらがな（1面4区）の文字集合を表すクラス
  */
-public final class JIS_X_0213_SpecialHiragana extends CodePoints {
+public final class JIS_X_0213_4ku_AddedSpecialHiragana extends CodePoints {
     private static final long serialVersionUID = 1L;
 
     /**
      * コンストラクタ
      */
-    public JIS_X_0213_SpecialHiragana() {
+    public JIS_X_0213_4ku_AddedSpecialHiragana() {
         super(
             0x3094, // ゔ(01-04-84) 
             0x3095, // ゕ(01-04-85) 
