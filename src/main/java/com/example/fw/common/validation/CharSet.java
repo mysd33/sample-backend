@@ -41,6 +41,8 @@ import com.example.fw.common.validation.CharSet.List;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
+import jakarta.validation.constraintvalidation.SupportedValidationTarget;
+import jakarta.validation.constraintvalidation.ValidationTarget;
 
 /**
  * 本システムが許容する文字集合を検証する単項目チェックルールのアノテーション
@@ -50,6 +52,8 @@ import jakarta.validation.ReportAsSingleViolation;
 @Retention(RUNTIME)
 @Repeatable(List.class)
 @ReportAsSingleViolation
+//https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#_validation_target_specification_for_purely_composed_constraints
+@SupportedValidationTarget(ValidationTarget.ANNOTATED_ELEMENT)
 // 実際のシステムの文字集合の範囲に応じて調整すること
 @ConsistOf({ //
         ASCIIControlChars.class, // ASCII制御文字の集合

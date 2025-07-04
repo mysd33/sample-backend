@@ -17,6 +17,8 @@ import com.example.fw.common.validation.FixedLength.List;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import jakarta.validation.constraintvalidation.SupportedValidationTarget;
+import jakarta.validation.constraintvalidation.ValidationTarget;
 
 /**
  * 
@@ -28,6 +30,8 @@ import jakarta.validation.Payload;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)
 @Repeatable(List.class)
+//https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#_validation_target_specification_for_purely_composed_constraints
+@SupportedValidationTarget(ValidationTarget.ANNOTATED_ELEMENT)
 public @interface FixedLength {
     int value() default 0;
 

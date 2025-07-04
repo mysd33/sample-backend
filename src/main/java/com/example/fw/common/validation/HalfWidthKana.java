@@ -19,6 +19,8 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraintvalidation.SupportedValidationTarget;
+import jakarta.validation.constraintvalidation.ValidationTarget;
 
 /**
  * 半角カナ形式の文字列かどうか検証する単項目チェックルールのアノテーション
@@ -29,6 +31,8 @@ import jakarta.validation.constraints.Pattern;
 @Retention(RUNTIME)
 @Repeatable(List.class)
 @ReportAsSingleViolation
+//https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#_validation_target_specification_for_purely_composed_constraints
+@SupportedValidationTarget(ValidationTarget.ANNOTATED_ELEMENT)
 @Pattern(regexp = "^[ｦ-ﾟ]*$")
 public @interface HalfWidthKana {
     String message() default "{com.example.fw.common.validation.HalfWidthKana.message}";
