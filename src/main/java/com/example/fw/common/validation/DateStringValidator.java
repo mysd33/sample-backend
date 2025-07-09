@@ -12,7 +12,7 @@ import jakarta.validation.ConstraintValidatorContext;
  * 日付形式の文字列かどうか検証するValidatorクラス
  *
  */
-public class DateStringValidator implements ConstraintValidator<DateString, String> {
+public class DateStringValidator implements ConstraintValidator<DateString, CharSequence> {
     // 許容する日付のリストを定義
     private static final List<DateTimeFormatter> DATE_FORMATTERS = List.of(//
             DateTimeFormatter.ofPattern("yyyy-MM-dd"), //
@@ -21,9 +21,9 @@ public class DateStringValidator implements ConstraintValidator<DateString, Stri
             DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
         // nullまたは空列、空白の場合はtrueを返す
-        if (value == null || value.isBlank()) {
+        if (value == null || value.toString().isBlank()) {
             return true;
         }
         // 10文字未満の場合は日付形式出ないと判断し、falseを返す
