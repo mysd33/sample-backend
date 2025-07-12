@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.ConfigurableTomcatWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.FilterRegistration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +23,10 @@ import lombok.RequiredArgsConstructor;
 public class TomcatAccessLogConfig {
     private final TomcatAccessLogConfigurationProperties tomcatAccessLogConfigurationProperties;
 
+    /**
+     * Tomcatのアクセスログの設定
+     * 
+     */
     @Bean
     WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> webServerFactoryCustomizer() {
         return factory -> {
@@ -32,9 +36,23 @@ public class TomcatAccessLogConfig {
         };
     }
 
+    /**
+     * Tomcatのアクセスログと通常のログをX-Amzn-Trace-Idで紐づけるためのフィルタ<br/>
+     * 
+     * Spring Boot3.5以降ではアノテーションでFilterを直接登録可能となった
+     */
     @Bean
-    public FilterRegistrationBean<LogMDCFilter> logMDCFilter() {
-        return new FilterRegistrationBean<>(new LogMDCFilter());
+    @FilterRegistration
+    LogMDCFilter logMDCFilter() {
+        return new LogMDCFilter();
     }
+
+    /**
+     * Spring Boot3.4以前ではFilterRegistrationBeanを使用してFilterを登録する必要があった
+     */
+    /*
+     * @Bean FilterRegistrationBean<LogMDCFilter> logMDCFilter() { return new
+     * FilterRegistrationBean<>(new LogMDCFilter()); }
+     */
 
 }
