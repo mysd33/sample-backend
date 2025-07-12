@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Import;
 import com.example.backend.domain.repository.TodoRepository;
 import com.example.backend.infra.repository.TodoRepositoryStub;
 import com.example.fw.common.datasource.config.DynamicRoutingDataSourceConfig;
+import com.example.fw.common.micrometer.config.MicrometerConfig;
 
 /**
  * 
@@ -13,7 +14,9 @@ import com.example.fw.common.datasource.config.DynamicRoutingDataSourceConfig;
  *
  */
 @Configuration
-@Import(DynamicRoutingDataSourceConfig.class)
+//動的ルーティングによるデータソース設定を追加
+//Micrometerのカスタムメトリックス設定を追加
+@Import({ DynamicRoutingDataSourceConfig.class, MicrometerConfig.class})
 public class InfraConfig {
 
     // MyBatisでRDBアクセスしない場合のスタブ
