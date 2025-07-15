@@ -19,15 +19,18 @@ public class DateStringValidator implements ConstraintValidator<DateString, Char
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"), //
             DateTimeFormatter.ofPattern("yyyy/MM/dd"), //
             DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+    // 日付文字列としての最小長
+    private static final int MIN_LENGTH = 10;
 
     @Override
     public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+        // 必須入力チェックとして@NotBlankアノテーションと組み合わせて使用することを想定しているため、
         // nullまたは空列、空白の場合はtrueを返す
-        if (value == null || value.toString().isBlank()) {
+        if (value == null || value.toString().isBlank()) { // CharSequenceがtoString()を実装している前提
             return true;
         }
-        // 10文字未満の場合は日付形式出ないと判断し、falseを返す
-        if (value.length() < 10) {
+        // 最低文字列長の場合は日付形式でないと判断し、falseを返す        
+        if (value.length() < MIN_LENGTH) {
             return false;
         }
         for (DateTimeFormatter formatter : DATE_FORMATTERS) {

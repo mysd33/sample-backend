@@ -20,11 +20,13 @@ public class MinLengthValidator implements ConstraintValidator<MinLength, CharSe
 
     @Override
     public boolean isValid(final CharSequence value, final ConstraintValidatorContext context) {
+        // 必須入力チェックとして@NotBlankアノテーションと組み合わせて使用することを想定しているため、
+        // nullまたは空列、空白の場合はtrueを返す
         if (value == null) {
             return true;
         }
-        String valueStr = value.toString();
-        if (valueStr.isEmpty()) {
+        String valueStr = value.toString(); // CharSequenceがtoString()を実装している前提
+        if (valueStr.isBlank()) {
             return true;
         }
         return JapaneseStringUtils.getCodePointLength(valueStr) >= this.length;
