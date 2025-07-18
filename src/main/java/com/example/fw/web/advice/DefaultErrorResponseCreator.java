@@ -1,4 +1,4 @@
-package com.example.backend.app.api.common.advice;
+package com.example.fw.web.advice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.context.request.WebRequest;
 
-import com.example.backend.app.api.common.resource.ErrorResponse;
-import com.example.backend.domain.message.MessageIds;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.ErrorCodeProvider;
 import com.example.fw.common.exception.SystemException;
-import com.example.fw.web.advice.ErrorResponseCreator;
-import com.example.fw.web.advice.InvalidFormatField;
+import com.example.fw.web.message.WebFrameworkMessageIds;
+import com.example.fw.web.resource.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -84,7 +82,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     @Override
     public Object createRequestParseErrorResponse(final JsonParseException e, final WebRequest request) {
         ArrayList<String> errorDetails = new ArrayList<>();
-        String localizedMessage = messageSource.getMessage(MessageIds.W_EX_5002, null, request.getLocale());
+        String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2001, null,
+                request.getLocale());
         errorDetails.add(localizedMessage);
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
         return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
@@ -105,11 +104,11 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         ArrayList<String> errorDetails = new ArrayList<>();
         invalidFields.forEach(field -> {
             if (StringUtils.hasLength(field.getDescription())) {
-                String localizedMessage = messageSource.getMessage(MessageIds.W_EX_5003,
+                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2002,
                         new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
                 errorDetails.add(localizedMessage);
             } else {
-                String localizedMessage = messageSource.getMessage(MessageIds.W_EX_5004,
+                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2003,
                         new Object[] { field.getFieldName() }, request.getLocale());
                 errorDetails.add(localizedMessage);
             }
@@ -182,7 +181,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             return objectLabel;
         }
         // ラベル取得できなかった場合は、オブジェクト名をそのまま使用
-        return objectName; 
+        return objectName;
     }
 
     /**

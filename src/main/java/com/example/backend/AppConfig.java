@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.example.backend.app.api.common.advice.DefaultErrorResponseCreator;
 import com.example.backend.domain.message.MessageIds;
 import com.example.fw.common.systemdate.SystemDate;
 import com.example.fw.common.systemdate.config.SystemDateConfig;
+import com.example.fw.web.advice.DefaultErrorResponseCreator;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
