@@ -33,7 +33,7 @@ public class AppConfig {
      */
     @Bean
     ErrorResponseCreator errorResponseCreator(MessageSource messageSource) {
-        return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_5001, MessageIds.W_EX_5005,
+        return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_2001, MessageIds.W_EX_2002,
                 MessageIds.E_EX_9001);
     }
 

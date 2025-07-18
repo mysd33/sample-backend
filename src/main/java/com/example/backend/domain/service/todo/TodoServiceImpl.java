@@ -38,7 +38,7 @@ public class TodoServiceImpl implements TodoService {
     public Todo findOne(String todoId) {
         return todoRepository.findById(todoId).orElseThrow(() -> {
             // 対象Todoがない場合、業務エラー
-            return new BusinessException(MessageIds.W_EX_2001);
+            return new BusinessException(MessageIds.W_EX_5001);
         });
     }
 
@@ -47,7 +47,7 @@ public class TodoServiceImpl implements TodoService {
         long unfinishedCount = todoRepository.countByFinished(false);
         if (unfinishedCount >= MAX_UNFINISHED_COUNT) {
             // 未完了のTodoが、5件以上の場合、業務エラー
-            throw new BusinessException(MessageIds.W_EX_2002, String.valueOf(MAX_UNFINISHED_COUNT));
+            throw new BusinessException(MessageIds.W_EX_5002, String.valueOf(MAX_UNFINISHED_COUNT));
         }
         doCreate(todo);
         return todo;
@@ -74,7 +74,7 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = findOne(todoId);
         if (todo.isFinished()) {
             // すでに終了している場合、業務エラー
-            throw new BusinessException(MessageIds.W_EX_2003, todoId);
+            throw new BusinessException(MessageIds.W_EX_5003, todoId);
         }
         todo.setFinished(true);
         todoRepository.update(todo);

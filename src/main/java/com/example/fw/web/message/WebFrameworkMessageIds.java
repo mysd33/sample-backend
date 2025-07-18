@@ -20,10 +20,9 @@ public final class WebFrameworkMessageIds {
     public static final String I_ON_FW_0005 = "i.on.fw.0005";
     public static final String I_ON_FW_0006 = "i.on.fw.0006";
     public static final String I_ON_FW_0007 = "i.on.fw.0007";
-    //TODO: メッセージID修正 0001→8001
-    public static final String W_ON_FW_0001 = "w.on.fw.0001";
     public static final String W_ON_FW_2001 = "w.on.fw.2001";
     public static final String W_ON_FW_2002 = "w.on.fw.2002";
     public static final String W_ON_FW_2003 = "w.on.fw.2003";
+    public static final String W_ON_FW_8001 = "w.on.fw.8001";
 
 }
