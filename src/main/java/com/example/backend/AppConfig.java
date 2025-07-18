@@ -25,7 +25,7 @@ import io.swagger.v3.oas.models.info.Info;
  */
 @Configuration
 //システム日時機能、Tomcatアクセスログ機能の追加
-@Import({SystemDateConfig.class, TomcatAccessLogConfig.class})
+@Import({ SystemDateConfig.class, TomcatAccessLogConfig.class })
 public class AppConfig {
 
     /**
@@ -33,20 +33,21 @@ public class AppConfig {
      */
     @Bean
     ErrorResponseCreator errorResponseCreator(MessageSource messageSource) {
-        return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_5001, MessageIds.E_EX_9001);
+        return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_5001, MessageIds.W_EX_5005,
+                MessageIds.E_EX_9001);
     }
 
     /**
      * ロギング機能
      */
-    @Bean    
+    @Bean
     LogAspect logAspect(SystemDate systemDate) {
         return new LogAspect(systemDate, MessageIds.E_EX_9001);
     }
 
     /**
      * Springdoc-openapiでスネークケースの設定が反映されるようにするための回避策
-     */    
+     */
     @Bean
     ModelResolver modelResolver(ObjectMapper objectMapper) {
         return new ModelResolver(objectMapper);

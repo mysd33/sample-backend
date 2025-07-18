@@ -35,6 +35,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     private static final String PLACEHOLDER_ZERO = "{0}";
     private final MessageSource messageSource;
     private final String inputErrorMessageId;
+    private final String inputErrorMessageIdWithPlaceholder;
     private final String unknowErrorMessageId;
 
     /**
@@ -136,7 +137,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             String localizedMessage = messageSource.getMessage(objectError, request.getLocale());
             errorDetails.add(localizedMessage);
         }
-        String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
+        String message = messageSource.getMessage(inputErrorMessageIdWithPlaceholder, null, request.getLocale());
         // Bean全体に対する日本語名を取得
         String objectLabel = getObjectLabel(bindingResult, request);
         // メッセージに{0}を含むか正規表現でチェックして置換
