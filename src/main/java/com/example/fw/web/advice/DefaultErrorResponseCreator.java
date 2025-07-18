@@ -136,6 +136,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             String localizedMessage = messageSource.getMessage(objectError, request.getLocale());
             errorDetails.add(localizedMessage);
         }
+        // {0}を含むエラーメッセージIDからメッセージを取得
         String message = messageSource.getMessage(inputErrorMessageIdWithPlaceholder, null, request.getLocale());
         // Bean全体に対する日本語名を取得
         String objectLabel = getObjectLabel(bindingResult, request);
@@ -144,7 +145,9 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             // {0}をパラメータ名に置換
             message = message.replace(PLACEHOLDER_ZERO, objectLabel);
         }
-        return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+        // この例では、inputErrorMessageIdWithPlaceholderをコードとして返却
+        // 他の入力エラーとコードを統一したい場合はinputErrorMessageIdにするとよい）
+        return ErrorResponse.builder().code(inputErrorMessageIdWithPlaceholder).message(message).details(errorDetails).build();
     }
 
     /**
