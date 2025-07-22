@@ -33,8 +33,11 @@ public class AppConfig {
      */
     @Bean
     ErrorResponseCreator errorResponseCreator(MessageSource messageSource) {
-        return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_2001, MessageIds.W_EX_2002,
-                MessageIds.E_EX_9001);
+        // オプション引数未指定の場合の例
+        // return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_2001,
+        // MessageIds.E_EX_9001);
+        return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_2001, MessageIds.E_EX_9001,
+                MessageIds.W_EX_2002);
     }
 
     /**

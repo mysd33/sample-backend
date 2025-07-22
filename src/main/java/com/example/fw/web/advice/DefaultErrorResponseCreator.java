@@ -22,19 +22,54 @@ import com.example.fw.web.resource.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * エラーレスポンスの作成クラス
  *
  */
-@RequiredArgsConstructor
 public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     private static final String PLACEHOLDER_ZERO = "{0}";
     private final MessageSource messageSource;
+    // 入力エラーのメッセージID
     private final String inputErrorMessageId;
-    private final String inputErrorMessageIdWithPlaceholder;
+    // 予期せぬエラーのメッセージID
     private final String unknowErrorMessageId;
+    // 入力エラーのうちリクエストボディのバリデーションエラーのメッセージID
+    private final String requestBodyValidationErrorMessageId;
+
+    /**
+     * コンストラクタ（オプション引数あり）
+     * 
+     * @param messageSource                      メッセージソース
+     * @param inputErrorMessageId                入力エラーのメッセージID
+     * @param unknowErrorMessageId               予期せぬエラーのメッセージID
+     * @param inputErrorMessageIdWithPlaceholder Resourceクラスの日本語のラベル名をプレースホルダ{0}として付与する入力エラーのメッセージID。オプションで指定可能。
+     */
+    public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
+            final String unknowErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
+        this.messageSource = messageSource;
+        this.inputErrorMessageId = inputErrorMessageId;
+        this.unknowErrorMessageId = unknowErrorMessageId;
+        this.requestBodyValidationErrorMessageId = inputErrorMessageIdWithPlaceholder;
+    }
+
+    /**
+     * コンストラクタ
+     * <p>
+     * inputErrorMessageIdWithPlaceholderオプション引数を使用しない場合は、inputErrorMessageIdが使用される
+     * </p>
+     * 
+     * @param messageSource        メッセージソース
+     * @param inputErrorMessageId  入力エラーのメッセージID
+     * @param unknowErrorMessageId 予期せぬエラーのメッセージID
+     * 
+     */
+    public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
+            final String unknowErrorMessageId) {
+        this.messageSource = messageSource;
+        this.inputErrorMessageId = inputErrorMessageId;
+        this.unknowErrorMessageId = unknowErrorMessageId;
+        this.requestBodyValidationErrorMessageId = inputErrorMessageId;
+    }
 
     /**
      * 入力エラー（パスパラメータやクエリパラメータのバリデーションエラー）の場合のエラーレスポンスを作成する
@@ -45,13 +80,16 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         // 入力エラーの情報を詳細情報に格納
         ArrayList<String> errorDetails = new ArrayList<>();
         for (ParameterValidationResult result : parameterValidationResults) {
+            String parameterLabel = "";
             // パラメータ名を取得
             String parameterName = result.getMethodParameter().getParameterName();
-            // パラメータ名に対するメッセージを取得
-            String parameterLabel = messageSource.getMessage(parameterName, null, request.getLocale());
-            if (!StringUtils.hasLength(parameterLabel)) {
-                // パラメータ名がメッセージソースに登録されていない場合は、パラメータ名をそのまま使用
-                parameterLabel = parameterName;
+            if (parameterName != null) {
+                // パラメータ名に対するメッセージ（＝パラメータのラベル名）を取得
+                parameterLabel = messageSource.getMessage(parameterName, null, request.getLocale());
+                if (!StringUtils.hasLength(parameterLabel)) {
+                    // パラメータ名がメッセージソースに登録されていない場合は、パラメータ名をそのまま使用
+                    parameterLabel = parameterName;
+                }
             }
 
             List<MessageSourceResolvable> errors = result.getResolvableErrors();
@@ -137,7 +175,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             errorDetails.add(localizedMessage);
         }
         // {0}を含むエラーメッセージIDからメッセージを取得
-        String message = messageSource.getMessage(inputErrorMessageIdWithPlaceholder, null, request.getLocale());
+        String message = messageSource.getMessage(requestBodyValidationErrorMessageId, null, request.getLocale());
         // Bean全体に対する日本語名を取得
         String objectLabel = getObjectLabel(bindingResult, request);
         // メッセージに{0}を含むか正規表現でチェックして置換
@@ -147,7 +185,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         }
         // この例では、inputErrorMessageIdWithPlaceholderをコードとして返却
         // 他の入力エラーとコードを統一したい場合はinputErrorMessageIdにするとよい）
-        return ErrorResponse.builder().code(inputErrorMessageIdWithPlaceholder).message(message).details(errorDetails).build();
+        return ErrorResponse.builder().code(requestBodyValidationErrorMessageId).message(message).details(errorDetails)
+                .build();
     }
 
     /**
