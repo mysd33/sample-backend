@@ -22,10 +22,13 @@ import com.example.fw.web.resource.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import lombok.Builder;
+
 /**
  * エラーレスポンスの作成クラス
  *
  */
+@Builder
 public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     private static final String PLACEHOLDER_ZERO = "{0}";
     private final MessageSource messageSource;
