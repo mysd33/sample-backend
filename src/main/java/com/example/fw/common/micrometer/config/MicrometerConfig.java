@@ -13,10 +13,11 @@ import io.micrometer.observation.ObservationRegistry;
 @Configuration
 public class MicrometerConfig {
 
-    // MyBatisのメトリクス観測用のBeanを定義
+    /**
+     *  MyBatisのメトリクス観測用のBean定義
+     */
     @Bean
     MyBatisMetricsObserver myBatisMetricsObserver(ObservationRegistry observationRegistry) {
-        // MyBatisのメトリクス観測用のBeanを定義
         return new MyBatisMetricsObserver(observationRegistry);
     }
 
