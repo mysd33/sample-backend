@@ -35,7 +35,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     // 入力エラーのメッセージID
     private final String inputErrorMessageId;
     // 予期せぬエラーのメッセージID
-    private final String unknowErrorMessageId;
+    private final String unknownErrorMessageId;
     // 入力エラーのうちリクエストボディのバリデーションエラーのメッセージID
     private final String requestBodyValidationErrorMessageId;
 
@@ -51,7 +51,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             final String unknowErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
         this.messageSource = messageSource;
         this.inputErrorMessageId = inputErrorMessageId;
-        this.unknowErrorMessageId = unknowErrorMessageId;
+        this.unknownErrorMessageId = unknowErrorMessageId;
         this.requestBodyValidationErrorMessageId = inputErrorMessageIdWithPlaceholder;
     }
 
@@ -70,7 +70,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             final String unknowErrorMessageId) {
         this.messageSource = messageSource;
         this.inputErrorMessageId = inputErrorMessageId;
-        this.unknowErrorMessageId = unknowErrorMessageId;
+        this.unknownErrorMessageId = unknowErrorMessageId;
         this.requestBodyValidationErrorMessageId = inputErrorMessageId;
     }
 
@@ -278,8 +278,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     @Override
     public Object createUnexpectedErrorResponse(final Exception e, final WebRequest request) {
         // 呼び出し元に例外の情報を必要以上に返却しないようデフォルトのメッセージを返却
-        String message = messageSource.getMessage(unknowErrorMessageId, null, request.getLocale());
-        return ErrorResponse.builder().code(unknowErrorMessageId).message(message).build();
+        String message = messageSource.getMessage(unknownErrorMessageId, null, request.getLocale());
+        return ErrorResponse.builder().code(unknownErrorMessageId).message(message).build();
     }
 
     /**

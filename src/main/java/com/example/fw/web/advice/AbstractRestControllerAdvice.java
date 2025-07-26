@@ -33,6 +33,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 
+ * 集約例外ハンドリングのためのRestControllerAdviceの基底クラス
+ *
+ */
 @RequiredArgsConstructor
 public abstract class AbstractRestControllerAdvice extends ResponseEntityExceptionHandler {
     protected final ErrorResponseCreator errorResponseCreator;
@@ -47,7 +52,8 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
     }
 
     /**
-     * パスパラメータ、クエリパラメータなどの入力エラーのハンドリング （HandlerMethodValidationException）
+     * 入力エラーのハンドリング （HandlerMethodValidationException）
+     * パスパラメータ、クエリパラメータなどの入力チェックでのエラーが発生した場合
      */
     @Override
     protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex,
@@ -58,35 +64,8 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
     }
 
     /**
-     * 入力エラーのハンドリング （MethodArgumentNotValidException）
-     * リクエストBODYに指定されたJSONに対する入力チェックでエラーが発生した場合
-     */
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-        return handleBindingResult(ex, ex.getBindingResult(), headers, statusCode, request);
-    }
-
-    /**
-     * 入力エラー時のBindingResultを元にエラーレスポンスを作成する
-     * 
-     * @param ex            例外
-     * @param bindingResult BindingResult
-     * @param headers       Httpヘッダー
-     * @param statusCode    Httpステータスコード
-     * @param request       WebRequest
-     * @return エラーレスポンス
-     */
-    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
-            HttpStatusCode statusCode, WebRequest request) {
-        Object body = errorResponseCreator.createValidationErrorResponse(bindingResult, request);
-
-        return handleExceptionInternal(ex, body, headers, statusCode, request);
-    }
-
-    /**
-     * 入力エラーのハンドリング （HttpMessageNotReadableException）
-     * JSONからResourceオブジェクトを生成する際にエラーが発生した場合
+     * 入力エラーのハンドリング （HttpMessageNotReadableException） *
+     * リクエストBODY（JSON）を読み取りResourceオブジェクトを生成する際にエラーが発生した場合
      */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -161,6 +140,33 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             return null;
         }
         return null;
+    }
+
+    /**
+     * 入力エラーのハンドリング （MethodArgumentNotValidException）
+     * リクエストBODY（JSON）に対するResourceの入力チェックでエラーが発生した場合
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+            HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        return handleBindingResult(ex, ex.getBindingResult(), headers, statusCode, request);
+    }
+
+    /**
+     * 入力エラー時のBindingResultを元にエラーレスポンスを作成する
+     * 
+     * @param ex            例外
+     * @param bindingResult BindingResult
+     * @param headers       Httpヘッダー
+     * @param statusCode    Httpステータスコード
+     * @param request       WebRequest
+     * @return エラーレスポンス
+     */
+    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
+            HttpStatusCode statusCode, WebRequest request) {
+        Object body = errorResponseCreator.createValidationErrorResponse(bindingResult, request);
+
+        return handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
     /**
