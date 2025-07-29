@@ -143,6 +143,11 @@
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-metrics</artifactId>
         </dependency>
+        <!-- Virtual Thread Metrics-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-java21</artifactId>
+        </dependency>
         <!-- Springdoc-openapi -->
         <dependency>
             <groupId>org.springdoc</groupId>
