@@ -3,7 +3,7 @@ package com.example.fw.common.exception;
 import com.example.fw.common.message.ResultMessage;
 
 /**
- * DynamoDBトランザクションに関する業務例外クラス<br>
+ * DynamoDBトランザクションの条件付き更新に失敗した場合等、業務エラーとして扱うための業務例外クラス<br>
  * 
  * アプリケーション層（RestControler）で発生する例外として区別するため、専用の例外を定義している。
  */

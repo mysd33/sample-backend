@@ -21,6 +21,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.DynamoDBTransactionBusinessException;
 import com.example.fw.common.exception.SystemException;
+import com.example.fw.common.exception.TransactionTimeoutBusinessException;
 import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
 import com.example.fw.common.logging.MonitoringLogger;
@@ -89,10 +90,15 @@ public class LogAspect {
         case HttpRequestMethodNotSupportedException hrmse -> {
             // 本サンプルAPでは何もしない（案件によってログ追加してもよい）
         }
-        // 業務エラー（RestControllerで発生する専用業務例外）の場合（案件によって例外の追加が必要）
+        // 業務エラー（RestControllerで発生するの専用業務例外）の場合（案件によって例外の追加が必要）
+        // DynamoDBトランザクションで条件付き更新などに失敗した場合に業務エラーで扱うための業務例外
         case DynamoDBTransactionBusinessException ddbtbe -> //
-            // Serviceでログ出力されない業務例外ので、ここでログ出力する
-            appLogger.warn(inputErrorMessageId, ddbtbe);
+            // Serviceでログ出力されない業務例外なので、ここでログ出力する
+            appLogger.warn(ddbtbe.getCode(), ddbtbe, (Object[]) ddbtbe.getArgs());
+        // RDBトランザクションタイムアウト時に業務エラーとして扱うための業務例外
+        case TransactionTimeoutBusinessException ttbe -> //
+            // Serviceでログ出力されない業務例外なので、ここでログ出力する
+            appLogger.warn(ttbe.getCode(), ttbe, (Object[]) ttbe.getArgs());
         // 業務エラー（Serviceで発生する業務例外）の場合
         case BusinessException be -> {
             // Serviceでログ出力するので、二重でスタックトーレス含むログを出力しないよう何もしない

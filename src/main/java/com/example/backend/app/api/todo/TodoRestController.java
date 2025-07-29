@@ -64,6 +64,18 @@ public class TodoRestController {
     public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
         Todo todo = todoService.findOne(todoId);
         return todoMapper.modelToResource(todo);
+
+        // @Transactionalのtimeout属性を指定し、トランザクションタイムアウト時に業務例外とする実装例
+        // DataAccessResourceFailureExceptionがスローされるので、BusinessExceptionでラップしてリスロー。
+        // @format:off
+//        
+//        try {
+//            Todo todo = todoService.findOne(todoId);
+//            return todoMapper.modelToResource(todo);
+//        } catch (DataAccessResourceFailureException e) {
+//            throw new TransactionTimeoutBusinessException(e, "w.ex.5004");
+//        }
+        // @format:on
     }
 
     /**

@@ -35,6 +35,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional(readOnly = true)
+    // @Transactional(readOnly = true, timeout=1) // トランザクションタイムアウトを1秒に設定する例
     public Todo findOne(String todoId) {
         return todoRepository.findById(todoId).orElseThrow(() -> {
             // 対象Todoがない場合、業務エラー
