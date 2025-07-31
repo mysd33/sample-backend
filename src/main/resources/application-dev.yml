@@ -28,6 +28,7 @@ spring:
     dynamic-routing:
       enabled: true
 
+# Spring Boot Actuator
 management:
   endpoints:
     web:

@@ -23,14 +23,14 @@ spring:
       driver-class-name: org.postgresql.Driver
 #      hikari:
 #        maximum-pool-size: 30
-# Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration
-  config:
-    import: 
-      - optional:aws-parameterstore:/config/common/;/config/sample-backend/
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.read.
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.write.
-
+# Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration Enabled
+  cloud:
+    aws:
+      parameterstore:
+        enabled: true
+      secretsmanager:
+        enabled: true
+# Spring Boot Actuator
 management:
   endpoints:
     web:
@@ -51,10 +51,3 @@ management:
     metrics:
       export:
         enabled: true
-        
-logging:
-  level:
-    org.springframework: INFO
-    org.springframework.jdbc: INFO
-    com.example: INFO
-#    software.amazon.awssdk: DEBUG

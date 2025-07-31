@@ -14,6 +14,7 @@ spring:
     # Resourceオブジェクトに存在しないフィールドがJSONに指定されていた場合、エラーとする
     deserialization:
       fail-on-unknown-properties: true
+# Graceful Shutdown
   lifecycle:
     timeout-per-shutdown-phase: 20s
   thymeleaf:
@@ -39,7 +40,21 @@ spring:
     write:
       hikari:
         auto-commit: false
-
+# Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration
+# Default Disabled For Local Development
+  cloud:
+    aws:
+      parameterstore:
+        enabled: false
+      secretsmanager:
+        enabled: false
+  config:
+    import: 
+      - optional:aws-parameterstore:/config/common/;/config/${spring.application.name}/
+      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.
+      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.read.
+      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.write.
+      
 # Spring Cloud for AWS Micrometer CloudWatch Integration Common Configuration
 # Default Disabled For Local Development
 management:
@@ -47,17 +62,18 @@ management:
     metrics:
       export:
         enabled: false
-        namespace: sample-backend
+        namespace: ${spring.application.name}
         step: 10s
-      
+# Mybatis
 mybatis:
-  type-aliases-package: com.example.backend.domain.model     
+  type-aliases-package: com.example.backend.domain.model
   configuration:
     map-underscore-to-camel-case: true
 
+# X-Ray SDK(not ADOT)
 aws:
   xray:
-    tracing-filter-name: sample-backend
+    tracing-filter-name: ${spring.application.name}
 
 # Tomcat Access Log
 #logback:
