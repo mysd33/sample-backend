@@ -35,7 +35,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     // 入力エラーのメッセージID
     private final String inputErrorMessageId;
     // 予期せぬエラーのメッセージID
-    private final String unknownErrorMessageId;
+    private final String unexpectedErrorMessageId;
     // 入力エラーのうちリクエストボディのバリデーションエラーのメッセージID
     private final String requestBodyValidationErrorMessageId;
 
@@ -44,14 +44,14 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * 
      * @param messageSource                      メッセージソース
      * @param inputErrorMessageId                入力エラーのメッセージID
-     * @param unknowErrorMessageId               予期せぬエラーのメッセージID
+     * @param unexpectedErrorMessageId               予期せぬエラーのメッセージID
      * @param inputErrorMessageIdWithPlaceholder Resourceクラスの日本語のラベル名をプレースホルダ{0}として付与する入力エラーのメッセージID。オプションで指定可能。
      */
     public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
-            final String unknowErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
+            final String unexpectedErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
         this.messageSource = messageSource;
         this.inputErrorMessageId = inputErrorMessageId;
-        this.unknownErrorMessageId = unknowErrorMessageId;
+        this.unexpectedErrorMessageId = unexpectedErrorMessageId;
         this.requestBodyValidationErrorMessageId = inputErrorMessageIdWithPlaceholder;
     }
 
@@ -63,14 +63,14 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * 
      * @param messageSource        メッセージソース
      * @param inputErrorMessageId  入力エラーのメッセージID
-     * @param unknowErrorMessageId 予期せぬエラーのメッセージID
+     * @param unexpectedErrorMessageId 予期せぬエラーのメッセージID
      * 
      */
     public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
-            final String unknowErrorMessageId) {
+            final String unexpectedErrorMessageId) {
         this.messageSource = messageSource;
         this.inputErrorMessageId = inputErrorMessageId;
-        this.unknownErrorMessageId = unknowErrorMessageId;
+        this.unexpectedErrorMessageId = unexpectedErrorMessageId;
         this.requestBodyValidationErrorMessageId = inputErrorMessageId;
     }
 
@@ -278,8 +278,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     @Override
     public Object createUnexpectedErrorResponse(final Exception e, final WebRequest request) {
         // 呼び出し元に例外の情報を必要以上に返却しないようデフォルトのメッセージを返却
-        String message = messageSource.getMessage(unknownErrorMessageId, null, request.getLocale());
-        return ErrorResponse.builder().code(unknownErrorMessageId).message(message).build();
+        String message = messageSource.getMessage(unexpectedErrorMessageId, null, request.getLocale());
+        return ErrorResponse.builder().code(unexpectedErrorMessageId).message(message).build();
     }
 
     /**
