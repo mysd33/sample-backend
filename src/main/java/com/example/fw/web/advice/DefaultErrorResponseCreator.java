@@ -3,10 +3,12 @@ package com.example.fw.web.advice;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -29,7 +31,8 @@ import lombok.Builder;
  *
  */
 @Builder
-public class DefaultErrorResponseCreator implements ErrorResponseCreator {
+public class DefaultErrorResponseCreator implements ErrorResponseCreator, InitializingBean {
+    private static final String EMPTY_STRING = "";
     private static final String PLACEHOLDER_ZERO = "{0}";
     private final MessageSource messageSource;
     // 入力エラーのメッセージID
@@ -37,14 +40,14 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     // 予期せぬエラーのメッセージID
     private final String unexpectedErrorMessageId;
     // 入力エラーのうちリクエストボディのバリデーションエラーのメッセージID
-    private final String requestBodyValidationErrorMessageId;
+    private String requestBodyValidationErrorMessageId;
 
     /**
      * コンストラクタ（オプション引数あり）
      * 
      * @param messageSource                      メッセージソース
      * @param inputErrorMessageId                入力エラーのメッセージID
-     * @param unexpectedErrorMessageId               予期せぬエラーのメッセージID
+     * @param unexpectedErrorMessageId           予期せぬエラーのメッセージID
      * @param inputErrorMessageIdWithPlaceholder Resourceクラスの日本語のラベル名をプレースホルダ{0}として付与する入力エラーのメッセージID。オプションで指定可能。
      */
     public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
@@ -61,8 +64,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * inputErrorMessageIdWithPlaceholderオプション引数を使用しない場合は、inputErrorMessageIdが使用される
      * </p>
      * 
-     * @param messageSource        メッセージソース
-     * @param inputErrorMessageId  入力エラーのメッセージID
+     * @param messageSource            メッセージソース
+     * @param inputErrorMessageId      入力エラーのメッセージID
      * @param unexpectedErrorMessageId 予期せぬエラーのメッセージID
      * 
      */
@@ -72,6 +75,18 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         this.inputErrorMessageId = inputErrorMessageId;
         this.unexpectedErrorMessageId = unexpectedErrorMessageId;
         this.requestBodyValidationErrorMessageId = inputErrorMessageId;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(messageSource, "messageSourceがNullです。");
+        Assert.hasLength(inputErrorMessageId, "inputErrorMessageIdがnullまたは空です。");
+        Assert.hasLength(unexpectedErrorMessageId, "unexpectedErrorMessageIdがnullまたは空です。");
+        if (!StringUtils.hasLength(requestBodyValidationErrorMessageId)) {
+            // 指定されていない場合は、inputErrorMessageIdを使用
+            this.requestBodyValidationErrorMessageId = this.inputErrorMessageId;
+        }
+
     }
 
     /**
@@ -87,14 +102,9 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             // パラメータ名を取得
             String parameterName = result.getMethodParameter().getParameterName();
             if (parameterName != null) {
-                // パラメータ名に対するメッセージ（＝パラメータのラベル名）を取得
-                parameterLabel = messageSource.getMessage(parameterName, null, request.getLocale());
-                if (!StringUtils.hasLength(parameterLabel)) {
-                    // パラメータ名がメッセージソースに登録されていない場合は、パラメータ名をそのまま使用
-                    parameterLabel = parameterName;
-                }
+                // パラメータ名に対するメッセージ（＝パラメータのラベル名）があれば取得
+                parameterLabel = messageSource.getMessage(parameterName, null, parameterName, request.getLocale());
             }
-
             List<MessageSourceResolvable> errors = result.getResolvableErrors();
             for (MessageSourceResolvable error : errors) {
                 // 各エラーのメッセージ取得
@@ -179,10 +189,10 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         }
         // {0}を含むエラーメッセージIDからメッセージを取得
         String message = messageSource.getMessage(requestBodyValidationErrorMessageId, null, request.getLocale());
-        // Bean全体に対する日本語名を取得
-        String objectLabel = getObjectLabel(bindingResult, request);
         // メッセージに{0}を含むか正規表現でチェックして置換
         if (StringUtils.hasLength(message) && message.contains(PLACEHOLDER_ZERO)) {
+            // Bean全体に対する日本語名を取得
+            String objectLabel = getObjectLabel(bindingResult, request);
             // {0}をパラメータ名に置換
             message = message.replace(PLACEHOLDER_ZERO, objectLabel);
         }
@@ -200,10 +210,11 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * @return オブジェクト名に対する日本語ラベル
      */
     private String getObjectLabel(final BindingResult bindingResult, final WebRequest request) {
+
         // オブジェクト名を取得
         String objectName = bindingResult.getObjectName();
         // メッセージ定義からオブジェクト名に対する日本語ラベルを取得
-        String objectLabel = messageSource.getMessage(objectName, null, request.getLocale());
+        String objectLabel = messageSource.getMessage(objectName, null, EMPTY_STRING, request.getLocale());
         if (StringUtils.hasLength(objectLabel)) {
             return objectLabel;
         }
@@ -215,13 +226,13 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         // オブジェクト名で登録されていない場合は、オブジェクトのクラス名で日本語ラベルを取得
         Class<?> targetClass = target.getClass();
         String targetClassName = targetClass.getSimpleName();
-        objectLabel = messageSource.getMessage(targetClassName, null, request.getLocale());
+        objectLabel = messageSource.getMessage(targetClassName, null, EMPTY_STRING, request.getLocale());
         if (StringUtils.hasLength(objectLabel)) {
             return objectLabel;
         }
         // クラス名も登録されていない場合は、クラスのFQDNを使用して日本語ラベルを取得
         String targetClassFQDN = targetClass.getName();
-        objectLabel = messageSource.getMessage(targetClassFQDN, null, request.getLocale());
+        objectLabel = messageSource.getMessage(targetClassFQDN, null, EMPTY_STRING, request.getLocale());
         if (StringUtils.hasLength(objectLabel)) {
             return objectLabel;
         }
@@ -294,4 +305,5 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
         return ErrorResponse.builder().code(e.getCode()).message(message).build();
     }
+
 }
