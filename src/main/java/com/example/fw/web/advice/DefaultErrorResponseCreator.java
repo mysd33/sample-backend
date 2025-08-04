@@ -231,13 +231,9 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator, Initia
             return objectLabel;
         }
         // クラス名も登録されていない場合は、クラスのFQDNを使用して日本語ラベルを取得
+        // 最終的にラベル取得できなかった場合は、オブジェクト名をそのまま使用
         String targetClassFQDN = targetClass.getName();
-        objectLabel = messageSource.getMessage(targetClassFQDN, null, EMPTY_STRING, request.getLocale());
-        if (StringUtils.hasLength(objectLabel)) {
-            return objectLabel;
-        }
-        // ラベル取得できなかった場合は、オブジェクト名をそのまま使用
-        return objectName;
+        return messageSource.getMessage(targetClassFQDN, null, objectName, request.getLocale());
     }
 
     /**
