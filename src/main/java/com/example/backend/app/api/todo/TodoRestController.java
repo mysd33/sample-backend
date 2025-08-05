@@ -57,7 +57,7 @@ public class TodoRestController {
             return todoMapper.modelsToResources(todos);
         } catch (DataAccessResourceFailureException e) {
             // PostgreSQLのトランザクションタイムアウトエラーなら業務例外に変換しスロー
-            throw DatabaseAccessUtils.convertToBusinessExceptionIfTimeout(e, MessageIds.W_EX_5004, "Todoリスト取得");
+            throw DatabaseAccessUtils.convertToBusinessExceptionIfQueryTimeout(e, MessageIds.W_EX_5004, "Todoリスト取得");
         }
     }
 
