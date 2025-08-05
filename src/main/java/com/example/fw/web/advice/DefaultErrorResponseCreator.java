@@ -3,7 +3,6 @@ package com.example.fw.web.advice;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -19,19 +18,25 @@ import org.springframework.web.context.request.WebRequest;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.ErrorCodeProvider;
 import com.example.fw.common.exception.SystemException;
+import com.example.fw.common.logging.ApplicationLogger;
+import com.example.fw.common.logging.LoggerFactory;
 import com.example.fw.web.message.WebFrameworkMessageIds;
 import com.example.fw.web.resource.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * エラーレスポンスの作成クラス
  *
  */
+@Slf4j
 @Builder
-public class DefaultErrorResponseCreator implements ErrorResponseCreator, InitializingBean {
+public class DefaultErrorResponseCreator implements ErrorResponseCreator {    
+    private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
     private static final String EMPTY_STRING = "";
     private static final String PLACEHOLDER_ZERO = "{0}";
     private final MessageSource messageSource;
@@ -77,13 +82,20 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator, Initia
         this.requestBodyValidationErrorMessageId = inputErrorMessageId;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    /**
+     * 初期化処理<br>
+     * 事前条件をチェックし、デフォルト値を設定する
+     * 
+     * @throws Exception
+     */
+    @PostConstruct
+    void init() throws Exception {
         Assert.notNull(messageSource, "messageSourceがNullです。");
         Assert.hasLength(inputErrorMessageId, "inputErrorMessageIdがnullまたは空です。");
         Assert.hasLength(unexpectedErrorMessageId, "unexpectedErrorMessageIdがnullまたは空です。");
         if (!StringUtils.hasLength(requestBodyValidationErrorMessageId)) {
             // 指定されていない場合は、inputErrorMessageIdを使用
+            appLogger.debug("requestBodyValidationErrorMessageIdが指定されていないため、inputErrorMessageIdを使用します。");
             this.requestBodyValidationErrorMessageId = this.inputErrorMessageId;
         }
 

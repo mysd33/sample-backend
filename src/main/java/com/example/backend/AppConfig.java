@@ -44,8 +44,8 @@ public class AppConfig {
         
         // Builderパターンを使用した場合の記載例
         return DefaultErrorResponseCreator.builder().messageSource(messageSource)
-                .inputErrorMessageId(MessageIds.W_EX_2001).//
-                unexpectedErrorMessageId(MessageIds.E_EX_9001)//
+                .inputErrorMessageId(MessageIds.W_EX_2001)//
+                .unexpectedErrorMessageId(MessageIds.E_EX_9001)//
                 .requestBodyValidationErrorMessageId(MessageIds.W_EX_2002)//
                 .build();
     }
