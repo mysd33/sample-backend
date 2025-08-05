@@ -3,7 +3,7 @@ package com.example.backend;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.example.fw.common.datasource.config.XRayJDBCConfig;
+import com.example.fw.common.db.config.XRayJDBCConfig;
 import com.example.fw.web.servlet.config.XRayServletConfig;
 
 /**

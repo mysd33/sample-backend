@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Import;
 
 import com.example.backend.domain.repository.TodoRepository;
 import com.example.backend.infra.repository.TodoRepositoryStub;
-import com.example.fw.common.datasource.config.DynamicRoutingDataSourceConfig;
+import com.example.fw.common.db.config.DynamicRoutingDataSourceConfig;
 import com.example.fw.common.micrometer.config.MicrometerConfig;
 
 /**

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.validator.constraints.UUID;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.xray.spring.aop.XRayEnabled;
+import com.example.backend.domain.message.MessageIds;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.todo.TodoService;
+import com.example.fw.common.db.utils.DatabaseAccessUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,8 +51,14 @@ public class TodoRestController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<TodoResource> getTodos() {
-        Collection<Todo> todos = todoService.findAll();
-        return todoMapper.modelsToResources(todos);
+        try {
+            // @Transactionalのtimeout属性を指定した処理でトランザクションタイムアウト時に業務例外とする実装例
+            Collection<Todo> todos = todoService.findAll();
+            return todoMapper.modelsToResources(todos);
+        } catch (DataAccessResourceFailureException e) {
+            // PostgreSQLのトランザクションタイムアウトエラーなら業務例外に変換しスロー
+            throw DatabaseAccessUtils.convertToBusinessExceptionIfTimeout(e, MessageIds.W_EX_5004, "Todoリスト取得");
+        }
     }
 
     /**
@@ -64,18 +73,6 @@ public class TodoRestController {
     public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
         Todo todo = todoService.findOne(todoId);
         return todoMapper.modelToResource(todo);
-
-        // @Transactionalのtimeout属性を指定し、トランザクションタイムアウト時に業務例外とする実装例
-        // DataAccessResourceFailureExceptionがスローされるので、BusinessExceptionでラップしてリスロー。
-        // @format:off
-//        
-//        try {
-//            Todo todo = todoService.findOne(todoId);
-//            return todoMapper.modelToResource(todo);
-//        } catch (DataAccessResourceFailureException e) {
-//            throw new TransactionTimeoutBusinessException(e, "w.ex.5004");
-//        }
-        // @format:on
     }
 
     /**

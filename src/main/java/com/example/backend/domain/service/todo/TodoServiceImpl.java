@@ -23,12 +23,14 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
+    private static final int TRANSACTION_TIMEOUT = 2;
     private static final long MAX_UNFINISHED_COUNT = 5;
 
     private final TodoRepository todoRepository;
 
     @Override
-    @Transactional(readOnly = true)
+    // クエリタイムアウトを2秒に設定する例
+    @Transactional(readOnly = true, timeout = TRANSACTION_TIMEOUT)
     public Collection<Todo> findAll() {
         return todoRepository.findAll();
     }
@@ -37,10 +39,10 @@ public class TodoServiceImpl implements TodoService {
     @Transactional(readOnly = true)
     // @Transactional(readOnly = true, timeout=1) // トランザクションタイムアウトを1秒に設定する例
     public Todo findOne(String todoId) {
-        return todoRepository.findById(todoId).orElseThrow(() -> {
+        return todoRepository.findById(todoId).orElseThrow(() -> //
             // 対象Todoがない場合、業務エラー
-            return new BusinessException(MessageIds.W_EX_5001);
-        });
+            new BusinessException(MessageIds.W_EX_5001)
+        );
     }
 
     @Override
