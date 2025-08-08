@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Builder
-public class DefaultErrorResponseCreator implements ErrorResponseCreator {    
+public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
     private static final String EMPTY_STRING = "";
     private static final String PLACEHOLDER_ZERO = "{0}";
@@ -86,10 +86,9 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * 初期化処理<br>
      * 事前条件をチェックし、デフォルト値を設定する
      * 
-     * @throws Exception
      */
     @PostConstruct
-    void init() throws Exception {
+    void init() {
         Assert.notNull(messageSource, "messageSourceがNullです。");
         Assert.hasLength(inputErrorMessageId, "inputErrorMessageIdがnullまたは空です。");
         Assert.hasLength(unexpectedErrorMessageId, "unexpectedErrorMessageIdがnullまたは空です。");
@@ -167,12 +166,18 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         ArrayList<String> errorDetails = new ArrayList<>();
         invalidFields.forEach(field -> {
             if (StringUtils.hasLength(field.getDescription())) {
-                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2002,
+                String messgeId = field.getErrorType() == InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD
+                        ? WebFrameworkMessageIds.W_ON_FW_2002
+                        : WebFrameworkMessageIds.W_ON_FW_2004;
+                String localizedMessage = messageSource.getMessage(messgeId,
                         new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
                 errorDetails.add(localizedMessage);
             } else {
-                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2003,
-                        new Object[] { field.getFieldName() }, request.getLocale());
+                String messgeId = field.getErrorType() == InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD
+                        ? WebFrameworkMessageIds.W_ON_FW_2003
+                        : WebFrameworkMessageIds.W_ON_FW_2005;
+                String localizedMessage = messageSource.getMessage(messgeId, new Object[] { field.getFieldName() },
+                        request.getLocale());
                 errorDetails.add(localizedMessage);
             }
         });

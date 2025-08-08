@@ -9,8 +9,18 @@ import lombok.Data;
 @Data
 @Builder
 public class InvalidFormatField {
+    public enum ErrorType {
+        // 規定されないフィールド
+        UNRECOGNIZED_FIELD,
+        // フィールドのフォーマットが不正
+        INVALID_FORMAT,
+    }
+
     // フィールド名
     private String fieldName;
     // フィールドの説明（日本語のラベル）
     private String description;
+    // エラーの種類
+    private ErrorType errorType;
+
 }

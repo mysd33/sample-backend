@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.NamingBase;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
@@ -88,15 +89,17 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             // もしくは、spring.jackson.deserialization.fail-on-unknown-properties=trueの場合に、
             // Resourceオブジェクトに存在しないフィールドがJSONに指定された場合に、エラーの原因となったフィールドを抽出
             List<InvalidFormatField> fields = new ArrayList<>();
+            InvalidFormatField.ErrorType errorType = getFieldErrorType(cause);
             cause.getPath().forEach(ref -> {
                 Class<?> fromClass = ref.getFrom().getClass();
                 String jsonFieldName = ref.getFieldName();
                 String propertyDescription = getPropertyDescription(fromClass, jsonFieldName);
                 if (StringUtils.hasLength(propertyDescription)) {
                     fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).description(propertyDescription)
+                            .errorType(errorType)
                             .build());
                 } else {
-                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).build());
+                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).errorType(errorType).build());
                 }
             });
             Object body = errorResponseCreator.createRequestMappingErrorResponse(fields, cause, request);
@@ -106,6 +109,23 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             Object body = errorResponseCreator.createWarnErrorResponse(ex, statusCode, request);
             return handleExceptionInternal(ex, body, headers, statusCode, request);
         }
+    }
+
+    /**
+     * JsonMappingExceptionの原因例外から、フィールドのエラータイプを取得する
+     * 
+     * @param cause JsonMappingExceptionの原因例外
+     * @return フィールドのエラータイプ
+     */
+    private InvalidFormatField.ErrorType getFieldErrorType(JsonMappingException cause) {
+        InvalidFormatField.ErrorType errorType;
+        switch (cause) {
+        case UnrecognizedPropertyException unrecognizedPropertyException -> //
+            errorType = InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD;
+        case null, default -> //
+            errorType = InvalidFormatField.ErrorType.INVALID_FORMAT;
+        }
+        return errorType;
     }
 
     /**
