@@ -107,9 +107,8 @@ public class LogAspect {
         case SystemException se -> //
             monitoringLogger.error(se.getCode(), se, (Object[]) se.getArgs());
         // システムエラー（予期せぬ例外）の場合
-        case null, default -> {
-            monitoringLogger.error(unexpectedErrorMessageId, e);
-        }
+        case null, default -> //
+            monitoringLogger.error(unexpectedErrorMessageId, e);        
         }
     }
 
