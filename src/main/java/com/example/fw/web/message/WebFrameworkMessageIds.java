@@ -24,7 +24,6 @@ public final class WebFrameworkMessageIds {
     public static final String W_ON_FW_2002 = "w.on.fw.2002";
     public static final String W_ON_FW_2003 = "w.on.fw.2003";
     public static final String W_ON_FW_2004 = "w.on.fw.2004";
-    public static final String W_ON_FW_2005 = "w.on.fw.2005";
     public static final String W_ON_FW_8001 = "w.on.fw.8001";
     public static final String W_ON_FW_8002 = "w.on.fw.8002";
     public static final String W_ON_FW_8003 = "w.on.fw.8003";

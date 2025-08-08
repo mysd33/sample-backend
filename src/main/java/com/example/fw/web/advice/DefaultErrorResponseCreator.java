@@ -20,6 +20,7 @@ import com.example.fw.common.exception.ErrorCodeProvider;
 import com.example.fw.common.exception.SystemException;
 import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
+import com.example.fw.web.advice.InvalidFormatField.ErrorType;
 import com.example.fw.web.message.WebFrameworkMessageIds;
 import com.example.fw.web.resource.ErrorResponse;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -165,20 +166,23 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
         ArrayList<String> errorDetails = new ArrayList<>();
         invalidFields.forEach(field -> {
-            if (StringUtils.hasLength(field.getDescription())) {
-                String messgeId = field.getErrorType() == InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD
-                        ? WebFrameworkMessageIds.W_ON_FW_2002
-                        : WebFrameworkMessageIds.W_ON_FW_2004;
-                String localizedMessage = messageSource.getMessage(messgeId,
-                        new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
+            ErrorType errorType = field.getErrorType();
+            // 規定されないフィールドの場合
+            if (errorType == ErrorType.UNRECOGNIZED_FIELD) {
+                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2002,
+                        new Object[] { field.getFieldName() }, request.getLocale());
                 errorDetails.add(localizedMessage);
             } else {
-                String messgeId = field.getErrorType() == InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD
-                        ? WebFrameworkMessageIds.W_ON_FW_2003
-                        : WebFrameworkMessageIds.W_ON_FW_2005;
-                String localizedMessage = messageSource.getMessage(messgeId, new Object[] { field.getFieldName() },
-                        request.getLocale());
-                errorDetails.add(localizedMessage);
+                // 型変換エラーの場合
+                if (StringUtils.hasLength(field.getDescription())) {
+                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2003,
+                            new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
+                    errorDetails.add(localizedMessage);
+                } else {
+                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_ON_FW_2004,
+                            new Object[] { field.getFieldName() }, request.getLocale());
+                    errorDetails.add(localizedMessage);
+                }
             }
         });
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
