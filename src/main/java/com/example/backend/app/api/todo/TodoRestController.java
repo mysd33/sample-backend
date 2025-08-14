@@ -22,6 +22,7 @@ import com.example.backend.domain.message.MessageIds;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.todo.TodoService;
 import com.example.fw.common.db.utils.DatabaseAccessUtils;
+import com.example.fw.common.exception.TransactionTimeoutBusinessException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,7 +58,11 @@ public class TodoRestController {
             return todoMapper.modelsToResources(todos);
         } catch (DataAccessResourceFailureException e) {
             // PostgreSQLのトランザクションタイムアウトエラーなら業務例外に変換しスロー
-            throw DatabaseAccessUtils.convertToBusinessExceptionIfQueryTimeout(e, MessageIds.W_EX_5004, "Todoリスト取得");
+            if (DatabaseAccessUtils.isQueryTimeout(e)) {
+                // BusinessExceptionでラップしてリスロー
+                throw new TransactionTimeoutBusinessException(e, MessageIds.W_EX_5004, "Todoリスト取得");
+            }
+            throw e; // それ以外は、そのまま元の例外をスロー
         }
     }
 
