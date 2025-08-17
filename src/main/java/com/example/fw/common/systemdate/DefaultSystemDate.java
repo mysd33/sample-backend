@@ -36,7 +36,7 @@ public class DefaultSystemDate implements SystemDate {
             try {
                 return LocalDateTime.parse(fixedSystemDate).atZone(ZoneId.systemDefault());
             } catch (DateTimeParseException e) {
-                throw new SystemException(e, CommonFrameworkMessageIds.E_CM_FW_9002);
+                throw new SystemException(e, CommonFrameworkMessageIds.E_FW_SYSDT_9001);
             }
         }
     }

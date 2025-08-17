@@ -9,24 +9,33 @@ public final class WebFrameworkMessageIds {
     private WebFrameworkMessageIds() {
     }
 
-    public static final String T_ON_FW_0001 = "t.on.fw.0001";
-    public static final String T_ON_FW_0002 = "t.on.fw.0002";
-    public static final String T_ON_FW_0003 = "t.on.fw.0003";
-    public static final String T_ON_FW_0004 = "t.on.fw.0004";
-    public static final String I_ON_FW_0001 = "i.on.fw.0001";
-    public static final String I_ON_FW_0002 = "i.on.fw.0002";
-    public static final String I_ON_FW_0003 = "i.on.fw.0003";
-    public static final String I_ON_FW_0004 = "i.on.fw.0004";
-    public static final String I_ON_FW_0005 = "i.on.fw.0005";
-    public static final String I_ON_FW_0006 = "i.on.fw.0006";
-    public static final String I_ON_FW_0007 = "i.on.fw.0007";
-    public static final String W_ON_FW_2001 = "w.on.fw.2001";
-    public static final String W_ON_FW_2002 = "w.on.fw.2002";
-    public static final String W_ON_FW_2003 = "w.on.fw.2003";
-    public static final String W_ON_FW_2004 = "w.on.fw.2004";
-    public static final String W_ON_FW_8001 = "w.on.fw.8001";
-    public static final String W_ON_FW_8002 = "w.on.fw.8002";
-    public static final String W_ON_FW_8003 = "w.on.fw.8003";
-    public static final String W_ON_FW_8004 = "w.on.fw.8004";
+    // トレースレベル
+    // オンラインAP制御（LogAspect）
+    public static final String T_FW_ONCTRL_0001 = "t.fw.onctrl.0001";
+    public static final String T_FW_ONCTRL_0002 = "t.fw.onctrl.0002";
+    public static final String T_FW_ONCTRL_0003 = "t.fw.onctrl.0003";
+    public static final String T_FW_ONCTRL_0004 = "t.fw.onctrl.0004";
+    // 情報レベル
+    // オンラインAP制御（LogAspect）
+    public static final String I_FW_ONCTRL_0001 = "i.fw.onctrl.0001";
+    public static final String I_FW_ONCTRL_0002 = "i.fw.onctrl.0002";
+    public static final String I_FW_ONCTRL_0003 = "i.fw.onctrl.0003";
+    public static final String I_FW_ONCTRL_0004 = "i.fw.onctrl.0004";
+    public static final String I_FW_ONCTRL_0005 = "i.fw.onctrl.0005";
+    public static final String I_FW_ONCTRL_0006 = "i.fw.onctrl.0006";
+    // トランザクショントークンチェック
+    public static final String I_FW_TRNTKN_0001 = "i.fw.trntkn.0001";
+    // 警告レベル
+    // 集約例外ハンドリング（入力エラー）
+    public static final String W_FW_ONCTRL_2001 = "w.fw.onctrl.2001";
+    public static final String W_FW_ONCTRL_2002 = "w.fw.onctrl.2002";
+    public static final String W_FW_ONCTRL_2003 = "w.fw.onctrl.2003";
+    public static final String W_FW_ONCTRL_2004 = "w.fw.onctrl.2004";
+    // 集約例外ハンドリング（警告エラー）
+    public static final String W_FW_ONCTRL_8001 = "w.fw.onctrl.8001";
+    public static final String W_FW_ONCTRL_8002 = "w.fw.onctrl.8002";
+    public static final String W_FW_ONCTRL_8003 = "w.fw.onctrl.8003";
+    // トランザクショントークンチェック
+    public static final String W_FW_TRNTKN_8001 = "w.fw.trntkn.8001";
 
 }

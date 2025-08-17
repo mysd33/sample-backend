@@ -27,7 +27,7 @@ public class CustomRoutingDataSource extends AbstractRoutingDataSource {
         DataSourceType dataSourceType = TransactionSynchronizationManager.isCurrentTransactionReadOnly()
                 ? DataSourceType.READ
                 : DataSourceType.WRITE;
-        appLogger.info(CommonFrameworkMessageIds.I_CM_FW_0006, dataSourceType);
+        appLogger.info(CommonFrameworkMessageIds.I_FW_RDB_0001, dataSourceType);
         return dataSourceType;
 
     }
