@@ -1,6 +1,7 @@
 package com.example.fw.common.db.utils;
 
 import org.postgresql.util.PSQLException;
+import org.postgresql.util.PSQLState;
 import org.springframework.dao.DataAccessResourceFailureException;
 
 /**
@@ -8,9 +9,6 @@ import org.springframework.dao.DataAccessResourceFailureException;
  * 
  */
 public final class DatabaseAccessUtils {
-    // PostgreSQLのクエリーキャンセル（クエリータイムアウト時）のエラーコード57014
-    private static final String QUERY_CANCELD_ERROR_CODE = "57014";
-
     private DatabaseAccessUtils() {
     }
 
@@ -25,7 +23,7 @@ public final class DatabaseAccessUtils {
     public static boolean isQueryTimeout(DataAccessResourceFailureException e) {
         Throwable cause = e.getCause();
         // PostgreSQLのクエリータイムアウトかどうかを判定
-        return cause instanceof PSQLException psqlException
-                && QUERY_CANCELD_ERROR_CODE.equals(psqlException.getSQLState());
+        return (cause instanceof PSQLException psqlException)
+                && PSQLState.QUERY_CANCELED.getState().equals(psqlException.getSQLState());
     }
 }
