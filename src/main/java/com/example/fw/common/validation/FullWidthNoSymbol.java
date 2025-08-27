@@ -61,7 +61,7 @@ import jakarta.validation.constraintvalidation.ValidationTarget;
         CustomFullWidthCharSet.class // 上記以外で独自に追加定義する全角文字の集合
 })
 public @interface FullWidthNoSymbol {
-    String message() default "{com.example.fw.common.validation.FullWidth.message}";
+    String message() default "{com.example.fw.common.validation.FullWidthNoSymbol.message}";
 
     Class<?>[] groups() default {};
 

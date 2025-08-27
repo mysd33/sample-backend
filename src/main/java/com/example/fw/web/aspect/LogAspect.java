@@ -134,7 +134,7 @@ public class LogAspect {
             long endTime = System.nanoTime();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
             Object[] args = { jp.getSignature(), elapsedTime, startDateTime };
-            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_8001, args, Locale.getDefault());
+            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8001, args, Locale.getDefault());
             String logFormat = message + LOG_FORMAT_SUFFIX;
             switch (e) {
             // ここでは、メソッドが異常終了した旨を警告ログのみ出力
@@ -170,7 +170,7 @@ public class LogAspect {
             long endTime = System.nanoTime();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
             Object[] args = { jp.getSignature(), elapsedTime, startDateTime };
-            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_8002, args, Locale.getDefault());
+            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8002, args, Locale.getDefault());
             String logFormat = message + LOG_FORMAT_SUFFIX;
             switch (e) {
             // 業務エラーは、ここでは、メソッドが異常終了した旨を警告ログのみ出力。スタックトレースは出力しない
@@ -198,7 +198,7 @@ public class LogAspect {
         } catch (Exception e) {
             // 例外が発生した場合は、エラーログを出力
             Object[] args = { jp.getSignature(), Arrays.asList(jp.getArgs()) };
-            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_8003, args, Locale.getDefault());
+            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8003, args, Locale.getDefault());
             String logFormat = message + LOG_FORMAT_SUFFIX;
             switch (e) {
             // 業務エラーは、メソッドが異常終了した旨を警告ログを出力するが、

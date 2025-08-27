@@ -145,7 +145,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     @Override
     public Object createRequestParseErrorResponse(final JsonParseException e, final WebRequest request) {
         ArrayList<String> errorDetails = new ArrayList<>();
-        String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_2001, null,
+        String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2001, null,
                 request.getLocale());
         errorDetails.add(localizedMessage);
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
@@ -169,17 +169,17 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             ErrorType errorType = field.getErrorType();
             // 規定されないフィールドの場合
             if (errorType == ErrorType.UNRECOGNIZED_FIELD) {
-                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_2002,
+                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2002,
                         new Object[] { field.getFieldName() }, request.getLocale());
                 errorDetails.add(localizedMessage);
             } else {
                 // 型変換エラーの場合
                 if (StringUtils.hasLength(field.getDescription())) {
-                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_2003,
+                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2003,
                             new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
                     errorDetails.add(localizedMessage);
                 } else {
-                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONCTRL_2004,
+                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2004,
                             new Object[] { field.getFieldName() }, request.getLocale());
                     errorDetails.add(localizedMessage);
                 }

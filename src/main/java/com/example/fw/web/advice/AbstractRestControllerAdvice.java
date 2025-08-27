@@ -41,6 +41,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public abstract class AbstractRestControllerAdvice extends ResponseEntityExceptionHandler {
+    // エラーレスポンス作成クラス
     protected final ErrorResponseCreator errorResponseCreator;
 
     // ObjectMapperのPropertyNamingStrategyを取得するためのフィールド
@@ -76,8 +77,8 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
         // https://terasolunaorg.github.io/guideline/current/ja/ArchitectureInDetail/WebServiceDetail/REST.html#resthowtouseexceptionhandlingforvalidationerror
         // なお、Resourceオブジェクトに存在しないフィールドがJSONに指定されてUnrecognizedPropertyExceptionがスローされるが
         // JsonMappingExceptionのサブクラスであるため、JsonParseException、JsonMappingExceptionの２つをハンドリングする
-        // また、Spring
-        // Bootの場合、デフォルトでは、ObjectMapperのDeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIESがfalseで作成されるため
+        // また、Spring Bootの場合、デフォルトでは、
+        // ObjectMapperのDeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIESがfalseで作成されるため
         // UnrecognizedPropertyExceptionはスローされない
         // spring.jackson.deserialization.fail-on-unknown-properties=trueをapplication.yamlに設定することで、例外発生する。
         if (ex.getCause() instanceof JsonParseException cause) {
@@ -96,8 +97,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
                 String propertyDescription = getPropertyDescription(fromClass, jsonFieldName);
                 if (StringUtils.hasLength(propertyDescription)) {
                     fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).description(propertyDescription)
-                            .errorType(errorType)
-                            .build());
+                            .errorType(errorType).build());
                 } else {
                     fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).errorType(errorType).build());
                 }
@@ -213,7 +213,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
      * 業務エラーのハンドリング
      */
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Object> bussinessExceptionHandler(final BusinessException e, final WebRequest request) {
+    public ResponseEntity<Object> handleBussinessException(final BusinessException e, final WebRequest request) {
         Object body = errorResponseCreator.createBusinessErrorResponse(e, request);
         return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
@@ -222,7 +222,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
      * システムエラーのハンドリング
      */
     @ExceptionHandler(SystemException.class)
-    public ResponseEntity<Object> systemExceptionHandler(final SystemException e, final WebRequest request) {
+    public ResponseEntity<Object> handleSystemException(final SystemException e, final WebRequest request) {
         Object body = errorResponseCreator.createSystemErrorResponse(e, request);
         return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
@@ -231,7 +231,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
      * システムエラー（予期せぬ例外）のハンドリング
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> exceptionHandler(final Exception e, final WebRequest request) {
+    public ResponseEntity<Object> handleUnexpectedException(final Exception e, final WebRequest request) {
         Object body = errorResponseCreator.createUnexpectedErrorResponse(e, request);
         return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
