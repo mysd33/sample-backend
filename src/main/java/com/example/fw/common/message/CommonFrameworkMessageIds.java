@@ -40,5 +40,27 @@ public final class CommonFrameworkMessageIds {
     public static final String E_FW_RPRT_9001 = "e.fw.rprt.9001";
     public static final String E_FW_RPRT_9002 = "e.fw.rprt.9002";
     public static final String E_FW_RPRT_9003 = "e.fw.rprt.9003";
+    // 鍵管理機能
+    public static final String E_FW_KYMG_9001 = "e.fw.kymg.9001";
+    public static final String E_FW_KYMG_9002 = "e.fw.kymg.9002";
+    public static final String E_FW_KYMG_9003 = "e.fw.kymg.9003";
+    public static final String E_FW_KYMG_9004 = "e.fw.kymg.9004";
+    public static final String E_FW_KYMG_9005 = "e.fw.kymg.9005";
+    public static final String E_FW_KYMG_9006 = "e.fw.kymg.9006";
+    public static final String E_FW_KYMG_9007 = "e.fw.kymg.9007";
+    public static final String E_FW_KYMG_9008 = "e.fw.kymg.9008";
+    public static final String E_FW_KYMG_9009 = "e.fw.kymg.9009";
+    public static final String E_FW_KYMG_9010 = "e.fw.kymg.9010";
+    public static final String E_FW_KYMG_9011 = "e.fw.kymg.9011";
+    public static final String E_FW_KYMG_9012 = "e.fw.kymg.9012";
+    // PDF署名機能
+    public static final String E_FW_PDFSGN_9001 = "e.fw.pdfsgn.9001";
+    public static final String E_FW_PDFSGN_9002 = "e.fw.pdfsgn.9002";
+    public static final String E_FW_PDFSGN_9003 = "e.fw.pdfsgn.9003";
+    public static final String E_FW_PDFSGN_9004 = "e.fw.pdfsgn.9004";
+    public static final String E_FW_PDFSGN_9005 = "e.fw.pdfsgn.9005";
+    public static final String E_FW_PDFSGN_9006 = "e.fw.pdfsgn.9006";
+    public static final String E_FW_PDFSGN_9007 = "e.fw.pdfsgn.9007";
+    public static final String E_FW_PDFSGN_9008 = "e.fw.pdfsgn.9008";
 
 }
