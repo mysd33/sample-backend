@@ -1,4 +1,4 @@
-package com.example.fw.common.micrometer;
+package com.example.fw.common.metrics;
 
 import java.lang.reflect.InvocationTargetException;
 
