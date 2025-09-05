@@ -25,6 +25,8 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 import com.example.fw.common.codepoints.catalog.CustomFullWidthCharSet;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_4ku_AddedSpecialHiragana;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_5ku_AddedSpecialKatakana;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_6ku_AddedSpecialCharsKatakana;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_7ku_AddedSpecialCharsKatakana;
 import com.example.fw.common.validation.FullWidthNoSymbol.List;
 
 import jakarta.validation.Constraint;
@@ -57,7 +59,9 @@ import jakarta.validation.constraintvalidation.ValidationTarget;
         // JIS X 0213 第2～3区の追加特殊文字、記号の集合は除外
         JIS_X_0213_4ku_AddedSpecialHiragana.class, // JIS X 0213 第4区の追加特殊ひらがなの集合
         JIS_X_0213_5ku_AddedSpecialKatakana.class, // JIS X 0213 第5区の追加特殊カタカナの集合
-        // JIS X 0213 第6～13区の追加特殊文字は除外
+        JIS_X_0213_6ku_AddedSpecialCharsKatakana.class, // JIS X 0213 第6区の追加特殊文字、特殊カタカナの集合
+        JIS_X_0213_7ku_AddedSpecialCharsKatakana.class, // JIS X 0213 第7区の追加特殊文字、特殊カタカナの集合
+        // JIS X 0213 第8～13区の追加特殊文字、記号は除外
         CustomFullWidthCharSet.class // 上記以外で独自に追加定義する全角文字の集合
 })
 public @interface FullWidthNoSymbol {
