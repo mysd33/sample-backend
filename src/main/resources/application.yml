@@ -8,7 +8,7 @@ spring:
 #    - log_container  #logging in json format
 #    - xray  #X-Ray Enabled
   messages:
-    basename: messages,messages-fw-common,messages-fw-web
+    basename: messages,messages-fw-common,messages-fw-web, messages-common
   jackson:
     property-naming-strategy: SNAKE_CASE
     # Resourceオブジェクトに存在しないフィールドがJSONに指定されていた場合、エラーとする

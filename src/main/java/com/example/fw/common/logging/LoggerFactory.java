@@ -1,5 +1,7 @@
 package com.example.fw.common.logging;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
@@ -13,7 +15,7 @@ public final class LoggerFactory {
 
     static {
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setBasenames("messages", "messages-fw-common", "messages-fw-web", "messages-fw-batch"); 
+        messageSource.setBasenames("messages", "messages-fw-common", "messages-fw-web", "messages-fw-batch");
     }
 
     private LoggerFactory() {
@@ -44,5 +46,13 @@ public final class LoggerFactory {
      */
     public static MonitoringLogger getMonitoringLogger(final Logger delegateLogger) {
         return new DefaultLogger(delegateLogger, messageSource);
+    }
+
+    /**
+     * 
+     * @param baseNames メッセージ定義ファイルのベース名を追加する
+     */
+    static void addMessageSourceBaseName(final List<String> baseNames) {
+        messageSource.addBasenames(baseNames.toArray(new String[baseNames.size()]));
     }
 }
