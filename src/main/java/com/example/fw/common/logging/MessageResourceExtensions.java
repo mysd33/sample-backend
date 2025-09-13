@@ -18,7 +18,7 @@ public class MessageResourceExtensions {
     private final MessageSourceProperties messageSourceProperties;
 
     /**
-     * spring.messages.baseの設定がある場合にログのメッセージ定義ファイルを拡張する。
+     * spring.messages.basenameの設定がある場合にログのメッセージ定義ファイルを拡張する。
      */
     @PostConstruct
     public void init() {

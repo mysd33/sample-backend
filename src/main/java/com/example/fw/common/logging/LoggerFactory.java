@@ -49,8 +49,9 @@ public final class LoggerFactory {
     }
 
     /**
+     * メッセージ定義ファイルのベース名を追加する
      * 
-     * @param baseNames メッセージ定義ファイルのベース名を追加する
+     * @param baseNames メッセージ定義ファイルのベース名
      */
     static void addMessageSourceBaseName(final List<String> baseNames) {
         messageSource.addBasenames(baseNames.toArray(new String[baseNames.size()]));

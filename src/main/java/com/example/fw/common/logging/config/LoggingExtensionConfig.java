@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.example.fw.common.logging.MessageResourceExtensions;
 
 /**
- * ロギング機能の設定クラス。
+ * ロギング機能の拡張設定クラス。
  */
 @Configuration
 public class LoggingExtensionConfig {
