@@ -14,6 +14,8 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
+import com.example.fw.common.metrics.config.MetricsConfigurationProperties;
+
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +41,10 @@ import lombok.RequiredArgsConstructor;
 })
 @RequiredArgsConstructor
 public class MyBatisMetricsObserver implements Interceptor {
-    private static final String METER_NAME_PREFIX = "mybatis.query";
     private static final String ID = "id";
     private static final String TYPE = "type";
     private final ObservationRegistry observationRegistry;
+    private final MetricsConfigurationProperties metricsConfigurationProperties;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -52,7 +54,9 @@ public class MyBatisMetricsObserver implements Interceptor {
         // https://docs.spring.io/spring-boot/reference/actuator/observability.html
         // https://docs.micrometer.io/micrometer/reference/observation/introduction.html
         try {
-            return Observation.createNotStarted(METER_NAME_PREFIX, observationRegistry)
+            return Observation
+                    .createNotStarted(metricsConfigurationProperties.getMybatis().getMeterNamePrefix(),
+                            observationRegistry)
                     .lowCardinalityKeyValue(ID, mappedStatement.getId())
                     .lowCardinalityKeyValue(TYPE, mappedStatement.getSqlCommandType().name())//
                     .observe(() -> {
