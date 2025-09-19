@@ -21,8 +21,8 @@ import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.example.backend.domain.message.MessageIds;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.todo.TodoService;
-import com.example.fw.common.db.utils.DatabaseAccessUtils;
 import com.example.fw.common.exception.TransactionTimeoutBusinessException;
+import com.example.fw.common.rdb.utils.DatabaseAccessUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

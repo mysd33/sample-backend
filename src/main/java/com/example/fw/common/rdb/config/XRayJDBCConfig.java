@@ -1,4 +1,4 @@
-package com.example.fw.common.db.config;
+package com.example.fw.common.rdb.config;
 
 import javax.sql.DataSource;
 

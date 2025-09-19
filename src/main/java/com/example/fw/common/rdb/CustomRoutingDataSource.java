@@ -1,4 +1,4 @@
-package com.example.fw.common.db;
+package com.example.fw.common.rdb;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.transaction.support.TransactionSynchronizationManager;

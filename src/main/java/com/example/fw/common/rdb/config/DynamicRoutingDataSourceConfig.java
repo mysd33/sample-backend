@@ -1,4 +1,4 @@
-package com.example.fw.common.db.config;
+package com.example.fw.common.rdb.config;
 
 import java.util.Map;
 
@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 
-import com.example.fw.common.db.CustomRoutingDataSource;
-import com.example.fw.common.db.CustomRoutingDataSource.DataSourceType;
+import com.example.fw.common.rdb.CustomRoutingDataSource;
+import com.example.fw.common.rdb.CustomRoutingDataSource.DataSourceType;
 
 /**
  * 動的にデータソース切替する機能の設定クラス

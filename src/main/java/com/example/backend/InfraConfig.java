@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Import;
 
 import com.example.backend.domain.repository.TodoRepository;
 import com.example.backend.infra.repository.TodoRepositoryStub;
-import com.example.fw.common.db.config.DynamicRoutingDataSourceConfig;
 import com.example.fw.common.logging.config.LoggingConfigPackage;
 import com.example.fw.common.metrics.config.MetricsConfig;
+import com.example.fw.common.rdb.config.DynamicRoutingDataSourceConfig;
 
 /**
  * 

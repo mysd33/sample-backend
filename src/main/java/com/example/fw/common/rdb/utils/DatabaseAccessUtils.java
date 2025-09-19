@@ -1,4 +1,4 @@
-package com.example.fw.common.db.utils;
+package com.example.fw.common.rdb.utils;
 
 import org.postgresql.util.PSQLException;
 import org.postgresql.util.PSQLState;
