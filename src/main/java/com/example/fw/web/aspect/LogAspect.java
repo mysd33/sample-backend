@@ -9,6 +9,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -27,6 +28,7 @@ import com.example.fw.common.logging.LoggerFactory;
 import com.example.fw.common.logging.MonitoringLogger;
 import com.example.fw.common.systemdate.SystemDate;
 import com.example.fw.common.systemdate.SystemDateUtils;
+import com.example.fw.web.auth.UserNameProvider;
 import com.example.fw.web.message.WebFrameworkMessageIds;
 
 import lombok.RequiredArgsConstructor;
@@ -50,6 +52,18 @@ public class LogAspect {
     private final String inputErrorMessageId;
     // 予期せぬエラーのログ出力メッセージID
     private final String unexpectedErrorMessageId;
+    // ログに出力するユーザ名を提供するクラス
+    private UserNameProvider userNameProvider;
+
+    /**
+     * 業務側の設定が煩雑にならないようにSetterインジェクション
+     * 
+     * @param userNameProvider ユーザ名提供クラス
+     */
+    @Autowired(required = false)
+    public void setUserNameProvider(UserNameProvider userNameProvider) {
+        this.userNameProvider = userNameProvider;
+    }
 
     /**
      * 水際で、各種エラーに対して適切なログレベルでのログ出力を行う
@@ -108,7 +122,7 @@ public class LogAspect {
             monitoringLogger.error(se.getCode(), se, (Object[]) se.getArgs());
         // システムエラー（予期せぬ例外）の場合
         case null, default -> //
-            monitoringLogger.error(unexpectedErrorMessageId, e);        
+            monitoringLogger.error(unexpectedErrorMessageId, e);
         }
     }
 
@@ -119,22 +133,26 @@ public class LogAspect {
     public Object aroundControllerLog(final ProceedingJoinPoint jp) throws Throwable {
         // ログ解析を容易にするため、処理開始日時をログ出力するために取得
         LocalDateTime startDateTime = systemDate.now();
+        // ログイン済みユーザIDをログ出力するために取得
+        String userName = userNameProvider != null ? userNameProvider.getUserName() : null;
         // 処理時間を計測しログ出力
         long startTime = System.nanoTime();
-        appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0001, jp.getSignature(), startDateTime);
+        appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0001, jp.getSignature(), userName, startDateTime);
         try {
             Object result = jp.proceed();
             // 処理時間を計測しログ出力
             long endTime = System.nanoTime();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
-            appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0002, jp.getSignature(), elapsedTime, startDateTime);
+            appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0002, jp.getSignature(), elapsedTime, userName,
+                    startDateTime);
             return result;
         } catch (Exception e) {
             // 処理時間を計測しログ出力
             long endTime = System.nanoTime();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
-            Object[] args = { jp.getSignature(), elapsedTime, startDateTime };
-            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8001, args, Locale.getDefault());
+            Object[] args = { jp.getSignature(), elapsedTime, userName, startDateTime };
+            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8001, args,
+                    Locale.getDefault());
             String logFormat = message + LOG_FORMAT_SUFFIX;
             switch (e) {
             // ここでは、メソッドが異常終了した旨を警告ログのみ出力
@@ -155,22 +173,26 @@ public class LogAspect {
     public Object aroundRestControllerLog(final ProceedingJoinPoint jp) throws Throwable {
         // ログ解析を容易にするため、処理開始日時をログ出力するために取得
         LocalDateTime startDateTime = systemDate.now();
+        // ログイン済みユーザIDをログ出力するために取得
+        String userName = userNameProvider != null ? userNameProvider.getUserName() : null;
         // 処理時間を計測しログ出力
         long startTime = System.nanoTime();
-        appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0003, jp.getSignature(), startDateTime);
+        appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0003, jp.getSignature(), userName, startDateTime);
         try {
             Object result = jp.proceed();
             // 処理時間を計測しログ出力
             long endTime = System.nanoTime();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
-            appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0004, jp.getSignature(), elapsedTime, startDateTime);
+            appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0004, jp.getSignature(), elapsedTime, userName,
+                    startDateTime);
             return result;
         } catch (Exception e) {
             // 処理時間を計測しログ出力
             long endTime = System.nanoTime();
             double elapsedTime = SystemDateUtils.calcElapsedTimeByMilliSeconds(startTime, endTime);
-            Object[] args = { jp.getSignature(), elapsedTime, startDateTime };
-            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8002, args, Locale.getDefault());
+            Object[] args = { jp.getSignature(), elapsedTime, userName, startDateTime };
+            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8002, args,
+                    Locale.getDefault());
             String logFormat = message + LOG_FORMAT_SUFFIX;
             switch (e) {
             // 業務エラーは、ここでは、メソッドが異常終了した旨を警告ログのみ出力。スタックトレースは出力しない
@@ -190,15 +212,20 @@ public class LogAspect {
      */
     @Around("@within(org.springframework.stereotype.Service)")
     public Object aroundServiceLog(final ProceedingJoinPoint jp) throws Throwable {
-        appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0005, jp.getSignature(), Arrays.asList(jp.getArgs()));
+        // ログイン済みユーザIDをログ出力するために取得
+        String userName = userNameProvider != null ? userNameProvider.getUserName() : null;
+        appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0005, jp.getSignature(), Arrays.asList(jp.getArgs()),
+                userName);
         try {
             Object result = jp.proceed();
-            appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0006, jp.getSignature(), Arrays.asList(jp.getArgs()));
+            appLogger.info(WebFrameworkMessageIds.I_FW_ONCTRL_0006, jp.getSignature(), Arrays.asList(jp.getArgs()),
+                    userName);
             return result;
         } catch (Exception e) {
             // 例外が発生した場合は、エラーログを出力
-            Object[] args = { jp.getSignature(), Arrays.asList(jp.getArgs()) };
-            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8003, args, Locale.getDefault());
+            Object[] args = { jp.getSignature(), Arrays.asList(jp.getArgs()), userName };
+            String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8003, args,
+                    Locale.getDefault());
             String logFormat = message + LOG_FORMAT_SUFFIX;
             switch (e) {
             // 業務エラーは、メソッドが異常終了した旨を警告ログを出力するが、
