@@ -53,7 +53,7 @@ public class XRayServletConfig  {
      * 
      */
     @Bean
-    public Filter tracingFilter() {
+    Filter tracingFilter() {
         return new AWSXRayServletFilter(xRayServletConfigurationProperties.getTracingFilterName());
     }
 

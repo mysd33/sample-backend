@@ -27,7 +27,7 @@ public class XRayJDBCConfig {
      * 単一データソースの場合
      */
     @Configuration
-    @ConditionalOnProperty(prefix = "spring.datasource.dynamic-routing", name = "enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
     static class SingleDataSource {
         /**
          * DataSourceプロパティの取得
@@ -60,14 +60,14 @@ public class XRayJDBCConfig {
      * 動的データソースルーティングの場合
      */
     @Configuration
-    @ConditionalOnProperty(prefix = "spring.datasource.dynamic-routing", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     static class DynamicDataSource {
 
         /**
          * DataSourceでのAWS X-RayのJDBCトレーシング設定
          */
         @Bean
-        @Primary  // トレーシング用のDataSourceを優先
+        @Primary // トレーシング用のDataSourceを優先
         DataSource dataSourceForXray(DataSource dataSource) {
             // DynamicRoutingDataSourceConfigでBean定義されたDataSourceをラップする
             return TracingDataSource.decorate(dataSource);

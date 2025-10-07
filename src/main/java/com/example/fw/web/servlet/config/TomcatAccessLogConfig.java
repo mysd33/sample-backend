@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * Tomcatアクセスログの設定クラス
  */
-@ConditionalOnProperty(prefix = "logback.access", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = TomcatAccessLogConfigurationProperties.PROPERTY_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties({ TomcatAccessLogConfigurationProperties.class })

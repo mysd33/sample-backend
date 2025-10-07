@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 
+import com.example.fw.common.constants.FrameworkConstants;
 import com.example.fw.common.rdb.CustomRoutingDataSource;
 import com.example.fw.common.rdb.CustomRoutingDataSource.DataSourceType;
 
@@ -18,14 +19,21 @@ import com.example.fw.common.rdb.CustomRoutingDataSource.DataSourceType;
  * 動的にデータソース切替する機能の設定クラス
  */
 @Configuration
-@ConditionalOnProperty(prefix = "spring.datasource.dynamic-routing", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DynamicRoutingDataSourceConfig {
+    // TODO:プロパティ名の見直しを予定
+    // DBアクセス機能のプロパティプレフィックス
+    static final String PROPERTY_PREFIX = FrameworkConstants.PROPERTY_BASE_NAME + "spring.datasource";
+    static final String DYNAMIC_ROUTING_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX
+            + ".dynamic-routing";
+    private static final String READER_PROPERTY_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".read";
+    private static final String WRITER_PROPERTY_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".write";
 
     /**
      * リーダーエンドポイント接続用のDataSourceProperties
      */
     @Bean
-    @ConfigurationProperties("spring.datasource.read")
+    @ConfigurationProperties(READER_PROPERTY_PREFIX)
     DataSourceProperties readDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -40,7 +48,7 @@ public class DynamicRoutingDataSourceConfig {
      */
     @Bean(defaultCandidate = false)
     // HikariCPを前提に、spring.datasource.hikariプロパティと同じ設定ができるようにする
-    @ConfigurationProperties("spring.datasource.read.hikari")
+    @ConfigurationProperties(DynamicRoutingDataSourceConfig.READER_PROPERTY_PREFIX + ".hikari")
     DataSource readDataSource() {
         return readDataSourceProperties().initializeDataSourceBuilder().build();
     }
@@ -53,7 +61,7 @@ public class DynamicRoutingDataSourceConfig {
     // https://docs.spring.io/spring-boot/how-to/data-access.html#howto.data-access.configure-custom-datasource
     /*
        @Bean(defaultCandidate = false)
-       @ConfigurationProperties("spring.datasource.read")
+       @ConfigurationProperties(DynamicRoutingDataSourceConfig.READER_PROPERTY_PREFIX)
        DataSource readDataSource() {
            return DataSourceBuilder.create().build();
        }
@@ -63,7 +71,7 @@ public class DynamicRoutingDataSourceConfig {
      * クラスタエンドポイント接続用のDataSourceProperties
      */
     @Bean
-    @ConfigurationProperties("spring.datasource.write")
+    @ConfigurationProperties(WRITER_PROPERTY_PREFIX)
     DataSourceProperties writeDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -73,7 +81,7 @@ public class DynamicRoutingDataSourceConfig {
      */
     @Bean(defaultCandidate = false)
     // HikariCPを前提に、spring.datasource.hikariプロパティと同じ設定ができるようにする
-    @ConfigurationProperties("spring.datasource.write.hikari")
+    @ConfigurationProperties(DynamicRoutingDataSourceConfig.WRITER_PROPERTY_PREFIX + ".hikari")
     DataSource writeDataSource() {
         return writeDataSourceProperties().initializeDataSourceBuilder().build();
     }
