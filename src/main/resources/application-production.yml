@@ -8,21 +8,13 @@ spring:
   sql:
     init:
       platform: postgresql
-      mode: always      
-  datasource:    
+      mode: always
+  datasource:
     url: jdbc:postgresql://localhost:5432/testdb
     driver-class-name: org.postgresql.Driver 
     username: postgres
     password: password
-# Dynamic Routing DataSource
-    read:
-      driver-class-name: org.postgresql.Driver
-#      hikari:
-#        maximum-pool-size: 30
-    write:
-      driver-class-name: org.postgresql.Driver
-#      hikari:
-#        maximum-pool-size: 30
+
 # Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration Enabled
   cloud:
     aws:
@@ -60,3 +52,17 @@ management:
       export:
         enabled: true
         namespace: ${spring.application.name}
+
+# 拡張フレームワーク機能の設定
+example:
+# Dynamic Routing DataSource
+  datasource:
+    read:
+      driver-class-name: org.postgresql.Driver
+#      hikari:
+#        maximum-pool-size: 30
+    write:
+      driver-class-name: org.postgresql.Driver
+#      hikari:
+#        maximum-pool-size: 30
+        

@@ -14,7 +14,7 @@ import lombok.Data;
 @ConfigurationProperties(XRayServletConfigurationProperties.PROPERTY_PREFIX)
 public class XRayServletConfigurationProperties {
     // X-Rayの設定のプロパティプレフィックス
-    static final String PROPERTY_PREFIX = FrameworkConstants.PROPERTY_BASE_NAME + "aws.xray";
+    static final String PROPERTY_PREFIX = FrameworkConstants.PROPERTY_BASE_NAME + "xray";
 
     // トレーシングフィルタの名前
     private String tracingFilterName;

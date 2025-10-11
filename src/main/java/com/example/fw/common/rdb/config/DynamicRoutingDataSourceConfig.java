@@ -21,11 +21,9 @@ import com.example.fw.common.rdb.CustomRoutingDataSource.DataSourceType;
 @Configuration
 @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DynamicRoutingDataSourceConfig {
-    // TODO:プロパティ名の見直しを予定
     // DBアクセス機能のプロパティプレフィックス
-    static final String PROPERTY_PREFIX = FrameworkConstants.PROPERTY_BASE_NAME + "spring.datasource";
-    static final String DYNAMIC_ROUTING_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX
-            + ".dynamic-routing";
+    static final String PROPERTY_PREFIX = FrameworkConstants.PROPERTY_BASE_NAME + "datasource";
+    static final String DYNAMIC_ROUTING_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".dynamic-routing";
     private static final String READER_PROPERTY_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".read";
     private static final String WRITER_PROPERTY_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".write";
 

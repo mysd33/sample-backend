@@ -1,5 +1,6 @@
 # Tomcat Access Log
-logback:
-  access:
-#    enabled: false
-    config: conf/logback-access-json.xml
+example:
+  logback:
+    access:
+#      enabled: false
+      config: conf/logback-access-json.xml

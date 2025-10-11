@@ -18,28 +18,19 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 20s
   thymeleaf:
-    check-template-location: false    
+    check-template-location: false
 # Virtual Thread                  
   threads:
     virtual:
-      enabled: true              
+      enabled: true
 # Transaction Rollback
   transaction:
     rollback-on-commit-failure: true
-# Dynamic Routing DataSource (disabled on Sample AP Default)
-  datasource:
-    dynamic-routing:
-      enabled: false
 # HikariCP AutoCommit false
+  datasource:
     hikari:
       auto-commit: false
-# Dynamic Routing DataSource HikariCP AutoCommit false
-    read:
-      hikari:
-        auto-commit: false
-    write:
-      hikari:
-        auto-commit: false
+
 # Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration
 # Default Disabled For Local Development
   cloud:
@@ -63,12 +54,24 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+# 拡張フレームワーク機能の設定
+example:
+# Dynamic Routing DataSource (disabled on Sample AP Default)
+  datasource:
+    dynamic-routing:
+      enabled: false
+# Dynamic Routing DataSource HikariCP AutoCommit false
+    read:
+      hikari:
+        auto-commit: false
+    write:
+      hikari:
+        auto-commit: false
 # X-Ray SDK(not ADOT)
-aws:
   xray:
     tracing-filter-name: ${spring.application.name}
 
 # Tomcat Access Log
-#logback:
-#  access:
-#    enabled: false   
+#  logback:
+#    access:
+#      enabled: false   

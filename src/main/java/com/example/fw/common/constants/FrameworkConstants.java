@@ -11,6 +11,6 @@ public final class FrameworkConstants {
      * Spring Bootのプロパティのベース名<br>
      * 最後はドット(.)で終わること
      */
-    public static final String PROPERTY_BASE_NAME = ""; // TODO: 値の変更
+    public static final String PROPERTY_BASE_NAME = "example.";
 
 }
