@@ -62,7 +62,6 @@ management:
     metrics:
       export:
         enabled: false
-        namespace: ${spring.application.name}
         step: 10s
 # Mybatis
 mybatis:
