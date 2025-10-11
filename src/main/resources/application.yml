@@ -48,12 +48,6 @@ spring:
         enabled: false
       secretsmanager:
         enabled: false
-  config:
-    import: 
-      - optional:aws-parameterstore:/config/common/;/config/${spring.application.name}/
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.read.
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.write.
       
 # Spring Cloud for AWS Micrometer CloudWatch Integration Common Configuration
 # Default Disabled For Local Development

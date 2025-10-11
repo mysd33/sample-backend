@@ -30,6 +30,13 @@ spring:
         enabled: true
       secretsmanager:
         enabled: true
+  config:
+    import: 
+      - optional:aws-parameterstore:/config/common/;/config/${spring.application.name}/
+      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.
+      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.read.
+      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.write.
+        
 # Spring Boot Actuator
 management:
   endpoints:
