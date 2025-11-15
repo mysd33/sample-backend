@@ -27,6 +27,8 @@ public final class CommonFrameworkMessageIds {
     public static final String I_FW_RPRT_0004 = "i.fw.rprt.0004";
     public static final String I_FW_RPRT_0005 = "i.fw.rprt.0005";
     public static final String I_FW_RPRT_0006 = "i.fw.rprt.0006";
+    // PDF署名機能
+    public static final String I_FW_PDFSGN_0001 = "i.fw.pdfsgn.0001";
     // 警告レベル
     // 帳票出力機能
     public static final String W_FW_RPRT_8001 = "w.fw.rprt.8001";
