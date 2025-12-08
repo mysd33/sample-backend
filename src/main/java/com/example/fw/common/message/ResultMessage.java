@@ -1,5 +1,6 @@
 package com.example.fw.common.message;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.Data;
 @Builder
 public class ResultMessage implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 5316854177235795645L;
 
     private ResultMessageType type; // メッセージの種類

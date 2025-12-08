@@ -1,5 +1,6 @@
 package com.example.fw.web.resource;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorResponse implements Serializable {
+    @Serial
     private static final long serialVersionUID = -707495429327768166L;
 
     // エラーコード

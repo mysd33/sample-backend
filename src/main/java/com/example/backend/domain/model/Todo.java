@@ -1,5 +1,6 @@
 package com.example.backend.domain.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import lombok.Data;
 @Data
 @Builder
 public class Todo implements Serializable {
+    @Serial
     private static final long serialVersionUID = -8221174350955399012L;
     // ID
     private String todoId;

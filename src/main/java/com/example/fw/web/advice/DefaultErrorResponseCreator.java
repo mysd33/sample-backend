@@ -23,12 +23,12 @@ import com.example.fw.common.logging.LoggerFactory;
 import com.example.fw.web.advice.InvalidFormatField.ErrorType;
 import com.example.fw.web.message.WebFrameworkMessageIds;
 import com.example.fw.web.resource.ErrorResponse;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
 
 /**
  * エラーレスポンスの作成クラス
@@ -143,7 +143,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * @return エラーレスポンス
      */
     @Override
-    public Object createRequestParseErrorResponse(final JsonParseException e, final WebRequest request) {
+    public Object createRequestParseErrorResponse(final StreamReadException e, final WebRequest request) {
         ArrayList<String> errorDetails = new ArrayList<>();
         String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2001, null,
                 request.getLocale());
@@ -162,7 +162,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      */
     @Override
     public Object createRequestMappingErrorResponse(final List<InvalidFormatField> invalidFields,
-            final JsonMappingException e, final WebRequest request) {
+            final DatabindException e, final WebRequest request) {
 
         ArrayList<String> errorDetails = new ArrayList<>();
         invalidFields.forEach(field -> {

@@ -1,5 +1,8 @@
 package com.example.fw.common.exception;
 
+import java.io.Serial;
+
+
 import org.springframework.util.Assert;
 
 import com.example.fw.common.message.ResultMessage;
@@ -13,6 +16,7 @@ import lombok.Getter;
  */
 public class SystemException extends RuntimeException implements ErrorCodeProvider {
 
+    @Serial
     private static final long serialVersionUID = 2366112591444733405L;
 
     @Getter

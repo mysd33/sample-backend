@@ -1,5 +1,7 @@
 package com.example.fw.common.exception;
 
+import java.io.Serial;
+
 import com.example.fw.common.message.ResultMessage;
 
 /**
@@ -9,6 +11,7 @@ import com.example.fw.common.message.ResultMessage;
  */
 public class TransactionTimeoutBusinessException extends BusinessException {
 
+    @Serial
     private static final long serialVersionUID = -1744348321677818805L;
 
     public TransactionTimeoutBusinessException(final String code) {

@@ -12,9 +12,7 @@ import com.example.fw.web.advice.DefaultErrorResponseCreator;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 
@@ -36,12 +34,12 @@ public class AppConfig {
         // オプション引数未指定の場合の例
         // return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_2001,
         // MessageIds.E_EX_9001);
-        
+
         // オプション引数を指定した場合の例
         // return new DefaultErrorResponseCreator(messageSource, MessageIds.W_EX_2001,
         // MessageIds.E_EX_9001,
         // MessageIds.W_EX_2002);
-        
+
         // Builderパターンを使用した場合の記載例
         return DefaultErrorResponseCreator.builder().messageSource(messageSource)
                 .inputErrorMessageId(MessageIds.W_EX_2001)//
@@ -58,13 +56,14 @@ public class AppConfig {
         return new LogAspect(systemDate, messageSource, MessageIds.W_EX_2001, MessageIds.E_EX_9001);
     }
 
+    // TODO: Spring Boot4.0で不要、もしくはまったく違う回避方法の可能性があるのでいったん削除
     /**
      * Springdoc-openapiでスネークケースの設定が反映されるようにするための回避策
      */
-    @Bean
-    ModelResolver modelResolver(ObjectMapper objectMapper) {
-        return new ModelResolver(objectMapper);
-    }
+    /*
+     * @Bean ModelResolver modelResolver(ObjectMapper objectMapper) { return new
+     * ModelResolver(objectMapper); }
+     */
 
     /**
      * Springdoc-openapiの定義

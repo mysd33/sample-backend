@@ -1,11 +1,15 @@
 package com.example.fw.common.codepoints.catalog;
 
+import java.io.Serial;
+
+
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
 /**
  *  特殊文字扱いでも全角文字（記号なし）チェックに含める文字集合を表すクラス
  */
 public final class CustomFullWidthCharSet extends CodePoints {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -9,8 +9,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.SystemException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
 
 /**
  * エラーレスポンスの作成インタフェース
@@ -19,13 +20,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public interface ErrorResponseCreator {
     /**
      * 入力エラー（パスパラメータやクエリパラメータのバリデーションエラー）の場合のエラーレスポンスを作成する
+     * 
      * @param parameterValidationResults
      * @param request
      * @return
      */
     Object createParameterValidationErrorResponse(List<ParameterValidationResult> parameterValidationResults,
             WebRequest request);
-    
+
     /**
      * 入力エラー（リクエストメッセージのJSONが不正な構文でパースに失敗）の場合のエラーレスポンスを作成する
      * 
@@ -33,7 +35,7 @@ public interface ErrorResponseCreator {
      * @param request WebRequest
      * @return エラーレスポンス
      */
-    Object createRequestParseErrorResponse(JsonParseException e, WebRequest request);
+    Object createRequestParseErrorResponse(StreamReadException e, WebRequest request);
 
     /**
      * 入力エラー（リクエストメッセージからResourceオブジェクトへの変換に失敗）の場合のエラーレスポンスを作成する
@@ -43,7 +45,7 @@ public interface ErrorResponseCreator {
      * @param request       WebRequest
      * @return エラーレスポンス
      */
-    Object createRequestMappingErrorResponse(List<InvalidFormatField> invalidFields, JsonMappingException e,
+    Object createRequestMappingErrorResponse(List<InvalidFormatField> invalidFields, DatabindException e,
             WebRequest request);
 
     /**

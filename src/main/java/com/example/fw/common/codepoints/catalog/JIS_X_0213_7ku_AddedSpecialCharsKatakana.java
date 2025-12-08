@@ -1,11 +1,15 @@
 package com.example.fw.common.codepoints.catalog;
 
+import java.io.Serial;
+
+
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
 /**
  *  JIS X 0213の追加非漢字の特殊文字、特殊カタカナ（1面7区）の文字集合を表すクラス
  */
 public final class JIS_X_0213_7ku_AddedSpecialCharsKatakana extends CodePoints {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -1,10 +1,12 @@
 package com.example.backend.app.api.todo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
 import com.example.fw.common.validation.CharSet;
 import com.example.fw.common.validation.RangeLength;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -18,6 +20,7 @@ import lombok.Data;
  */
 @Data
 public class TodoResource implements Serializable {
+    @Serial
     private static final long serialVersionUID = -8098772003890701846L;
 
     // ID
@@ -37,7 +40,7 @@ public class TodoResource implements Serializable {
 
     // 作成日時
     @Schema(description = "作成日時")
-    // @JsonPropertyDescription("作成日時") // @Schemaのdescrptionがあれば定義不要
+    @JsonPropertyDescription("作成日時") // @Schemaのdescrptionがあれば定義不要
     private Date createdAt;
 
     // TODO: 入れ子のリソースでのテスト。後で削除
