@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.autoconfigure.JacksonProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -46,19 +45,11 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
 
     // ObjectMapperのPropertyNamingStrategyを取得するためのフィールド
     private ObjectMapper objectMapper;
-    // JsonPropertyアノテーションの値を取得するためのフィールド
-    private JacksonProperties jacksonProperties;
 
     // 業務のRestControllerAdviceクラスのコンストラクタが煩雑にならないようSetterインジェクションを利用
     @Autowired
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-    }
-
-    // 業務のRestControllerAdviceクラスのコンストラクタが煩雑にならないようSetterインジェクションを利用
-    @Autowired
-    public void setJacksonProperties(JacksonProperties jacksonProperties) {
-        this.jacksonProperties = jacksonProperties;
     }
 
     /**
@@ -147,25 +138,25 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
      * @return JsonPropertyDescriptionアノテーションの値
      */
     private String getPropertyDescription(Class<?> clazz, String jsonFieldName) {
-        List<Field> fields = List.of(clazz.getDeclaredFields());
-        for (Field field : fields) {
-            JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
+        Field[] fields = clazz.getDeclaredFields();
+        // for-eachを使うと、Fieldオブジェクトのプロキシが外れてしまうので、Annotationsが取得できない問題があるため、for文で回す
+        for (int i = 0; i < fields.length; i++) {
+            JsonProperty jsonProperty = fields[i].getAnnotation(JsonProperty.class);
             // @JsonPropertyが付与されている場合はその値を優先して使用、
             // 付与されていない場合はObjectMapperからPropertyNamingStrategyで変換した値を使用する
             String fieldName = jsonProperty != null ? jsonProperty.value()
                     : objectMapper._deserializationContext().getConfig().getPropertyNamingStrategy().nameForField(null,
-                            null, jsonFieldName);
+                            null, fields[i].getName());
             if (!fieldName.equals(jsonFieldName)) {
                 continue;
             }
-            // TODO: なぜかアノテーションが空になってしまうため、和名が取得できないので継続検討要
             // フィールド名が一致する場合に、@JsonPropertyDescriptionがあればその値を返却
-            JsonPropertyDescription jsonPropertyDescription = field.getAnnotation(JsonPropertyDescription.class);
+            JsonPropertyDescription jsonPropertyDescription = fields[i].getAnnotation(JsonPropertyDescription.class);
             if (jsonPropertyDescription != null) {
                 return jsonPropertyDescription.value();
             }
             // @Schemaがあれば、そのdescription属性を返却
-            Schema schema = field.getAnnotation(Schema.class);
+            Schema schema = fields[i].getAnnotation(Schema.class);
             if (schema != null) {
                 return schema.description();
             }
