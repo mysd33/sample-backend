@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.terasoluna.gfw.web.token.transaction.InvalidTransactionTokenException;
 
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.exception.DynamoDBTransactionBusinessException;
@@ -117,6 +118,10 @@ public class LogAspect {
         case BusinessException be -> {
             // Serviceでログ出力するので、二重でスタックトーレス含むログを出力しないよう何もしない
         }
+        // トランザクショントークンチェックエラーの場合
+        case InvalidTransactionTokenException itte -> //
+            // 警告エラー扱いとしてログ出力
+            appLogger.warn(WebFrameworkMessageIds.W_FW_TRNTKN_8002, itte);
         // システムエラー（システム例外）の場合
         case SystemException se -> //
             monitoringLogger.error(se.getCode(), se, (Object[]) se.getArgs());

@@ -37,5 +37,6 @@ public final class WebFrameworkMessageIds {
     public static final String W_FW_ONEXCP_8003 = "w.fw.onexcp.8003";
     // トランザクショントークンチェック
     public static final String W_FW_TRNTKN_8001 = "w.fw.trntkn.8001";
+    public static final String W_FW_TRNTKN_8002 = "w.fw.trntkn.8002";
 
 }

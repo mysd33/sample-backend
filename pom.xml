@@ -71,6 +71,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <!-- TERASOLUNA Web (for TransactionToken Check)  LogAspect Required-->
+        <dependency>
+            <groupId>org.terasoluna.gfw</groupId>
+            <artifactId>terasoluna-gfw-web</artifactId>
+            <version>${terasoluna.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- TERASOLUNA CodePoint -->
         <dependency>
             <groupId>org.terasoluna.gfw.codepoints</groupId>
