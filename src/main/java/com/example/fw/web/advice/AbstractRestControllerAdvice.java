@@ -140,9 +140,10 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
             // @JsonPropertyが付与されている場合はその値を優先して使用、
             // 付与されていない場合はObjectMapperからPropertyNamingStrategyで変換した値を使用する
+            // _
             String fieldName = jsonProperty != null ? jsonProperty.value()
-                    : objectMapper._deserializationContext().getConfig().getPropertyNamingStrategy().nameForField(null,
-                            null, field.getName());
+                    : objectMapper.deserializationConfig().getPropertyNamingStrategy().nameForField(null, null,
+                            field.getName());
             if (!fieldName.equals(jsonFieldName)) {
                 continue;
             }
