@@ -68,6 +68,11 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+        <!-- Spring Boot OpenTelemetry -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-opentelemetry</artifactId>
+        </dependency>
         <!-- Spring Boot AspectJ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -141,11 +146,6 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash-logback-encoder.version}</version>
-        </dependency>
-        <!-- Micrometer Tracing -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
         </dependency>
         <!-- Spring Cloud for AWS Parameter Store Integration-->
         <dependency>
