@@ -6,6 +6,10 @@
 * 別プロジェクト、別リポジトリで作成している、BFF(Backend For Frontend)のサンプルアプリケーション(sampe-bff)、非同期処理/バッチのサンプルアプリケーション（sample-batch）からAPIを利用している。
 ![実装イメージ](img/sample-backend.png)
 
+* 本サンプルAPのソフトウェアアーキテクチャの図は以下の通り。
+
+![ソフトウェアアーキテクチャ](img/architecture.png)
+
 ## プロジェクト構成
 * sample-bff
     * 別のプロジェクト。当該名称のリポジトリを参照のこと。Spring BootのWebブラウザアプリケーション（Backend for Frontend）で、ユーザがログイン後、TODOやユーザを管理する画面を提供する。また、画面やAPIからsample-batchへの非同期実行依頼も可能である。
