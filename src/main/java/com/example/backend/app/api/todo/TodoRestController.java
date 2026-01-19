@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.validator.constraints.UUID;
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,7 +56,7 @@ public class TodoRestController {
             // @Transactionalのtimeout属性を指定した処理でトランザクションタイムアウト時に業務例外とする実装例
             Collection<Todo> todos = todoService.findAll();
             return todoMapper.modelsToResources(todos);
-        } catch (DataAccessResourceFailureException e) {
+        } catch (DataAccessException e) {
             // PostgreSQLのトランザクションタイムアウトエラーなら業務例外に変換しスロー
             if (DatabaseAccessUtils.isQueryTimeout(e)) {
                 // BusinessExceptionでラップしてリスロー
