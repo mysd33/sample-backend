@@ -94,6 +94,10 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             cause.getPath().forEach(ref -> {
                 Class<?> fromClass = ref.getFrom().getClass();
                 String jsonFieldName = ref.getFieldName();
+                if (jsonFieldName == null) {
+                    // フィールド名が取得できない場合はスキップ（例: refがjava.util.ArrayList[0]のような配列要素の場合）
+                    return;
+                }
                 String propertyDescription = getPropertyDescription(fromClass, jsonFieldName);
                 if (StringUtils.hasLength(propertyDescription)) {
                     fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).description(propertyDescription)
