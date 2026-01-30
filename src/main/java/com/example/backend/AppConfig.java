@@ -12,6 +12,7 @@ import com.example.fw.web.advice.DefaultErrorResponseCreator;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
+import com.example.fw.web.validation.config.ValidatorConfig;
 // springdoc-openapiの内部io.swagger.v3.core.jacksonはJackson2を使用しているため
 // Jackson2のObjectMapperをインポートする
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +28,8 @@ import io.swagger.v3.oas.models.info.Info;
  *
  */
 @Configuration
-//システム日時機能、Tomcatアクセスログ機能の追加
-@Import({ SystemDateConfig.class, TomcatAccessLogConfig.class })
+//システム日時機能、Tomcatアクセスログ機能の追加、入力チェック拡張機能の追加
+@Import({ SystemDateConfig.class, TomcatAccessLogConfig.class, ValidatorConfig.class })
 public class AppConfig {
 
     /**

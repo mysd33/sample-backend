@@ -44,4 +44,9 @@ public class TodoResource implements Serializable {
     // @Schema(description = "ほげ")
     // @JsonInclude(JsonInclude.Include.NON_NULL)
     // private Hoge hoge;
+
+    // TODO: 入れ子のリソースでのテスト。後で削除
+    // @Valid
+    // private List<Hoge2> hoge2;
+
 }
