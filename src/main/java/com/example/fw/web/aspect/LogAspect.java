@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -158,7 +159,7 @@ public class LogAspect {
             Object[] args = { jp.getSignature(), elapsedTime, userName, startDateTime };
             String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8001, args,
                     Locale.getDefault());
-            String logFormat = message + LOG_FORMAT_SUFFIX;
+            String logFormat = escapeFormat(message) + LOG_FORMAT_SUFFIX;
             switch (e) {
             // ここでは、メソッドが異常終了した旨を警告ログのみ出力
             // WebブラウザAPの場合、通常業務例外はControllerのメソッド内でキャッチされるが、
@@ -198,7 +199,7 @@ public class LogAspect {
             Object[] args = { jp.getSignature(), elapsedTime, userName, startDateTime };
             String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8002, args,
                     Locale.getDefault());
-            String logFormat = message + LOG_FORMAT_SUFFIX;
+            String logFormat = escapeFormat(message) + LOG_FORMAT_SUFFIX;
             switch (e) {
             // 業務エラーは、ここでは、メソッドが異常終了した旨を警告ログのみ出力。スタックトレースは出力しない
             case BusinessException be -> //
@@ -231,7 +232,7 @@ public class LogAspect {
             Object[] args = { jp.getSignature(), Arrays.asList(jp.getArgs()), userName };
             String message = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_8003, args,
                     Locale.getDefault());
-            String logFormat = message + LOG_FORMAT_SUFFIX;
+            String logFormat = escapeFormat(message) + LOG_FORMAT_SUFFIX;
             switch (e) {
             // 業務エラーは、メソッドが異常終了した旨を警告ログを出力するが、
             // WebブラウザAPのケースを考慮すると、通常業務例外はControllerのメソッド内でキャッチされ、
@@ -297,4 +298,17 @@ public class LogAspect {
         }
     }
 
+    /**
+     * 想定外の「{」「}」を含むフォーマット文字列の置き換えを文字列全体にシングルクォートで囲むことでエスケープする。<br>
+     * これにより、ロギング機能内のMessageFormat.formatメソッドでの置き換え処理の誤動作を回避する。
+     * 
+     * @param format エスケープ対象のフォーマット文字列
+     * @return エスケープ後のフォーマット文字列
+     */
+    private String escapeFormat(String format) {
+        if (StringUtils.isBlank(format)) {
+            return format;
+        }
+        return "'" + format.replace("'", "''") + "'";
+    }
 }
