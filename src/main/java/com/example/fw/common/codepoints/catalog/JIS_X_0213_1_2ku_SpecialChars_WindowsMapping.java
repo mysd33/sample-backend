@@ -13,11 +13,12 @@ public final class JIS_X_0213_1_2ku_SpecialChars_WindowsMapping extends CodePoin
      */
     public JIS_X_0213_1_2ku_SpecialChars_WindowsMapping() {
         super(0x2015, // ―(01-01-29)
+                0xff3c, // ＼(01-01-32)
                 0xff5e, // ～(01-01-33)
                 0x2225, // ∥(01-01-34)
                 0xff0d, // －(01-01-61)
-                0xff04, // ＄(01-01-80)
                 0xffe0, // ￠(01-01-81)
+                0xffe1, // ￡(01-01-82)
                 0xffe2 // ￢(01-02-44)
         );
     }
