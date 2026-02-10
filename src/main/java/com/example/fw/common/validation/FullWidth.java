@@ -25,6 +25,7 @@ import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0208_SpecialChars;
 import org.terasoluna.gfw.common.codepoints.catalog.JIS_X_0213_Kanji;
 
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_12_13ku_AddedSpecialChars;
+import com.example.fw.common.codepoints.catalog.JIS_X_0213_1_2ku_SpecialChars_WindowsMapping;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_2_3ku_AddedSpecialChars;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_4ku_AddedSpecialHiragana;
 import com.example.fw.common.codepoints.catalog.JIS_X_0213_5ku_AddedSpecialKatakana;
@@ -61,6 +62,7 @@ import jakarta.validation.constraintvalidation.ValidationTarget;
         JIS_X_0208_CyrillicLetters.class, // JIS X 0208 の7区：キリル文字の集合
         JIS_X_0208_BoxDrawingChars.class, // JIS X 0208 の8区：罫線素片の集合
         JIS_X_0213_Kanji.class, // JIS第1～4水準の漢字の集合
+        JIS_X_0213_1_2ku_SpecialChars_WindowsMapping.class, // JIS X0218の1-2区でWindowsと他のOSでマッピングが異なる文字の集合
         JIS_X_0213_2_3ku_AddedSpecialChars.class, // JIS X 0213 第2～3区の追加特殊文字、記号の集合
         JIS_X_0213_4ku_AddedSpecialHiragana.class, // JIS X 0213 第4区の追加特殊ひらがなの集合
         JIS_X_0213_5ku_AddedSpecialKatakana.class, // JIS X 0213 第5区の追加特殊カタカナの集合
