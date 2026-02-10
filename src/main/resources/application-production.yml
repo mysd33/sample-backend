@@ -24,10 +24,10 @@ spring:
         enabled: true
   config:
     import: 
-      - optional:aws-parameterstore:/config/common/;/config/${spring.application.name}/
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=spring.datasource.
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=example.datasource.read.
-      - optional:aws-secretsmanager:/secrets/database-secrets?prefix=example.datasource.write.
+      - optional:aws-parameterstore:/config/${PROJECT_NAME}/${ENV_NAME}/common/;/config/${PROJECT_NAME}/${ENV_NAME}/${spring.application.name}/
+      - optional:aws-secretsmanager:/secrets/${DB_SECRETS_NAME}?prefix=spring.datasource.
+      - optional:aws-secretsmanager:/secrets/${DB_SECRETS_NAME}?prefix=example.datasource.read.
+      - optional:aws-secretsmanager:/secrets/${DB_SECRETS_NAME}?prefix=example.datasource.write.
         
 # Spring Boot Actuator
 management:
