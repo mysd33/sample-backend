@@ -11,6 +11,7 @@ import com.example.fw.common.systemdate.config.SystemDateConfig;
 import com.example.fw.web.advice.DefaultErrorResponseCreator;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
+import com.example.fw.web.converter.RestAPISpecialCharConvertConfig;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
 import com.example.fw.web.validation.config.ValidatorConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,9 @@ import io.swagger.v3.oas.models.info.Info;
  */
 @Configuration
 //システム日時機能、Tomcatアクセスログ機能の追加、入力チェック拡張機能の追加
-@Import({ SystemDateConfig.class, TomcatAccessLogConfig.class, ValidatorConfig.class })
+@Import({ SystemDateConfig.class, TomcatAccessLogConfig.class, ValidatorConfig.class,
+        // REST APIの特殊文字のコードポイント変換機能の追加
+        RestAPISpecialCharConvertConfig.class })
 public class AppConfig {
 
     /**
