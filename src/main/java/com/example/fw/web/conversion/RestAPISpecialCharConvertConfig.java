@@ -28,7 +28,7 @@ public class RestAPISpecialCharConvertConfig {
         @Override
         public String deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
             String value = p.getValueAsString();
-            return JapaneseStringUtils.convertSpecialChar(value);
+            return JapaneseStringUtils.convertCodePoints(value);
         }
     }
 
