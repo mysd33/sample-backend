@@ -95,6 +95,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- TERASOLUNA String Process -->
+        <dependency>
+            <groupId>org.terasoluna.gfw</groupId>
+            <artifactId>terasoluna-gfw-string</artifactId>
+            <version>${terasoluna.version}</version>
+        </dependency>
         <!-- TERASOLUNA CodePoint -->
         <dependency>
             <groupId>org.terasoluna.gfw.codepoints</groupId>

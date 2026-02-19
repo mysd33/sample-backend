@@ -1,4 +1,4 @@
-package com.example.fw.web.converter;
+package com.example.fw.web.conversion;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class RestAPISpecialCharConvertConfig {
         @Override
         public String deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
             String value = p.getValueAsString();
-            return JapaneseStringUtils.exchageSpecialChar(value);
+            return JapaneseStringUtils.convertSpecialChar(value);
         }
     }
 

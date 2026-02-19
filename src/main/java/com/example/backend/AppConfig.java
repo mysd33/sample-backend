@@ -11,7 +11,7 @@ import com.example.fw.common.systemdate.config.SystemDateConfig;
 import com.example.fw.web.advice.DefaultErrorResponseCreator;
 import com.example.fw.web.advice.ErrorResponseCreator;
 import com.example.fw.web.aspect.LogAspect;
-import com.example.fw.web.converter.RestAPISpecialCharConvertConfig;
+import com.example.fw.web.conversion.RestAPISpecialCharConvertConfig;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
 import com.example.fw.web.validation.config.ValidatorConfig;
 // springdoc-openapiの内部io.swagger.v3.core.jacksonはJackson2を使用しているため
