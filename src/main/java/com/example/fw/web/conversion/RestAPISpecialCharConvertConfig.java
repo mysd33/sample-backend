@@ -1,4 +1,4 @@
-package com.example.fw.web.converter;
+package com.example.fw.web.conversion;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class RestAPISpecialCharConvertConfig {
             @Override
             public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
                 String value = p.getValueAsString();
-                return JapaneseStringUtils.exchageSpecialChar(value);
+                return JapaneseStringUtils.convertSpecialChar(value);
             }
         });
     }
