@@ -59,7 +59,7 @@ public final class JapaneseStringUtils {
      * @param str 対象文字列
      * @return 変換後の文字列
      */
-    public static String convertSpecialChar(String str) {
+    public static String convertCodePoints(String str) {
         if (str == null) {
             return null;
         }

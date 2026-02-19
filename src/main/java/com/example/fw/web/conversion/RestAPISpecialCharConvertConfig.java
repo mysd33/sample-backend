@@ -23,7 +23,7 @@ public class RestAPISpecialCharConvertConfig {
             @Override
             public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
                 String value = p.getValueAsString();
-                return JapaneseStringUtils.convertSpecialChar(value);
+                return JapaneseStringUtils.convertCodePoints(value);
             }
         });
     }
