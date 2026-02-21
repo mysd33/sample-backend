@@ -144,7 +144,7 @@
         <!-- Micrometer Tracing -->
         <dependency>
             <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
         <!-- Spring Cloud for AWS Parameter Store Integration-->
         <dependency>
