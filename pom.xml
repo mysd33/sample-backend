@@ -68,10 +68,10 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <!-- Spring Boot OpenTelemetry -->
+        <!-- Spring Boot Starter OpenZipkin -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-opentelemetry</artifactId>
+            <artifactId>spring-boot-starter-zipkin</artifactId>
         </dependency>
         <!-- Spring Boot AspectJ -->
         <dependency>

@@ -48,11 +48,11 @@ management:
       export:
         enabled: false
         step: 10s
-# Dislabled Metrics Exporting By OpenTelemetry
-  otlp:
-    metrics:
-      export:
-        enabled: false
+# Dislabled Tracing Exporting By Zipkin
+  tracing:
+    export:
+      zipkin:
+        enabled: false 
 
 # Mybatis
 mybatis:
