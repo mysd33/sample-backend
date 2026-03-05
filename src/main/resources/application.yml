@@ -48,7 +48,7 @@ management:
       export:
         enabled: false
         step: 10s
-# Dislabled Tracing Exporting By Zipkin
+# Disabled Tracing Exporting By Zipkin
   tracing:
     export:
       zipkin:
