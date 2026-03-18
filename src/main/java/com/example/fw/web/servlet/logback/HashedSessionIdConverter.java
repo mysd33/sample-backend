@@ -23,7 +23,7 @@ public class HashedSessionIdConverter extends AccessConverter {
     private static final String SESSION = "SESSION";
     // ハッシュ化したものをHEX形式で出力するためのフォーマットで、スレッドセーフ
     private static final HexFormat HEX_FORMAT = HexFormat.of();
-    // MessageDigestはスレッドセーフでないため、ThreadLocalを利用してスレッド毎にインストールを保持する。
+    // MessageDigestはスレッドセーフでないため、ThreadLocalを利用してスレッド毎にインスタンスを保持する。
     private static final ThreadLocal<MessageDigest> DIGEST = ThreadLocal.withInitial(() -> {
         try {
             return MessageDigest.getInstance(SHA_256);
