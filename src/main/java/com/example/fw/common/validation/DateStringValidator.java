@@ -38,7 +38,7 @@ public class DateStringValidator implements ConstraintValidator<DateString, Char
                 // 日付形式に変換できるかどうかを検証
                 LocalDate.parse(value, formatter);
                 return true;
-            } catch (DateTimeParseException e) {
+            } catch (DateTimeParseException _) {
                 // 変換できない場合は次のフォーマットを試すため何もしない
             }
         }

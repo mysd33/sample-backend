@@ -105,7 +105,7 @@ public class DefaultLogger implements ApplicationLogger, MonitoringLogger, Audit
         String message;
         try {
             message = messageSource.getMessage(messageId, args, Locale.getDefault());
-        } catch (NoSuchMessageException e) {
+        } catch (NoSuchMessageException _) {
             message = MessageFormat.format(UNDEFINED_MESSAGE_FORMAT, messageId, Arrays.toString(args));
         }
         return message;
@@ -116,7 +116,7 @@ public class DefaultLogger implements ApplicationLogger, MonitoringLogger, Audit
         try {
             message = MessageFormat.format(ERRORCODE_FORMAT, messageId,
                     messageSource.getMessage(messageId, args, Locale.getDefault()));
-        } catch (NoSuchMessageException e) {
+        } catch (NoSuchMessageException _) {
             message = MessageFormat.format(UNDEFINED_MESSAGE_FORMAT, messageId, Arrays.toString(args));
         }
         return message;
@@ -127,7 +127,7 @@ public class DefaultLogger implements ApplicationLogger, MonitoringLogger, Audit
         try {
             message = MessageFormat.format(ERRORCODE_FORMAT, messageId,
                     messageSource.getMessage(messageId, args, Locale.getDefault()));
-        } catch (NoSuchMessageException e) {
+        } catch (NoSuchMessageException _) {
             message = MessageFormat.format(UNDEFINED_MESSAGE_FORMAT, messageId, Arrays.toString(args));
         }
         return MessageFormat.format(format, message);

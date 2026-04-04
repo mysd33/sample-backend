@@ -122,14 +122,10 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
      * @return フィールドのエラータイプ
      */
     private InvalidFormatField.ErrorType getFieldErrorType(DatabindException cause) {
-        InvalidFormatField.ErrorType errorType;
-        switch (cause) {
-        case UnrecognizedPropertyException unrecognizedPropertyException -> //
-            errorType = InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD;
-        case null, default -> //
-            errorType = InvalidFormatField.ErrorType.INVALID_FORMAT;
-        }
-        return errorType;
+        return switch (cause) {
+        case UnrecognizedPropertyException _ -> InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD;
+        case null, default -> InvalidFormatField.ErrorType.INVALID_FORMAT;
+        };
     }
 
     /**

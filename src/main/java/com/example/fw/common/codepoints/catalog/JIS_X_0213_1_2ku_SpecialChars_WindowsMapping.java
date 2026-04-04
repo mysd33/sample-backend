@@ -1,12 +1,16 @@
 package com.example.fw.common.codepoints.catalog;
 
+import java.io.Serial;
+
+
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
 /**
  * JIS X 0213の非漢字の特殊文字、記号（1面1区、2区）文字集合でWindowsと他のOSでマッピングが異なる文字
  */
 public final class JIS_X_0213_1_2ku_SpecialChars_WindowsMapping extends CodePoints {
-    private static final long serialVersionUID = 1L;
+    @Serial 
+    private static final long serialVersionUID = 5814903212987182905L;
 
     /**
      * コンストラクタ

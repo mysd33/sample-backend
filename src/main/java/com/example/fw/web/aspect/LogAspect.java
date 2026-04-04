@@ -96,14 +96,14 @@ public class LogAspect {
             appLogger.warn(inputErrorMessageId, be);
         }
         // REST API404 Not Foundエラーが発生した場合
-        case NoResourceFoundException nrfe -> {
+        case NoResourceFoundException _ -> {
             // 本サンプルAPでは何もしない（案件によってログ追加してもよい）
         }
-        case NoHandlerFoundException nhfe -> {
+        case NoHandlerFoundException _ -> {
             // 本サンプルAPでは何もしない（案件によってログ追加してもよい）
         }
         // REST API405 Method Not Allowedエラーが発生した場合
-        case HttpRequestMethodNotSupportedException hrmse -> {
+        case HttpRequestMethodNotSupportedException _ -> {
             // 本サンプルAPでは何もしない（案件によってログ追加してもよい）
         }
         // 業務エラー（RestControllerで発生するの専用業務例外）の場合（案件によって例外の追加が必要）
@@ -116,7 +116,7 @@ public class LogAspect {
             // Serviceでログ出力されない業務例外なので、ここでログ出力する
             appLogger.warn(ttbe.getCode(), ttbe, (Object[]) ttbe.getArgs());
         // 業務エラー（Serviceで発生する業務例外）の場合
-        case BusinessException be -> {
+        case BusinessException _ -> {
             // Serviceでログ出力するので、二重でスタックトーレス含むログを出力しないよう何もしない
         }
         // トランザクショントークンチェックエラーの場合

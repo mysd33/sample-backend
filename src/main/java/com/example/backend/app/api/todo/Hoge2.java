@@ -1,5 +1,6 @@
 package com.example.backend.app.api.todo;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -12,6 +13,7 @@ import lombok.Data;
 //TODO: 入れ子Listのリソースのテスト。後で削除
 @Data
 public class Hoge2 implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5416826544273426754L;
 
     @NotBlank

@@ -27,7 +27,7 @@ public class HashedSessionIdConverter extends AccessConverter {
     private static final ThreadLocal<MessageDigest> DIGEST = ThreadLocal.withInitial(() -> {
         try {
             return MessageDigest.getInstance(SHA_256);
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException _) {
             return null;
         }
     });
