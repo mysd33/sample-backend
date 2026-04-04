@@ -64,5 +64,7 @@ public final class CommonFrameworkMessageIds {
     public static final String E_FW_PDFSGN_9006 = "e.fw.pdfsgn.9006";
     public static final String E_FW_PDFSGN_9007 = "e.fw.pdfsgn.9007";
     public static final String E_FW_PDFSGN_9008 = "e.fw.pdfsgn.9008";
+    // 一時ファイル管理機能
+    public static final String E_FW_TMPFL_9001 = "e.fw.tmpfl.9001";
 
 }
