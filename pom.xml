@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>4.0.6</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -17,7 +17,7 @@
     <properties>
         <java.version>25</java.version>
         <spring-cloud.version>2025.1.1</spring-cloud.version>
-        <spring-cloud-aws.version>4.0.0</spring-cloud-aws.version>
+        <spring-cloud-aws.version>4.0.1</spring-cloud-aws.version>
         <mybatis-spring-boot-starter.version>4.0.0</mybatis-spring-boot-starter.version>
         <springdoc-openapi-ui.version>3.0.2</springdoc-openapi-ui.version>
         <awsxray.bom.version>2.20.0</awsxray.bom.version>
