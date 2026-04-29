@@ -16,9 +16,12 @@ import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * 
- * X-Ray用のJDBCのトレーシング用設定クラス
+ * X-Ray SDKでのJDBCのトレーシング用設定クラス<br>
+ * 
+ * X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
  *
  */
+@Deprecated(forRemoval = true)
 @Profile("xray")
 @Configuration
 public class XRayJDBCConfig {
@@ -26,12 +29,14 @@ public class XRayJDBCConfig {
     /**
      * 単一データソースの場合
      */
+    @Deprecated(forRemoval = true)
     @Configuration
     @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
     static class SingleDataSource {
         /**
          * DataSourceプロパティの取得
          */
+        @Deprecated(forRemoval = true)
         @Bean
         @ConfigurationProperties(prefix = "spring.datasource")
         DataSourceProperties dataSourceProperties() {
@@ -41,6 +46,7 @@ public class XRayJDBCConfig {
         /**
          * DataSourceでのAWS X-RayのJDBCトレーシング設定
          */
+        @Deprecated(forRemoval = true)
         @Bean
         DataSource dataSourceForXray(DataSourceProperties dataSourceProperties) {
         // @formatter:off
@@ -59,6 +65,7 @@ public class XRayJDBCConfig {
     /**
      * 動的データソースルーティングの場合
      */
+    @Deprecated(forRemoval = true)
     @Configuration
     @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     static class DynamicDataSource {
@@ -66,6 +73,7 @@ public class XRayJDBCConfig {
         /**
          * DataSourceでのAWS X-RayのJDBCトレーシング設定
          */
+        @Deprecated(forRemoval = true)
         @Bean
         @Primary // トレーシング用のDataSourceを優先
         DataSource dataSourceForXray(DataSource dataSource) {

@@ -18,16 +18,19 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 
- * X-Ray設定クラス
+ * X-Ray SDKの設定クラス<br>
+ * 
+ * X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
  *
  */
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 @Profile("xray")
 @Configuration
-@EnableConfigurationProperties({XRayServletConfigurationProperties.class})
-public class XRayServletConfig  {
+@EnableConfigurationProperties({ XRayServletConfigurationProperties.class })
+public class XRayServletConfig {
     private final XRayServletConfigurationProperties xRayServletConfigurationProperties;
-    
+
     static {
         // サービスプラグインの設定
         AWSXRayRecorderBuilder builder = AWSXRayRecorderBuilder.standard().withPlugin(new EKSPlugin())
@@ -42,16 +45,17 @@ public class XRayServletConfig  {
     /**
      * AWS X-RayのAOP設定
      */
+    @Deprecated(forRemoval = true)
     @Bean
     XRayAspect xRayAspect() {
         return new XRayAspect();
     }
-    
-    
+
     /**
      * AWS X-Rayのトレーシングフィルタ設定
      * 
      */
+    @Deprecated(forRemoval = true)
     @Bean
     Filter tracingFilter() {
         return new AWSXRayServletFilter(xRayServletConfigurationProperties.getTracingFilterName());
