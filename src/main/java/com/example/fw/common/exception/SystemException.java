@@ -2,7 +2,6 @@ package com.example.fw.common.exception;
 
 import java.io.Serial;
 
-
 import org.springframework.util.Assert;
 
 import com.example.fw.common.message.ResultMessage;
@@ -56,9 +55,9 @@ public class SystemException extends RuntimeException implements ErrorCodeProvid
      * @param args  エラーコードに対応するメッセージの置換文字列
      */
     public SystemException(final Throwable cause, final String code, final String... args) {
-        super(cause);
         Assert.notNull(code, "codeがNullです。");
         Assert.notNull(args, "argsがNullです。");
+        super(cause);
         this.code = code;
         this.args = args;
         this.resultMessage = ResultMessage.builder().type(ResultMessageType.ERROR).code(code).args(args).build();
@@ -80,8 +79,8 @@ public class SystemException extends RuntimeException implements ErrorCodeProvid
      * @param resultMessage エラーメッセージオブジェクト
      */
     public SystemException(final Throwable cause, final ResultMessage resultMessage) {
-        super(cause);
         Assert.notNull(resultMessage, "resutlMessageがNullです。");
+        super(cause);
         this.code = resultMessage.getCode();
         this.args = resultMessage.getArgs();
         this.resultMessage = resultMessage;
