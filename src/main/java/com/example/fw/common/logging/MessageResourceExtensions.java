@@ -23,7 +23,7 @@ public class MessageResourceExtensions {
     @PostConstruct
     public void init() {
         List<String> baseNames = messageSourceProperties.getBasename();
-        if (baseNames == null || baseNames.isEmpty()) {
+        if (baseNames.isEmpty()) {
             appLogger.debug("spring.messages.basenameは設定されていません。ログのメッセージ定義ファイルの追加は行いません。");
             return;
         }
