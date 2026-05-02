@@ -1,8 +1,19 @@
 package com.example.fw.web.advice;
 
+import com.example.fw.common.exception.BusinessException;
+import com.example.fw.common.exception.ErrorCodeProvider;
+import com.example.fw.common.exception.SystemException;
+import com.example.fw.common.logging.ApplicationLogger;
+import com.example.fw.common.logging.LoggerFactory;
+import com.example.fw.web.advice.InvalidFormatField.ErrorType;
+import com.example.fw.web.message.WebFrameworkMessageIds;
+import com.example.fw.web.resource.ErrorResponse;
+import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Objects;
+import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -14,19 +25,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.context.request.WebRequest;
-
-import com.example.fw.common.exception.BusinessException;
-import com.example.fw.common.exception.ErrorCodeProvider;
-import com.example.fw.common.exception.SystemException;
-import com.example.fw.common.logging.ApplicationLogger;
-import com.example.fw.common.logging.LoggerFactory;
-import com.example.fw.web.advice.InvalidFormatField.ErrorType;
-import com.example.fw.web.message.WebFrameworkMessageIds;
-import com.example.fw.web.resource.ErrorResponse;
-
-import jakarta.annotation.PostConstruct;
-import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 
@@ -37,6 +35,7 @@ import tools.jackson.databind.DatabindException;
 @Slf4j
 @Builder
 public class DefaultErrorResponseCreator implements ErrorResponseCreator {
+
     private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
     private static final String EMPTY_STRING = "";
     private static final String PLACEHOLDER_ZERO = "{0}";
@@ -50,14 +49,15 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
     /**
      * コンストラクタ（オプション引数あり）
-     * 
+     *
      * @param messageSource                      メッセージソース
      * @param inputErrorMessageId                入力エラーのメッセージID
      * @param unexpectedErrorMessageId           予期せぬエラーのメッセージID
      * @param inputErrorMessageIdWithPlaceholder Resourceクラスの日本語のラベル名をプレースホルダ{0}として付与する入力エラーのメッセージID。オプションで指定可能。
      */
-    public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
-            final String unexpectedErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
+    public DefaultErrorResponseCreator(final MessageSource messageSource,
+        final String inputErrorMessageId,
+        final String unexpectedErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
         this.messageSource = messageSource;
         this.inputErrorMessageId = inputErrorMessageId;
         this.unexpectedErrorMessageId = unexpectedErrorMessageId;
@@ -69,14 +69,15 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      * <p>
      * inputErrorMessageIdWithPlaceholderオプション引数を使用しない場合は、inputErrorMessageIdが使用される
      * </p>
-     * 
+     *
      * @param messageSource            メッセージソース
      * @param inputErrorMessageId      入力エラーのメッセージID
      * @param unexpectedErrorMessageId 予期せぬエラーのメッセージID
-     * 
+     *
      */
-    public DefaultErrorResponseCreator(final MessageSource messageSource, final String inputErrorMessageId,
-            final String unexpectedErrorMessageId) {
+    public DefaultErrorResponseCreator(final MessageSource messageSource,
+        final String inputErrorMessageId,
+        final String unexpectedErrorMessageId) {
         this.messageSource = messageSource;
         this.inputErrorMessageId = inputErrorMessageId;
         this.unexpectedErrorMessageId = unexpectedErrorMessageId;
@@ -84,9 +85,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     }
 
     /**
-     * 初期化処理<br>
-     * 事前条件をチェックし、デフォルト値を設定する
-     * 
+     * 初期化処理<br> 事前条件をチェックし、デフォルト値を設定する
+     *
      */
     @PostConstruct
     void init() {
@@ -95,7 +95,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         Assert.hasLength(unexpectedErrorMessageId, "unexpectedErrorMessageIdがnullまたは空です。");
         if (!StringUtils.hasLength(requestBodyValidationErrorMessageId)) {
             // 指定されていない場合は、inputErrorMessageIdを使用
-            appLogger.debug("requestBodyValidationErrorMessageIdが指定されていないため、inputErrorMessageIdを使用します。");
+            appLogger.debug(
+                "requestBodyValidationErrorMessageIdが指定されていないため、inputErrorMessageIdを使用します。");
             this.requestBodyValidationErrorMessageId = this.inputErrorMessageId;
         }
 
@@ -106,7 +107,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      */
     @Override
     public Object createParameterValidationErrorResponse(
-            final List<ParameterValidationResult> parameterValidationResults, final WebRequest request) {
+        final List<ParameterValidationResult> parameterValidationResults,
+        final WebRequest request) {
         // 入力エラーの情報を詳細情報に格納
         ArrayList<String> errorDetails = new ArrayList<>();
         for (ParameterValidationResult result : parameterValidationResults) {
@@ -115,7 +117,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             String parameterName = result.getMethodParameter().getParameterName();
             if (parameterName != null) {
                 // パラメータ名に対するメッセージ（＝パラメータのラベル名）があれば取得
-                parameterLabel = messageSource.getMessage(parameterName, null, parameterName, request.getLocale());
+                parameterLabel = messageSource.getMessage(parameterName, null, parameterName,
+                    request.getLocale());
             }
             List<MessageSourceResolvable> errors = result.getResolvableErrors();
             for (MessageSourceResolvable error : errors) {
@@ -125,36 +128,41 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
                 // メッセージに{0}を含むか正規表現でチェックして置換
                 if (StringUtils.hasLength(message) && message.contains(PLACEHOLDER_ZERO)) {
                     // {0}をパラメータ名に置換
-                    message = message.replace(PLACEHOLDER_ZERO, parameterLabel);
+                    message = message.replace(PLACEHOLDER_ZERO,
+                        Objects.requireNonNull(parameterLabel));
                 }
                 errorDetails.add(message);
             }
         }
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
-        return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+        return ErrorResponse.builder().code(inputErrorMessageId).message(message)
+            .details(errorDetails).build();
 
     }
 
     /**
      * 入力エラー（リクエストメッセージのJSONが不正な構文でパースに失敗）の場合のエラーレスポンスを作成する
-     * 
+     *
      * @param e       JsonParseException
      * @param request WebRequest
      * @return エラーレスポンス
      */
     @Override
-    public Object createRequestParseErrorResponse(final StreamReadException e, final WebRequest request) {
+    public Object createRequestParseErrorResponse(final StreamReadException e,
+        final WebRequest request) {
         ArrayList<String> errorDetails = new ArrayList<>();
-        String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2001, null,
-                request.getLocale());
+        String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2001,
+            null,
+            request.getLocale());
         errorDetails.add(localizedMessage);
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
-        return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+        return ErrorResponse.builder().code(inputErrorMessageId).message(message)
+            .details(errorDetails).build();
     }
 
     /**
      * 入力エラー（リクエストメッセージからResourceオブジェクトへの変換に失敗）の場合のエラーレスポンスを作成する
-     * 
+     *
      * @param invalidFields JsonMappingExceptinonからエラーの原因となフィールドのリストを取得したもの
      * @param e             JsonMappingException
      * @param request       WebRequest
@@ -162,42 +170,48 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
      */
     @Override
     public Object createRequestMappingErrorResponse(final List<InvalidFormatField> invalidFields,
-            final DatabindException e, final WebRequest request) {
+        final DatabindException e, final WebRequest request) {
 
         ArrayList<String> errorDetails = new ArrayList<>();
         invalidFields.forEach(field -> {
             ErrorType errorType = field.getErrorType();
             // 規定されないフィールドの場合
             if (errorType == ErrorType.UNRECOGNIZED_FIELD) {
-                String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2002,
-                        new Object[] { field.getFieldName() }, request.getLocale());
+                String localizedMessage = messageSource.getMessage(
+                    WebFrameworkMessageIds.W_FW_ONEXCP_2002,
+                    new Object[]{field.getFieldName()}, request.getLocale());
                 errorDetails.add(localizedMessage);
             } else {
                 // 型変換エラーの場合
                 if (StringUtils.hasLength(field.getDescription())) {
-                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2003,
-                            new Object[] { field.getDescription(), field.getFieldName() }, request.getLocale());
+                    String localizedMessage = messageSource.getMessage(
+                        WebFrameworkMessageIds.W_FW_ONEXCP_2003,
+                        new Object[]{field.getDescription(), field.getFieldName()},
+                        request.getLocale());
                     errorDetails.add(localizedMessage);
                 } else {
-                    String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2004,
-                            new Object[] { field.getFieldName() }, request.getLocale());
+                    String localizedMessage = messageSource.getMessage(
+                        WebFrameworkMessageIds.W_FW_ONEXCP_2004,
+                        new Object[]{field.getFieldName()}, request.getLocale());
                     errorDetails.add(localizedMessage);
                 }
             }
         });
         String message = messageSource.getMessage(inputErrorMessageId, null, request.getLocale());
-        return ErrorResponse.builder().code(inputErrorMessageId).message(message).details(errorDetails).build();
+        return ErrorResponse.builder().code(inputErrorMessageId).message(message)
+            .details(errorDetails).build();
     }
 
     /**
      * 入力エラー（Validationエラー）の場合のエラーレスポンスを作成する
-     * 
+     *
      * @param bindingResult BindingResult
      * @param request       WebRequest
      * @return エラーレスポンス
      */
     @Override
-    public Object createValidationErrorResponse(final BindingResult bindingResult, final WebRequest request) {
+    public Object createValidationErrorResponse(final BindingResult bindingResult,
+        final WebRequest request) {
         // 入力エラーの情報を詳細情報に格納
         ArrayList<String> errorDetails = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -209,7 +223,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             errorDetails.add(localizedMessage);
         }
         // {0}を含むエラーメッセージIDからメッセージを取得
-        String message = messageSource.getMessage(requestBodyValidationErrorMessageId, null, request.getLocale());
+        String message = messageSource.getMessage(requestBodyValidationErrorMessageId, null,
+            request.getLocale());
         // メッセージに{0}を含むか正規表現でチェックして置換
         if (StringUtils.hasLength(message) && message.contains(PLACEHOLDER_ZERO)) {
             // Bean全体に対する日本語名を取得
@@ -219,13 +234,14 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         }
         // この例では、inputErrorMessageIdWithPlaceholderをコードとして返却
         // 他の入力エラーとコードを統一したい場合はinputErrorMessageIdにするとよい）
-        return ErrorResponse.builder().code(requestBodyValidationErrorMessageId).message(message).details(errorDetails)
-                .build();
+        return ErrorResponse.builder().code(requestBodyValidationErrorMessageId).message(message)
+            .details(errorDetails)
+            .build();
     }
 
     /**
      * BindingResultからオブジェクト名に対する日本語ラベルを取得する
-     * 
+     *
      * @param bindingResult BindingResult
      * @param request       WebRequest
      * @return オブジェクト名に対する日本語ラベル
@@ -235,7 +251,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         // オブジェクト名を取得
         String objectName = bindingResult.getObjectName();
         // メッセージ定義からオブジェクト名に対する日本語ラベルを取得
-        String objectLabel = messageSource.getMessage(objectName, null, EMPTY_STRING, request.getLocale());
+        String objectLabel = messageSource.getMessage(objectName, null, EMPTY_STRING,
+            request.getLocale());
         if (StringUtils.hasLength(objectLabel)) {
             return objectLabel;
         }
@@ -247,7 +264,8 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         // オブジェクト名で登録されていない場合は、オブジェクトのクラス名で日本語ラベルを取得
         Class<?> targetClass = target.getClass();
         String targetClassName = targetClass.getSimpleName();
-        objectLabel = messageSource.getMessage(targetClassName, null, EMPTY_STRING, request.getLocale());
+        objectLabel = messageSource.getMessage(targetClassName, null, EMPTY_STRING,
+            request.getLocale());
         if (StringUtils.hasLength(objectLabel)) {
             return objectLabel;
         }
@@ -259,7 +277,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
     /**
      * 業務エラーのエラーレスポンスを作成する
-     * 
+     *
      * @param e       BusinessException
      * @param request WebRequest
      * @return エラーレスポンス
@@ -271,22 +289,23 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
     /**
      * 警告エラーのエラーレスポンスを作成する
-     * 
-     * @param e
-     * @param statusCode
-     * @param request
-     * @return
+     *
+     * @param e          Exception
+     * @param statusCode ステータスコード
+     * @param request    WebRequest
+     * @return エラーレスポンス
      */
     @Override
     public Object createWarnErrorResponse(final Exception e, final HttpStatusCode statusCode,
-            final WebRequest request) {
+        final WebRequest request) {
         HttpStatus status = HttpStatus.valueOf(statusCode.value());
-        return ErrorResponse.builder().code(String.valueOf(statusCode.value())).message(status.name()).build();
+        return ErrorResponse.builder().code(String.valueOf(statusCode.value()))
+            .message(status.name()).build();
     }
 
     /**
-     * 業務エラー、システムエラーといった一般的なエラーのエラーレスポンスを作成する
-     * 
+     * システムエラーのエラーレスポンスを作成する
+     *
      * @param e       SystemException
      * @param request WebRequest
      * @return エラーレスポンス
@@ -298,7 +317,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
     /**
      * 予期せぬ例外によるエラーの場合のエラーレスポンスを作成する
-     * 
+     *
      * @param e       例外
      * @param request WebRequest
      * @return エラーレスポンス
@@ -306,18 +325,20 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     @Override
     public Object createUnexpectedErrorResponse(final Exception e, final WebRequest request) {
         // 呼び出し元に例外の情報を必要以上に返却しないようデフォルトのメッセージを返却
-        String message = messageSource.getMessage(unexpectedErrorMessageId, null, request.getLocale());
+        String message = messageSource.getMessage(unexpectedErrorMessageId, null,
+            request.getLocale());
         return ErrorResponse.builder().code(unexpectedErrorMessageId).message(message).build();
     }
 
     /**
      * 業務エラー、システムエラーといった一般的なエラーのエラーレスポンスを作成する
-     * 
+     *
      * @param e       ErrorCodeProviderインタフェースをもつ例外
      * @param request WebRequest
      * @return エラーレスポンス
      */
-    private ErrorResponse createGeneralErrorResponse(final ErrorCodeProvider e, final WebRequest request) {
+    private ErrorResponse createGeneralErrorResponse(final ErrorCodeProvider e,
+        final WebRequest request) {
         // 例外が持つエラーコードとエラーコードにもとづくメッセージを返却
         String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
         return ErrorResponse.builder().code(e.getCode()).message(message).build();

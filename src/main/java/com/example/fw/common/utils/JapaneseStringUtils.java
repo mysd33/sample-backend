@@ -1,15 +1,14 @@
 package com.example.fw.common.utils;
 
-import java.util.Map;
-
-import org.terasoluna.gfw.common.fullhalf.DefaultFullHalf;
-
 import com.example.fw.common.codepoints.conversion.CodePointConversionMap;
+import java.util.Map;
+import org.terasoluna.gfw.common.fullhalf.DefaultFullHalf;
 
 /**
  * 日本語の文字列に関するユーティリティクラス
  */
 public final class JapaneseStringUtils {
+
     /**
      * コード変換のマッピング表
      */
@@ -20,7 +19,7 @@ public final class JapaneseStringUtils {
 
     /**
      * サロゲートペアを考慮しコードポイントに基づく文字列長を取得する
-     * 
+     *
      * @param str 対象文字列
      * @return 文字列長
      */
@@ -53,9 +52,9 @@ public final class JapaneseStringUtils {
     }
 
     /**
-     * JIS X 0213ではない類似の文字をJIS X 0213の文字のコードポイントに変換する<br>
-     * JIS X 0213の非漢字の特殊文字、記号（1面1区、2区）のうち、JIS X 0213ではない類似文字をJIS X 0213の文字に変換する
-     * 
+     * JIS X 0213ではない類似の文字をJIS X 0213の文字のコードポイントに変換する<br> JIS X 0213の非漢字の特殊文字、記号（1面1区、2区）のうち、JIS X
+     * 0213ではない類似文字をJIS X 0213の文字に変換する
+     *
      * @param str 対象文字列
      * @return 変換後の文字列
      */
@@ -67,11 +66,7 @@ public final class JapaneseStringUtils {
         StringBuilder sb = new StringBuilder();
         str.codePoints().forEach(cp -> {
             // 変換表にあれば変換
-            if (conversionMap.containsKey(cp)) {
-                sb.appendCodePoint(conversionMap.get(cp));
-            } else {
-                sb.appendCodePoint(cp);
-            }
+            sb.appendCodePoint(conversionMap.getOrDefault(cp, cp));
         });
         return sb.toString();
     }

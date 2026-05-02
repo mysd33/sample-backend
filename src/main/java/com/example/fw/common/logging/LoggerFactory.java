@@ -1,21 +1,22 @@
 package com.example.fw.common.logging;
 
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
- * 
+ *
  * 本システム専用のLoggerを作成するFactoryクラス
  *
  */
 public final class LoggerFactory {
-    private static ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+
+    private static final ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 
     static {
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setBasenames("messages", "messages-fw-common", "messages-fw-web", "messages-fw-batch");
+        messageSource.setBasenames("messages", "messages-fw-common", "messages-fw-web",
+            "messages-fw-batch");
     }
 
     private LoggerFactory() {
@@ -23,7 +24,7 @@ public final class LoggerFactory {
 
     /**
      * 監査ログ出力オブジェクトを返却する
-     * 
+     *
      * @param delegateLogger SLF4Jロガー
      */
     public static AuditLogger getAuditLogger(final Logger delegateLogger) {
@@ -32,7 +33,7 @@ public final class LoggerFactory {
 
     /**
      * アプリケーションログ出力オブジェクトを返却する
-     * 
+     *
      * @param delegateLogger SLF4Jロガー
      */
     public static ApplicationLogger getApplicationLogger(final Logger delegateLogger) {
@@ -41,7 +42,7 @@ public final class LoggerFactory {
 
     /**
      * 監視ログ出力オブジェクトを返却する
-     * 
+     *
      * @param delegateLogger SLF4Jロガー
      */
     public static MonitoringLogger getMonitoringLogger(final Logger delegateLogger) {
@@ -50,10 +51,10 @@ public final class LoggerFactory {
 
     /**
      * メッセージ定義ファイルのベース名を追加する
-     * 
+     *
      * @param baseNames メッセージ定義ファイルのベース名
      */
     static void addMessageSourceBaseName(final List<String> baseNames) {
-        messageSource.addBasenames(baseNames.toArray(new String[baseNames.size()]));
+        messageSource.addBasenames(baseNames.toArray(new String[0]));
     }
 }
