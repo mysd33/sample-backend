@@ -18,7 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * 
  * X-Ray SDKでのJDBCのトレーシング用設定クラス<br>
  * 
- * X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
+ * @deprecated X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
  *
  */
 @Deprecated(forRemoval = true)

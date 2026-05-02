@@ -92,9 +92,8 @@ public class LogAspect {
         case MethodArgumentNotValidException manve -> //
             appLogger.warn(inputErrorMessageId, manve);
         // REST APIでの入力チェックエラーが発生した場合
-        case BindException be -> {
+        case BindException be -> //
             appLogger.warn(inputErrorMessageId, be);
-        }
         // REST API404 Not Foundエラーが発生した場合
         case NoResourceFoundException _ -> {
             // 本サンプルAPでは何もしない（案件によってログ追加してもよい）
