@@ -1,13 +1,13 @@
 package com.example.fw.common.logging;
 
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Locale;
-
 import org.slf4j.Logger;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.util.Assert;
+
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * ロガーのデフォルト実装
@@ -97,7 +97,7 @@ public class DefaultLogger implements ApplicationLogger, MonitoringLogger, Audit
     public void audit(final String messageId, final Object... args) {
         String message = messageSource.getMessage(messageId, args, Locale.getDefault());
         // TODO: 監査証跡として共通で出力するものを設定
-        String commonInfoFormat = "[AuditInfo]{0}";
+        String commonInfoFormat = "[AuditInfo]{}";
         delegateLogger.info(commonInfoFormat, message);
     }
 
