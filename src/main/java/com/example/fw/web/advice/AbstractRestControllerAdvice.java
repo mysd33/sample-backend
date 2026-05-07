@@ -187,7 +187,8 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
 
     /// 404 NotFoundを警告エラーとしてハンドリング
     @Override
-    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex,
+    protected ResponseEntity<Object> handleNoResourceFoundException(
+        @NonNull NoResourceFoundException ex,
         @NonNull HttpHeaders headers,
         @NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
         Object body = errorResponseCreator.createWarnErrorResponse(ex, statusCode, request);

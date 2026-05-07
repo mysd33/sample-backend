@@ -1,8 +1,5 @@
 package com.example.backend.app.api;
 
-/**
- * apiパッケージを表すインタフェース
- *
- */
+/// apiパッケージを表すインタフェース
 public interface APIPackage {
 }

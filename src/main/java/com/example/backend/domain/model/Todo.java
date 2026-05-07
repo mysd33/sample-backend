@@ -7,9 +7,7 @@ import java.util.Date;
 import lombok.Builder;
 import lombok.Data;
 
-/**
- * Todoクラス
- */
+/// Todoクラス
 @Data
 @Builder
 public class Todo implements Serializable {

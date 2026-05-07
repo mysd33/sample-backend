@@ -10,11 +10,7 @@ import com.example.fw.common.logging.config.LoggingConfigPackage;
 import com.example.fw.common.metrics.config.MetricsConfig;
 import com.example.fw.common.rdb.config.DynamicRoutingDataSourceConfig;
 
-/**
- * 
- * インフラストラクチャ層の設定クラス
- *
- */
+/// インフラストラクチャ層の設定クラス
 @Configuration
 // Loggingの拡張設定を追加
 @ComponentScan(basePackageClasses = { LoggingConfigPackage.class })

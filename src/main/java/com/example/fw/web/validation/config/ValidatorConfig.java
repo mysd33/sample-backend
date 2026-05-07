@@ -10,20 +10,16 @@ import com.example.fw.web.validation.factorybean.StrippingIndexBracketsLocalVali
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * RestController向けの入力チェック機能拡張の設定クラス
- */
+/// RestController向けの入力チェック機能拡張の設定クラス
 @Configuration
 @RequiredArgsConstructor
 public class ValidatorConfig implements WebMvcConfigurer {
     private final MessageSource messageSource;
 
-    /**
-     * LocalValidatorFactoryBeanを拡張したValidatorのBean定義
-     */
+    /// LocalValidatorFactoryBeanを拡張したValidatorのBean定義
     @Bean
     Validator strippingIndexBracketsLocalValidatorFactoryBean() {
-        StrippingIndexBracketsLocalValidatorFactoryBean validator = new StrippingIndexBracketsLocalValidatorFactoryBean();
+        var validator = new StrippingIndexBracketsLocalValidatorFactoryBean();
         validator.setValidationMessageSource(messageSource);
         return validator;
     }

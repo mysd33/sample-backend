@@ -23,11 +23,7 @@ import io.swagger.v3.core.jackson.ModelResolver;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 
-/**
- * 
- * アプリケーション層の設定クラス
- *
- */
+/// アプリケーション層の設定クラス
 @Configuration
 //システム日時機能、Tomcatアクセスログ機能の追加、入力チェック拡張機能の追加
 @Import({ SystemDateConfig.class, TomcatAccessLogConfig.class, ValidatorConfig.class,
@@ -35,9 +31,7 @@ import io.swagger.v3.oas.models.info.Info;
         RestAPISpecialCharConvertConfig.class })
 public class AppConfig {
 
-    /**
-     * エラーレスポンス作成クラス
-     */
+    /// エラーレスポンス作成クラス
     @Bean
     ErrorResponseCreator errorResponseCreator(MessageSource messageSource) {
         // オプション引数未指定の場合の例
@@ -57,28 +51,22 @@ public class AppConfig {
                 .build();
     }
 
-    /**
-     * ロギング機能
-     */
+    /// ロギング機能
     @Bean
     LogAspect logAspect(SystemDate systemDate, MessageSource messageSource) {
         return new LogAspect(systemDate, messageSource, MessageIds.W_EX_2001, MessageIds.E_EX_9001);
     }
 
-    /**
-     * Springdoc-openapiでスネークケースの設定が反映されるようにするための回避策
-     */
+    /// Springdoc-openapiでスネークケースの設定が反映されるようにするための回避策
     @Bean
     ModelResolver modelResolver() {
         // Jackson2のObjectMapperを使用して、スネークケースの設定を反映させる
-        ObjectMapper objectMapper = new ObjectMapper();
+        var objectMapper = new ObjectMapper();
         objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         return new ModelResolver(objectMapper);
     }
 
-    /**
-     * Springdoc-openapiの定義
-     */
+    /// Springdoc-openapiの定義
     @Bean
     OpenAPI springDocOpenAPI() {
         return new OpenAPI().info(new Info().title("Todo APIドキュメント").description("Todo管理のためのAPIです。").version("v1.0"));

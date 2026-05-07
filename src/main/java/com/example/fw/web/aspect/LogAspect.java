@@ -97,11 +97,11 @@ public class LogAspect {
             // DynamoDBトランザクションで条件付き更新などに失敗した場合に業務エラーで扱うための業務例外
             case DynamoDBTransactionBusinessException ddbtbe -> //
                 // Serviceでログ出力されない業務例外なので、ここでログ出力する
-                appLogger.warn(ddbtbe.getCode(), ddbtbe, ddbtbe.getArgs());
+                appLogger.warn(ddbtbe.getCode(), ddbtbe, (Object[])ddbtbe.getArgs());
             // RDBトランザクションタイムアウト時に業務エラーとして扱うための業務例外
             case TransactionTimeoutBusinessException ttbe -> //
                 // Serviceでログ出力されない業務例外なので、ここでログ出力する
-                appLogger.warn(ttbe.getCode(), ttbe, ttbe.getArgs());
+                appLogger.warn(ttbe.getCode(), ttbe, (Object[])ttbe.getArgs());
             // 業務エラー（Serviceで発生する業務例外）の場合
             case BusinessException _ -> {
                 // Serviceでログ出力するので、二重でスタックトーレス含むログを出力しないよう何もしない
@@ -112,7 +112,7 @@ public class LogAspect {
                 appLogger.warn(WebFrameworkMessageIds.W_FW_TRNTKN_8002, itte);
             // システムエラー（システム例外）の場合
             case SystemException se -> //
-                monitoringLogger.error(se.getCode(), se, se.getArgs());
+                monitoringLogger.error(se.getCode(), se, (Object[])se.getArgs());
             // システムエラー（予期せぬ例外）の場合
             case null, default -> //
                 monitoringLogger.error(unexpectedErrorMessageId, e);
@@ -192,10 +192,10 @@ public class LogAspect {
             switch (e) {
                 // 業務エラーは、ここでは、メソッドが異常終了した旨を警告ログのみ出力。スタックトレースは出力しない
                 case BusinessException be -> //
-                    appLogger.warn(be.getCode(), logFormat, null, be.getArgs());
+                    appLogger.warn(be.getCode(), logFormat, null, (Object[])be.getArgs());
                 // システムエラーは、ここではメソッドが異常終了した旨を警告ログのみ出力。スタックトレースは出力しない
                 case SystemException se -> //
-                    appLogger.warn(se.getCode(), logFormat, null, se.getArgs());
+                    appLogger.warn(se.getCode(), logFormat, null, (Object[])se.getArgs());
                 default -> appLogger.warn(unexpectedErrorMessageId, logFormat, null);
             }
             throw e;

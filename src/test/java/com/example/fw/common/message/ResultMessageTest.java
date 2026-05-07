@@ -1,6 +1,7 @@
 package com.example.fw.common.message;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ class ResultMessageTest {
     // TODO: 仮のテスト
     @Test
     void test() {
-        String code = "i.ex.0001";
+        var code = "i.ex.0001";
         String[] args = new String[] { "aaa", "bbb" };
 
         ResultMessage actual = ResultMessage.builder().type(ResultMessageType.INFO).code(code).args(args).build();

@@ -8,9 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.repository.TodoRepository;
 
-/**
- * TodoRepositoryのスタブ実装
- */
+/// TodoRepositoryのスタブ実装
 public class TodoRepositoryStub implements TodoRepository {
     private static final Map<String, Todo> TODO_MAP = new ConcurrentHashMap<>();
 
@@ -42,7 +40,7 @@ public class TodoRepositoryStub implements TodoRepository {
 
     @Override
     public long countByFinished(boolean finished) {
-        long count = 0;
+        var count = 0L;
         for (Todo todo : TODO_MAP.values()) {
             if (finished == todo.isFinished()) {
                 count++;

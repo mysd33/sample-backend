@@ -5,11 +5,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.fw.web.advice.AbstractRestControllerAdvice;
 import com.example.fw.web.advice.ErrorResponseCreator;
 
-/**
- * 
- * 集約例外ハンドリングのためのRestControllerAdviceクラス
- *
- */
+/// 集約例外ハンドリングのためのRestControllerAdviceクラス
 @RestControllerAdvice
 public class GlobalRestControllerAdvice extends AbstractRestControllerAdvice {
 

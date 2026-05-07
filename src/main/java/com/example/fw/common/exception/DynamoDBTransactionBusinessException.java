@@ -6,7 +6,7 @@ import com.example.fw.common.message.ResultMessage;
 
 /// DynamoDBトランザクションの条件付き更新に失敗した場合等、業務エラーとして扱うための業務例外クラス<br>
 ///
-/// アプリケーション層（RestControler）で発生する例外として区別するため、専用の例外を定義している。
+/// アプリケーション層（RestController）で発生する例外として区別するため、専用の例外を定義している。
 public class DynamoDBTransactionBusinessException extends BusinessException {
 
     @Serial

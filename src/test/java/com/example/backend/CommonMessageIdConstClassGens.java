@@ -11,21 +11,16 @@ import java.util.regex.Pattern;
 
 import com.example.backend.domain.message.CommonMessageIds;
 
-/**
- * 
- * メッセージIDの定数クラスを自動生成するツール九明日
- * 
- *
- */
+/// メッセージIDの定数クラスを自動生成するツール九明日
 public class CommonMessageIdConstClassGens {
     void main() throws IOException {
         // message properties file
         InputStream inputStream = new FileInputStream("src/main/resources/messages-common.properties");
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        var br = new BufferedReader(new InputStreamReader(inputStream));
         Class<?> targetClazz = CommonMessageIds.class;
-        File output = new File("src/main/java/" + targetClazz.getName().replaceAll(Pattern.quote("."), "/") + ".java");
+        var output = new File("src/main/java/" + targetClazz.getName().replaceAll(Pattern.quote("."), "/") + ".java");
         IO.println("write " + output.getAbsolutePath());
-        try (PrintWriter pw = new PrintWriter(output)) {
+        try (var pw = new PrintWriter(output); br) {
             pw.println("package " + targetClazz.getPackage().getName() + ";");
             pw.println("/**");
             pw.println(" * Message Id");
@@ -40,8 +35,6 @@ public class CommonMessageIdConstClassGens {
             }
             pw.println("}");
             pw.flush();
-        } finally {
-            br.close();
         }
     }
 
