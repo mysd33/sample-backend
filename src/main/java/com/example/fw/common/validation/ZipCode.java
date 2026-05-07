@@ -22,9 +22,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 郵便番号形式（ハイフンあり）かどうか検証する単項目チェックルールのアノテーション
- */
+/// 郵便番号形式（ハイフンあり）かどうか検証する単項目チェックルールのアノテーション
 @Documented
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })

@@ -6,11 +6,7 @@ import com.example.fw.common.constants.FrameworkConstants;
 
 import lombok.Data;
 
-/**
- * 
- * システム日付取得機能のプロパティクラス
- *
- */
+/// システム日付取得機能のプロパティクラス
 @Data
 @ConfigurationProperties(prefix = SystemDateConfigurationProperties.PROPERTY_PREFIX)
 public class SystemDateConfigurationProperties {

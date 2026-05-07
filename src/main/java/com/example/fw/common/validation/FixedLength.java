@@ -20,11 +20,7 @@ import jakarta.validation.Payload;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 
- * サロゲートペア対応の固定文字列長をチェックする単項目チェックルールのアノテーション
- *
- */
+/// サロゲートペア対応の固定文字列長をチェックする単項目チェックルールのアノテーション
 @Documented
 @Constraint(validatedBy = { FixedLengthValidator.class })
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })

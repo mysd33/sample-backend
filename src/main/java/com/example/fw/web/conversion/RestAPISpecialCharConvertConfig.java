@@ -11,15 +11,13 @@ import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.ValueDeserializer;
 import tools.jackson.databind.module.SimpleModule;
 
-/**
- * REST API用の特殊文字のコードポイント変換の設定クラス
- */
+/// REST API用の特殊文字のコードポイント変換の設定クラス
 @Configuration
 public class RestAPISpecialCharConvertConfig {
 
     @Bean
     SimpleModule specialCharModule() {
-        SimpleModule module = new SimpleModule();
+        var module = new SimpleModule();
         module.addDeserializer(String.class, new SpecialCharDeserializer());
         return module;
     }

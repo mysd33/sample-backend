@@ -1,9 +1,15 @@
 package com.example.fw.web.advice;
 
+import com.example.fw.common.exception.BusinessException;
+import com.example.fw.common.exception.SystemException;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,26 +26,15 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
-import com.example.fw.common.exception.BusinessException;
-import com.example.fw.common.exception.SystemException;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.RequiredArgsConstructor;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.exc.UnrecognizedPropertyException;
 
-/**
- * 
- * 集約例外ハンドリングのためのRestControllerAdviceの基底クラス
- *
- */
+/// 集約例外ハンドリングのためのRestControllerAdviceの基底クラス
 @RequiredArgsConstructor
 public abstract class AbstractRestControllerAdvice extends ResponseEntityExceptionHandler {
+
     // エラーレスポンス作成クラス
     protected final ErrorResponseCreator errorResponseCreator;
 
@@ -52,25 +47,25 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * 入力エラーのハンドリング （HandlerMethodValidationException）
-     * パスパラメータ、クエリパラメータなどの入力チェックでのエラーが発生した場合
-     */
+    /// 入力エラーのハンドリング （HandlerMethodValidationException）
+    /// パスパラメータ、クエリパラメータなどの入力チェックでのエラーが発生した場合
     @Override
-    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex,
-            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(
+        HandlerMethodValidationException ex,
+        @NonNull HttpHeaders headers, @NonNull HttpStatusCode status, @NonNull WebRequest request) {
         List<ParameterValidationResult> validationResults = ex.getParameterValidationResults();
-        Object body = errorResponseCreator.createParameterValidationErrorResponse(validationResults, request);
+        Object body = errorResponseCreator.createParameterValidationErrorResponse(validationResults,
+            request);
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 
-    /**
-     * 入力エラーのハンドリング （HttpMessageNotReadableException） *
-     * リクエストBODY（JSON）を読み取りResourceオブジェクトを生成する際にエラーが発生した場合
-     */
+    /// 入力エラーのハンドリング （HttpMessageNotReadableException） *
+    /// リクエストBODY（JSON）を読み取りResourceオブジェクトを生成する際にエラーが発生した場合
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-            HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+        HttpMessageNotReadableException ex,
+        @NonNull HttpHeaders headers, @NonNull HttpStatusCode statusCode,
+        @NonNull WebRequest request) {
         // リソースのフォーマットとしてJSONを使用する場合、HttpMessageNotReadableExceptionの原因例外として格納されるものをハンドリング
         // (参考)
         // https://terasolunaorg.github.io/guideline/current/ja/ArchitectureInDetail/WebServiceDetail/REST.html#resthowtouseexceptionhandlingforvalidationerror
@@ -89,7 +84,7 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             // JSONからResourceオブジェクトへ変換する際に、値の型変換またはエラーが発生した場合、
             // もしくは、spring.jackson.deserialization.fail-on-unknown-properties=trueの場合に、
             // Resourceオブジェクトに存在しないフィールドがJSONに指定された場合に、エラーの原因となったフィールドを抽出
-            List<InvalidFormatField> fields = new ArrayList<>();
+            var fields = new ArrayList<InvalidFormatField>();
             InvalidFormatField.ErrorType errorType = getFieldErrorType(cause);
             cause.getPath().forEach(ref -> {
                 Class<?> fromClass = ref.from().getClass();
@@ -100,13 +95,17 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
                 }
                 String propertyDescription = getPropertyDescription(fromClass, jsonFieldName);
                 if (StringUtils.hasLength(propertyDescription)) {
-                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).description(propertyDescription)
-                            .errorType(errorType).build());
+                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName)
+                        .description(propertyDescription)
+                        .errorType(errorType).build());
                 } else {
-                    fields.add(InvalidFormatField.builder().fieldName(jsonFieldName).errorType(errorType).build());
+                    fields.add(
+                        InvalidFormatField.builder().fieldName(jsonFieldName).errorType(errorType)
+                            .build());
                 }
             });
-            Object body = errorResponseCreator.createRequestMappingErrorResponse(fields, cause, request);
+            Object body = errorResponseCreator.createRequestMappingErrorResponse(fields, cause,
+                request);
             return handleExceptionInternal(ex, body, headers, statusCode, request);
         } else {
             // その他の例外は想定外のため、警告エラーとしてハンドリングする
@@ -115,26 +114,22 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
         }
     }
 
-    /**
-     * JsonMappingExceptionの原因例外から、フィールドのエラータイプを取得する
-     * 
-     * @param cause JsonMappingExceptionの原因例外
-     * @return フィールドのエラータイプ
-     */
+    /// JsonMappingExceptionの原因例外から、フィールドのエラータイプを取得する
+    ///
+    /// @param cause JsonMappingExceptionの原因例外
+    /// @return フィールドのエラータイプ
     private InvalidFormatField.ErrorType getFieldErrorType(DatabindException cause) {
         return switch (cause) {
-        case UnrecognizedPropertyException _ -> InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD;
-        case null, default -> InvalidFormatField.ErrorType.INVALID_FORMAT;
+            case UnrecognizedPropertyException _ -> InvalidFormatField.ErrorType.UNRECOGNIZED_FIELD;
+            case null, default -> InvalidFormatField.ErrorType.INVALID_FORMAT;
         };
     }
 
-    /**
-     * プロパティに関するDescriptionアノテーションの値を取得する
-     * 
-     * @param clazz         対象のクラス
-     * @param jsonFieldName Jsonのフィールド名
-     * @return JsonPropertyDescriptionアノテーションの値
-     */
+    /// プロパティに関するDescriptionアノテーションの値を取得する
+    ///
+    /// @param clazz         対象のクラス
+    /// @param jsonFieldName Jsonのフィールド名
+    /// @return JsonPropertyDescriptionアノテーションの値
     private String getPropertyDescription(Class<?> clazz, String jsonFieldName) {
         for (Field field : clazz.getDeclaredFields()) {
             JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
@@ -142,13 +137,15 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
             // 付与されていない場合はObjectMapperからPropertyNamingStrategyで変換した値を使用する
             // _
             String fieldName = jsonProperty != null ? jsonProperty.value()
-                    : objectMapper.deserializationConfig().getPropertyNamingStrategy().nameForField(null, null,
-                            field.getName());
+                : objectMapper.deserializationConfig().getPropertyNamingStrategy()
+                  .nameForField(null, null,
+                      field.getName());
             if (!fieldName.equals(jsonFieldName)) {
                 continue;
             }
             // フィールド名が一致する場合に、@JsonPropertyDescriptionがあればその値を返却
-            JsonPropertyDescription jsonPropertyDescription = field.getAnnotation(JsonPropertyDescription.class);
+            JsonPropertyDescription jsonPropertyDescription = field.getAnnotation(
+                JsonPropertyDescription.class);
             if (jsonPropertyDescription != null) {
                 return jsonPropertyDescription.value();
             }
@@ -162,78 +159,75 @@ public abstract class AbstractRestControllerAdvice extends ResponseEntityExcepti
         return null;
     }
 
-    /**
-     * 入力エラーのハンドリング （MethodArgumentNotValidException）
-     * リクエストBODY（JSON）に対するResourceの入力チェックでエラーが発生した場合
-     */
+    /// 入力エラーのハンドリング （MethodArgumentNotValidException）
+    /// リクエストBODY（JSON）に対するResourceの入力チェックでエラーが発生した場合
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+        @NonNull MethodArgumentNotValidException ex,
+        @NonNull HttpHeaders headers, @NonNull HttpStatusCode statusCode,
+        @NonNull WebRequest request) {
         return handleBindingResult(ex, ex.getBindingResult(), headers, statusCode, request);
     }
 
-    /**
-     * 入力エラー時のBindingResultを元にエラーレスポンスを作成する
-     * 
-     * @param ex            例外
-     * @param bindingResult BindingResult
-     * @param headers       Httpヘッダー
-     * @param statusCode    Httpステータスコード
-     * @param request       WebRequest
-     * @return エラーレスポンス
-     */
-    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult, HttpHeaders headers,
-            HttpStatusCode statusCode, WebRequest request) {
+    /// 入力エラー時のBindingResultを元にエラーレスポンスを作成する
+    ///
+    /// @param ex            例外
+    /// @param bindingResult BindingResult
+    /// @param headers       Httpヘッダー
+    /// @param statusCode    Httpステータスコード
+    /// @param request       WebRequest
+    /// @return エラーレスポンス
+    private ResponseEntity<Object> handleBindingResult(Exception ex, BindingResult bindingResult,
+        HttpHeaders headers,
+        HttpStatusCode statusCode, WebRequest request) {
         Object body = errorResponseCreator.createValidationErrorResponse(bindingResult, request);
 
         return handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
-    /**
-     * 404 NotFoundを警告エラーとしてハンドリング
-     */
+    /// 404 NotFoundを警告エラーとしてハンドリング
     @Override
-    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex, HttpHeaders headers,
-            HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex,
+        @NonNull HttpHeaders headers,
+        @NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
         Object body = errorResponseCreator.createWarnErrorResponse(ex, statusCode, request);
         return handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
-    /**
-     * 405 Method Not Allowedを警告エラーとしてハンドリング
-     */
+    /// 405 Method Not Allowedを警告エラーとしてハンドリング
     @Override
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
-            HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
+        @NonNull HttpRequestMethodNotSupportedException ex,
+        @NonNull HttpHeaders headers, @NonNull HttpStatusCode statusCode,
+        @NonNull WebRequest request) {
         Object body = errorResponseCreator.createWarnErrorResponse(ex, statusCode, request);
         return handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
-    /**
-     * 業務エラーのハンドリング
-     */
+    /// 業務エラーのハンドリング
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Object> handleBussinessException(final BusinessException e, final WebRequest request) {
+    public ResponseEntity<Object> handleBusinessException(final BusinessException e,
+        final WebRequest request) {
         Object body = errorResponseCreator.createBusinessErrorResponse(e, request);
         return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    /**
-     * システムエラーのハンドリング
-     */
+    /// システムエラーのハンドリング
     @ExceptionHandler(SystemException.class)
-    public ResponseEntity<Object> handleSystemException(final SystemException e, final WebRequest request) {
+    public ResponseEntity<Object> handleSystemException(final SystemException e,
+        final WebRequest request) {
         Object body = errorResponseCreator.createSystemErrorResponse(e, request);
-        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+            request);
     }
 
-    /**
-     * システムエラー（予期せぬ例外）のハンドリング
-     */
+    /// システムエラー（予期せぬ例外）のハンドリング
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleUnexpectedException(final Exception e, final WebRequest request) {
+    public ResponseEntity<Object> handleUnexpectedException(final Exception e,
+        final WebRequest request) {
         Object body = errorResponseCreator.createUnexpectedErrorResponse(e, request);
-        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+        return handleExceptionInternal(e, body, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR,
+            request);
     }
 
 }

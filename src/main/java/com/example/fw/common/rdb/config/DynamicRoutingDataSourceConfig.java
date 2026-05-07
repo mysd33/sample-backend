@@ -15,9 +15,7 @@ import com.example.fw.common.constants.FrameworkConstants;
 import com.example.fw.common.rdb.CustomRoutingDataSource;
 import com.example.fw.common.rdb.CustomRoutingDataSource.DataSourceType;
 
-/**
- * 動的にデータソース切替する機能の設定クラス
- */
+/// 動的にデータソース切替する機能の設定クラス
 @Configuration
 @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DynamicRoutingDataSourceConfig {
@@ -27,9 +25,7 @@ public class DynamicRoutingDataSourceConfig {
     private static final String READER_PROPERTY_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".read";
     private static final String WRITER_PROPERTY_PREFIX = DynamicRoutingDataSourceConfig.PROPERTY_PREFIX + ".write";
 
-    /**
-     * リーダーエンドポイント接続用のDataSourceProperties
-     */
+    /// リーダーエンドポイント接続用のDataSourceProperties
     @Bean
     @ConfigurationProperties(READER_PROPERTY_PREFIX)
     DataSourceProperties readDataSourceProperties() {
@@ -41,9 +37,7 @@ public class DynamicRoutingDataSourceConfig {
     // メインのDataSource定義以外は、defaultCandidate = falseにしている
     // https://docs.spring.io/spring-boot/how-to/data-access.html#howto.data-access.configure-two-datasources
 
-    /**
-     * リーダーエンドポイント接続用のDataSource
-     */
+    /// リーダーエンドポイント接続用のDataSource
     @Bean(defaultCandidate = false)
     // HikariCPを前提に、spring.datasource.hikariプロパティと同じ設定ができるようにする
     @ConfigurationProperties(DynamicRoutingDataSourceConfig.READER_PROPERTY_PREFIX + ".hikari")
@@ -74,9 +68,7 @@ public class DynamicRoutingDataSourceConfig {
         return new DataSourceProperties();
     }
 
-    /**
-     * クラスタエンドポイント接続用のDataSource
-     */
+    /// クラスタエンドポイント接続用のDataSource
     @Bean(defaultCandidate = false)
     // HikariCPを前提に、spring.datasource.hikariプロパティと同じ設定ができるようにする
     @ConfigurationProperties(DynamicRoutingDataSourceConfig.WRITER_PROPERTY_PREFIX + ".hikari")
@@ -84,12 +76,10 @@ public class DynamicRoutingDataSourceConfig {
         return writeDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
-    /**
-     * 動的ルーティング用のDataSource
-     */
+    /// 動的ルーティング用のDataSource
     @Bean(defaultCandidate = false)
     DataSource customRoutingDataSource() {
-        CustomRoutingDataSource customRoutingDataSource = new CustomRoutingDataSource();
+        var customRoutingDataSource = new CustomRoutingDataSource();
         customRoutingDataSource.setTargetDataSources(//
                 Map.of(DataSourceType.READ, readDataSource(), //
                         DataSourceType.WRITE, writeDataSource()));
@@ -97,12 +87,9 @@ public class DynamicRoutingDataSourceConfig {
         return customRoutingDataSource;
     }
 
-    /**
-     * メインのDataSource<br>
-     * 
-     * TransactionalアノテーションのreadOnly属性によってコネクションの振り分けができるよう遅延フェッチする
-     * 
-     */
+    /// メインのDataSource<br>
+    ///
+    /// TransactionalアノテーションのreadOnly属性によってコネクションの振り分けができるよう遅延フェッチする
     @Bean
     DataSource dataSource() {
         return new LazyConnectionDataSourceProxy(customRoutingDataSource());

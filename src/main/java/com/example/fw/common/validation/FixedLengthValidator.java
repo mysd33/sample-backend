@@ -5,11 +5,7 @@ import com.example.fw.common.utils.JapaneseStringUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-/**
- * 
- * サロゲートペア対応の固定文字列長チェックを行うValidatorクラス
- *
- */
+/// サロゲートペア対応の固定文字列長チェックを行うValidatorクラス
 public class FixedLengthValidator implements ConstraintValidator<FixedLength, CharSequence> {
     private int length;
 

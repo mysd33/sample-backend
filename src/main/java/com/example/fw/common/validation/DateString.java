@@ -20,9 +20,7 @@ import jakarta.validation.Payload;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 日付形式の文字列かどうかチェックする単項目チェックルールのアノテーション
- */
+/// 日付形式の文字列かどうかチェックする単項目チェックルールのアノテーション
 @Documented
 @Constraint(validatedBy = { DateStringValidator.class })
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })

@@ -5,16 +5,12 @@ import java.io.Serial;
 
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
-/**
- * JIS X 0213の追加非漢字の特殊文字、特殊カタカナ（1面7区）の文字集合を表すクラス
- */
+/// JIS X 0213の追加非漢字の特殊文字、特殊カタカナ（1面7区）の文字集合を表すクラス
 public final class JIS_X_0213_7ku_AddedSpecialCharsKatakana extends CodePoints {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * コンストラクタ
-     */
+    /// コンストラクタ
     public JIS_X_0213_7ku_AddedSpecialCharsKatakana() {
         super(0x23be, // ⎾(01-07-34)
                 0x23bf, // ⎿(01-07-35)

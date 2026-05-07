@@ -6,9 +6,7 @@ import com.example.fw.common.constants.FrameworkConstants;
 
 import lombok.Data;
 
-/**
- * メトリクス取得機能の設定プロパティクラス。
- */
+/// メトリクス取得機能の設定プロパティクラス。
 @Data
 @ConfigurationProperties(prefix = MetricsConfigurationProperties.PROPERTY_PREFIX)
 public class MetricsConfigurationProperties {
@@ -19,9 +17,7 @@ public class MetricsConfigurationProperties {
 
     @Data
     public static class MyBatisConfig {
-        /**
-         * MyBatisのメトリクス観測を有効にするかどうかのフラグ
-         */
+        /// MyBatisのメトリクス観測を有効にするかどうかのフラグ
         private boolean enable = true;
 
         private String meterNamePrefix = "mybatis.query";

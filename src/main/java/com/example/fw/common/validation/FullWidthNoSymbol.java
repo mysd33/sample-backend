@@ -35,9 +35,7 @@ import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 全角文字列（記号なし）かどうか検証する単項目チェックルールのアノテーション
- */
+/// 全角文字列（記号なし）かどうか検証する単項目チェックルールのアノテーション
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)

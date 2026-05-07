@@ -8,18 +8,14 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * spring.messages.basenameの設定をもとにログのメッセージ定義ファイルを拡張するための設定クラス。
- */
+/// spring.messages.basenameの設定をもとにログのメッセージ定義ファイルを拡張するための設定クラス。
 @Slf4j
 @RequiredArgsConstructor
 public class MessageResourceExtensions {
     private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
     private final MessageSourceProperties messageSourceProperties;
 
-    /**
-     * spring.messages.basenameの設定がある場合にログのメッセージ定義ファイルを拡張する。
-     */
+    /// spring.messages.basenameの設定がある場合にログのメッセージ定義ファイルを拡張する。
     @PostConstruct
     public void init() {
         List<String> baseNames = messageSourceProperties.getBasename();

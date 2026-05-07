@@ -5,16 +5,12 @@ import java.io.Serial;
 
 import org.terasoluna.gfw.common.codepoints.CodePoints;
 
-/**
- * JIS X 0213の追加非漢字の特殊文字、記号（1面2～3区）の文字集合を表すクラス
- */
+/// JIS X 0213の追加非漢字の特殊文字、記号（1面2～3区）の文字集合を表すクラス
 public final class JIS_X_0213_2_3ku_AddedSpecialChars extends CodePoints {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /**
-     * コンストラクタ
-     */
+    /// コンストラクタ
     public JIS_X_0213_2_3ku_AddedSpecialChars() {
         super(0xff07, // ＇(01-02-15)
                 0xff02, // ＂(01-02-16)

@@ -9,9 +9,7 @@ import com.example.fw.common.message.ResultMessageType;
 
 import lombok.Getter;
 
-/**
- * 業務エラーを表す例外クラス
- */
+/// 業務エラーを表す例外クラス
 public class BusinessException extends RuntimeException implements ErrorCodeProvider {
 
     @Serial
@@ -27,32 +25,26 @@ public class BusinessException extends RuntimeException implements ErrorCodeProv
     @Getter
     private final ResultMessage resultMessage;
 
-    /**
-     * コンストラクタ
-     * 
-     * @param code エラーコード
-     */
+    /// コンストラクタ
+    ///
+    /// @param code エラーコード
     public BusinessException(final String code) {
         this(code, new String[0]);
     }
 
-    /**
-     * コンストラクタ
-     * 
-     * @param code エラーコード
-     * @param args エラーコードに対応するメッセージの置換文字列
-     */
+    /// コンストラクタ
+    ///
+    /// @param code エラーコード
+    /// @param args エラーコードに対応するメッセージの置換文字列
     public BusinessException(final String code, final String... args) {
         this(null, code, args);
     }
 
-    /**
-     * コンストラクタ
-     *
-     * @param cause 原因となったエラーオブジェクト
-     * @param code  エラーコード
-     * @param args  エラーコードに対応するメッセージの置換文字列
-     */
+    /// コンストラクタ
+    ///
+    /// @param cause 原因となったエラーオブジェクト
+    /// @param code  エラーコード
+    /// @param args  エラーコードに対応するメッセージの置換文字列
     public BusinessException(final Throwable cause, final String code, final String... args) {
         Assert.notNull(code, "codeがNullです。");
         Assert.notNull(args, "argsがNullです。");
@@ -62,21 +54,17 @@ public class BusinessException extends RuntimeException implements ErrorCodeProv
         this.resultMessage = ResultMessage.builder().type(ResultMessageType.WARN).code(code).args(args).build();
     }
 
-    /**
-     * コンストラクタ
-     * 
-     * @param resultMessage エラーメッセージオブジェクト
-     */
+    /// コンストラクタ
+    ///
+    /// @param resultMessage エラーメッセージオブジェクト
     public BusinessException(final ResultMessage resultMessage) {
         this(null, resultMessage);
     }
 
-    /**
-     * コンストラクタ
-     * 
-     * @param cause         原因となったエラーオブジェクト
-     * @param resultMessage エラーメッセージオブジェクト
-     */
+    /// コンストラクタ
+    ///
+    /// @param cause         原因となったエラーオブジェクト
+    /// @param resultMessage エラーメッセージオブジェクト
     public BusinessException(final Throwable cause, final ResultMessage resultMessage) {
         Assert.notNull(resultMessage, "resutlMessageがNullです。");
         super(cause);

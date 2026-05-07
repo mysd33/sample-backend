@@ -8,11 +8,7 @@ import java.util.List;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-/**
- * 
- * 日付形式の文字列かどうか検証するValidatorクラス
- *
- */
+/// 日付形式の文字列かどうか検証するValidatorクラス
 public class DateStringValidator implements ConstraintValidator<DateString, CharSequence> {
     // 許容する日付のリストを定義
     private static final List<DateTimeFormatter> DATE_FORMATTERS = List.of(//

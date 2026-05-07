@@ -6,11 +6,7 @@ import java.io.Serializable;
 import lombok.Builder;
 import lombok.Data;
 
-/**
- * 
- * メッセージを保持するクラス
- *
- */
+/// メッセージを保持するクラス
 @Data
 @Builder
 public class ResultMessage implements Serializable {
@@ -26,29 +22,23 @@ public class ResultMessage implements Serializable {
 
     private String message; // メッセージ（直接メッセージ格納する場合は優先出力）
 
-    /**
-     * 情報レベルのメッセージかどうか
-     * 
-     * @return 情報レベルのメッセージかどうか
-     */
+    /// 情報レベルのメッセージかどうか
+ ///
+ /// @return 情報レベルのメッセージかどうか
     public boolean isInfo() {
         return type == ResultMessageType.INFO;
     }
 
-    /**
-     * 警告レベルのメッセージかどうか
-     * 
-     * @return 警告レベルのメッセージかどうか
-     */
+    /// 警告レベルのメッセージかどうか
+    ///
+    /// @return 警告レベルのメッセージかどうか
     public boolean isWarn() {
         return type == ResultMessageType.WARN;
     }
 
-    /**
-     * エラーレベルのメッセージかどうか
-     * 
-     * @return 警告レベルのメッセージかどうか
-     */
+    /// エラーレベルのメッセージかどうか
+    ///
+    /// @return 警告レベルのメッセージかどうか
     public boolean isError() {
         return type == ResultMessageType.ERROR;
     }

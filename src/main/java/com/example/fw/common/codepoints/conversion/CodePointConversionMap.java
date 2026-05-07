@@ -2,9 +2,7 @@ package com.example.fw.common.codepoints.conversion;
 
 import java.util.Map;
 
-/**
- * JIS X 0213ではない類似の文字を、JIS X 0213の文字のコードポイントに変換するための変換表
- */
+/// JIS X 0213ではない類似の文字を、JIS X 0213の文字のコードポイントに変換するための変換表
 public final class CodePointConversionMap {
     // JIS X 0213の非漢字の特殊文字、記号（1面1区、2区）のうち、JIS X 0213ではない類似文字をJIS X 0213の文字に変換するマップ
     private static final Map<Integer, Integer> conversionMap = Map.of(//
@@ -17,9 +15,7 @@ public final class CodePointConversionMap {
             0xffe1, 0x00a3, // FULLWIDTH POUND SIGN（￡） → POUND SIGN（£）
             0xffe2, 0x00ac); // FULLWIDTH NOT SIGN （￢）→ NOT SIGN（¬）
 
-    /**
-     * private コンストラクタ
-     */
+    /// private コンストラクタ
     private CodePointConversionMap() {
     }
 

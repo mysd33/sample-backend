@@ -1,18 +1,12 @@
 package com.example.fw.common.exception;
 
-import java.io.Serial;
-
-import org.springframework.util.Assert;
-
 import com.example.fw.common.message.ResultMessage;
 import com.example.fw.common.message.ResultMessageType;
-
+import java.io.Serial;
 import lombok.Getter;
+import org.springframework.util.Assert;
 
-/**
- * システム例外を表すクラス
- *
- */
+/// システム例外を表すクラス
 public class SystemException extends RuntimeException implements ErrorCodeProvider {
 
     @Serial
@@ -28,58 +22,49 @@ public class SystemException extends RuntimeException implements ErrorCodeProvid
     @Getter
     private final ResultMessage resultMessage;
 
-    /**
-     * コンストラクタ
-     * 
-     * @param code エラーコード
-     */
+    /// コンストラクタ
+    ///
+    /// @param code エラーコード
     public SystemException(final String code) {
         this(code, new String[0]);
     }
 
-    /**
-     * コンストラクタ
-     * 
-     * @param code エラーコード
-     * @param args エラーコードに対応するメッセージの置換文字列
-     */
+    /// コンストラクタ
+    ///
+    /// @param code エラーコード
+    /// @param args エラーコードに対応するメッセージの置換文字列
     public SystemException(final String code, final String... args) {
         this(null, code, args);
     }
 
-    /**
-     * コンストラクタ
-     *
-     * @param cause 原因となったエラーオブジェクト
-     * @param code  エラーコード
-     * @param args  エラーコードに対応するメッセージの置換文字列
-     */
+    /// コンストラクタ
+    ///
+    /// @param cause 原因となったエラーオブジェクト
+    /// @param code  エラーコード
+    /// @param args  エラーコードに対応するメッセージの置換文字列
     public SystemException(final Throwable cause, final String code, final String... args) {
         Assert.notNull(code, "codeがNullです。");
         Assert.notNull(args, "argsがNullです。");
         super(cause);
         this.code = code;
         this.args = args;
-        this.resultMessage = ResultMessage.builder().type(ResultMessageType.ERROR).code(code).args(args).build();
+        this.resultMessage = ResultMessage.builder().type(ResultMessageType.ERROR).code(code)
+            .args(args).build();
     }
 
-    /**
-     * コンストラクタ
-     * 
-     * @param resultMessage エラーメッセージオブジェクト
-     */
+    /// コンストラクタ
+    ///
+    /// @param resultMessage エラーメッセージオブジェクト
     public SystemException(final ResultMessage resultMessage) {
         this(null, resultMessage);
     }
 
-    /**
-     * コンストラクタ
-     * 
-     * @param cause         原因となったエラーオブジェクト
-     * @param resultMessage エラーメッセージオブジェクト
-     */
+    /// コンストラクタ
+    ///
+    /// @param cause         原因となったエラーオブジェクト
+    /// @param resultMessage エラーメッセージオブジェクト
     public SystemException(final Throwable cause, final ResultMessage resultMessage) {
-        Assert.notNull(resultMessage, "resutlMessageがNullです。");
+        Assert.notNull(resultMessage, "resultMessageがNullです。");
         super(cause);
         this.code = resultMessage.getCode();
         this.args = resultMessage.getArgs();

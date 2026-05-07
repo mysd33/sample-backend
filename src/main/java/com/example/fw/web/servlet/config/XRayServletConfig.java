@@ -16,13 +16,9 @@ import com.example.fw.web.aspect.XRayAspect;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * 
- * X-Ray SDKの設定クラス<br>
- * 
- * @deprecated X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
- *
- */
+/// X-Ray SDKの設定クラス<br>
+///
+/// @deprecated X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
 @Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 @Profile("xray")
@@ -42,19 +38,14 @@ public class XRayServletConfig {
         AWSXRay.setGlobalRecorder(builder.build());
     }
 
-    /**
-     * AWS X-RayのAOP設定
-     */
+    /// AWS X-RayのAOP設定
     @Deprecated(forRemoval = true)
     @Bean
     XRayAspect xRayAspect() {
         return new XRayAspect();
     }
 
-    /**
-     * AWS X-Rayのトレーシングフィルタ設定
-     * 
-     */
+    /// AWS X-Rayのトレーシングフィルタ設定
     @Deprecated(forRemoval = true)
     @Bean
     Filter tracingFilter() {

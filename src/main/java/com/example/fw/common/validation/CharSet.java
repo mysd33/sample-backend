@@ -45,9 +45,7 @@ import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 本システムが許容する文字集合を検証する単項目チェックルールのアノテーション
- */
+/// 本システムが許容する文字集合を検証する単項目チェックルールのアノテーション
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
 @Retention(RUNTIME)

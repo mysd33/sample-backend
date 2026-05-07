@@ -6,11 +6,9 @@ import com.example.fw.common.constants.FrameworkConstants;
 
 import lombok.Data;
 
-/**
- * X-Rayの設定プロパティクラス<br>
- * 
- * @deprecated X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
- */
+/// X-Rayの設定プロパティクラス<br>
+///
+/// @deprecated X-Ray SDKは2027 年 2 月 25 日にサポート終了となるため削除予定
 @Deprecated(forRemoval = true)
 @Data
 @ConfigurationProperties(XRayServletConfigurationProperties.PROPERTY_PREFIX)

@@ -10,12 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import ch.qos.logback.access.common.pattern.AccessConverter;
 import ch.qos.logback.access.common.spi.IAccessEvent;
 
-/**
- * セッションIDをハッシュ化して出力する{@link AccessConverter}。<br>
- * 
- * セッションIDが平文でログに出力されると、セキュリティ上好ましくないことから、セッションIDをハッシュ化して出力する。<br>
- * 
- */
+/// セッションIDをハッシュ化して出力する[AccessConverter]。<br>
+///
+/// セッションIDが平文でログに出力されると、セキュリティ上好ましくないことから、セッションIDをハッシュ化して出力する。<br>
 public class HashedSessionIdConverter extends AccessConverter {
     // ハッシュアルゴリズム
     private static final String SHA_256 = "SHA-256";

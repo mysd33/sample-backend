@@ -6,15 +6,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.fw.common.logging.MessageResourceExtensions;
 
-/**
- * ロギング機能の拡張設定クラス。
- */
+/// ロギング機能の拡張設定クラス。
 @Configuration
 public class LoggingExtensionConfig {
 
-    /**
-     * ログのメッセージ定義ファイルを拡張するためのクラス
-     */
+    /// ログのメッセージ定義ファイルを拡張するためのクラス
     @Bean
     MessageResourceExtensions messageResourceExtensions(MessageSourceProperties messageSourceProperties) {
         return new MessageResourceExtensions(messageSourceProperties);

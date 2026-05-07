@@ -22,9 +22,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 全角カナ形式の文字列かどうか検証する単項目チェックルールのアノテーション
- */
+/// 全角カナ形式の文字列かどうか検証する単項目チェックルールのアノテーション
 @Documented
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })

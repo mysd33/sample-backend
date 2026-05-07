@@ -22,11 +22,7 @@ import jakarta.validation.ReportAsSingleViolation;
 import jakarta.validation.constraintvalidation.SupportedValidationTarget;
 import jakarta.validation.constraintvalidation.ValidationTarget;
 
-/**
- * 
- * サロゲートペア対応の文字列長の範囲チェックを行う単項目チェックルールのアノテーション
- * 
- */
+/// サロゲートペア対応の文字列長の範囲チェックを行う単項目チェックルールのアノテーション
 @Documented
 @Constraint(validatedBy = {})
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })

@@ -8,9 +8,7 @@ import com.example.fw.common.message.CommonFrameworkMessageIds;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * TransactionalアノテーションのreadOnly属性によって、データソースを切り替えるためのクラス
- */
+/// TransactionalアノテーションのreadOnly属性によって、データソースを切り替えるためのクラス
 @Slf4j
 public class CustomRoutingDataSource extends AbstractRoutingDataSource {
     private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);

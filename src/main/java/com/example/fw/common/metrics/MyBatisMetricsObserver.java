@@ -20,9 +20,7 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Spring Boot Actuator/MicrometerのカスタムメトリクスとしてMyBatisに関するメトリクスを観測するクラス
- */
+/// Spring Boot Actuator/MicrometerのカスタムメトリクスとしてMyBatisに関するメトリクスを観測するクラス
 // MyBatisのプラグイン機能を使用し、Executorのupdate、query、queryCursorメソッドをインターセプトしてメトリクスを取得
 // https://mybatis.org/mybatis-3/ja/configuration.html#plugins
 @Intercepts({ @Signature(type = Executor.class, //
@@ -49,7 +47,7 @@ public class MyBatisMetricsObserver implements Interceptor {
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         // 第1引数のMappedStatementを取得し、SQLのIDとコマンドタイプを取得する
-        MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
+        var mappedStatement = (MappedStatement) invocation.getArgs()[0];
         // Micrometer Observationを使用してメトリクスを観測する
         // https://docs.spring.io/spring-boot/reference/actuator/observability.html
         // https://docs.micrometer.io/micrometer/reference/observation/introduction.html

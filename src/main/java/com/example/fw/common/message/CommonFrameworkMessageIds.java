@@ -1,10 +1,6 @@
 package com.example.fw.common.message;
 
-/**
- * 
- * フレームワークのメッセージID定数クラス
- *
- */
+/// フレームワークのメッセージID定数クラス
 public final class CommonFrameworkMessageIds {
     private CommonFrameworkMessageIds() {
     }

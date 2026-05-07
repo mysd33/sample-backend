@@ -2,28 +2,23 @@ package com.example.fw.common.utils;
 
 import com.example.fw.common.codepoints.conversion.CodePointConversionMap;
 import java.util.Map;
+import org.jspecify.annotations.Nullable;
 import org.terasoluna.gfw.common.fullhalf.DefaultFullHalf;
 
-/**
- * 日本語の文字列に関するユーティリティクラス
- */
+/// 日本語の文字列に関するユーティリティクラス
 public final class JapaneseStringUtils {
 
-    /**
-     * コード変換のマッピング表
-     */
+    /// コード変換のマッピング表
     private static final Map<Integer, Integer> conversionMap = CodePointConversionMap.getMap();
 
     private JapaneseStringUtils() {
     }
 
-    /**
-     * サロゲートペアを考慮しコードポイントに基づく文字列長を取得する
-     *
-     * @param str 対象文字列
-     * @return 文字列長
-     */
-    public static int getCodePointLength(String str) {
+    /// サロゲートペアを考慮しコードポイントに基づく文字列長を取得する
+    ///
+    /// @param str 対象文字列
+    /// @return 文字列長
+    public static int getCodePointLength(@Nullable String str) {
         if (str == null) {
             return 0;
         }
@@ -31,43 +26,36 @@ public final class JapaneseStringUtils {
         return str.codePointCount(0, str.length());
     }
 
-    /**
-     * 半角文字列を全角文字列に変換する
-     */
-    public static String toFullwidth(String str) {
+    /// 半角文字列を全角文字列に変換する
+    public static @Nullable String toFullwidth(@Nullable String str) {
         if (str == null) {
             return null;
         }
         return DefaultFullHalf.INSTANCE.toFullwidth(str);
     }
 
-    /**
-     * 全角文字列を半角文字列に変換する
-     */
-    public static String toHalfwidth(String str) {
+    /// 全角文字列を半角文字列に変換する
+    public static @Nullable String toHalfwidth(@Nullable String str) {
         if (str == null) {
             return null;
         }
         return DefaultFullHalf.INSTANCE.toHalfwidth(str);
     }
 
-    /**
-     * JIS X 0213ではない類似の文字をJIS X 0213の文字のコードポイントに変換する<br> JIS X 0213の非漢字の特殊文字、記号（1面1区、2区）のうち、JIS X
-     * 0213ではない類似文字をJIS X 0213の文字に変換する
-     *
-     * @param str 対象文字列
-     * @return 変換後の文字列
-     */
-    public static String convertCodePoints(String str) {
+    /// JIS X 0213ではない類似の文字をJIS X 0213の文字のコードポイントに変換する<br> JIS X 0213の非漢字の特殊文字、記号（1面1区、2区）のうち、JIS X
+    /// 0213ではない類似文字をJIS X 0213の文字に変換する
+    ///
+    /// @param str 対象文字列
+    /// @return 変換後の文字列
+    public static @Nullable String convertCodePoints(@Nullable String str) {
         if (str == null) {
             return null;
         }
 
-        StringBuilder sb = new StringBuilder();
-        str.codePoints().forEach(cp -> {
+        var sb = new StringBuilder();
+        str.codePoints().forEach(cp ->
             // 変換表にあれば変換
-            sb.appendCodePoint(conversionMap.getOrDefault(cp, cp));
-        });
+            sb.appendCodePoint(conversionMap.getOrDefault(cp, cp)));
         return sb.toString();
     }
 

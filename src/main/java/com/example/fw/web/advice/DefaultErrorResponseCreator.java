@@ -28,10 +28,7 @@ import org.springframework.web.context.request.WebRequest;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 
-/**
- * エラーレスポンスの作成クラス
- *
- */
+/// エラーレスポンスの作成クラス
 @Slf4j
 @Builder
 public class DefaultErrorResponseCreator implements ErrorResponseCreator {
@@ -47,14 +44,12 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
     // 入力エラーのうちリクエストボディのバリデーションエラーのメッセージID
     private String requestBodyValidationErrorMessageId;
 
-    /**
-     * コンストラクタ（オプション引数あり）
-     *
-     * @param messageSource                      メッセージソース
-     * @param inputErrorMessageId                入力エラーのメッセージID
-     * @param unexpectedErrorMessageId           予期せぬエラーのメッセージID
-     * @param inputErrorMessageIdWithPlaceholder Resourceクラスの日本語のラベル名をプレースホルダ{0}として付与する入力エラーのメッセージID。オプションで指定可能。
-     */
+    /// コンストラクタ（オプション引数あり）
+    ///
+    /// @param messageSource                      メッセージソース
+    /// @param inputErrorMessageId                入力エラーのメッセージID
+    /// @param unexpectedErrorMessageId           予期せぬエラーのメッセージID
+    /// @param inputErrorMessageIdWithPlaceholder Resourceクラスの日本語のラベル名をプレースホルダ{0}として付与する入力エラーのメッセージID。オプションで指定可能。
     public DefaultErrorResponseCreator(final MessageSource messageSource,
         final String inputErrorMessageId,
         final String unexpectedErrorMessageId, final String inputErrorMessageIdWithPlaceholder) {
@@ -64,17 +59,13 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         this.requestBodyValidationErrorMessageId = inputErrorMessageIdWithPlaceholder;
     }
 
-    /**
-     * コンストラクタ
-     * <p>
-     * inputErrorMessageIdWithPlaceholderオプション引数を使用しない場合は、inputErrorMessageIdが使用される
-     * </p>
-     *
-     * @param messageSource            メッセージソース
-     * @param inputErrorMessageId      入力エラーのメッセージID
-     * @param unexpectedErrorMessageId 予期せぬエラーのメッセージID
-     *
-     */
+    /// コンストラクタ
+    ///
+    /// inputErrorMessageIdWithPlaceholderオプション引数を使用しない場合は、inputErrorMessageIdが使用される
+    ///
+    /// @param messageSource            メッセージソース
+    /// @param inputErrorMessageId      入力エラーのメッセージID
+    /// @param unexpectedErrorMessageId 予期せぬエラーのメッセージID
     public DefaultErrorResponseCreator(final MessageSource messageSource,
         final String inputErrorMessageId,
         final String unexpectedErrorMessageId) {
@@ -84,10 +75,7 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         this.requestBodyValidationErrorMessageId = inputErrorMessageId;
     }
 
-    /**
-     * 初期化処理<br> 事前条件をチェックし、デフォルト値を設定する
-     *
-     */
+    /// 初期化処理<br> 事前条件をチェックし、デフォルト値を設定する
     @PostConstruct
     void init() {
         Assert.notNull(messageSource, "messageSourceがNullです。");
@@ -102,17 +90,15 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
     }
 
-    /**
-     * 入力エラー（パスパラメータやクエリパラメータのバリデーションエラー）の場合のエラーレスポンスを作成する
-     */
+    /// 入力エラー（パスパラメータやクエリパラメータのバリデーションエラー）の場合のエラーレスポンスを作成する
     @Override
     public Object createParameterValidationErrorResponse(
         final List<ParameterValidationResult> parameterValidationResults,
         final WebRequest request) {
         // 入力エラーの情報を詳細情報に格納
-        ArrayList<String> errorDetails = new ArrayList<>();
+        var errorDetails = new ArrayList<String>();
         for (ParameterValidationResult result : parameterValidationResults) {
-            String parameterLabel = "";
+            var parameterLabel = "";
             // パラメータ名を取得
             String parameterName = result.getMethodParameter().getParameterName();
             if (parameterName != null) {
@@ -140,17 +126,15 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
 
     }
 
-    /**
-     * 入力エラー（リクエストメッセージのJSONが不正な構文でパースに失敗）の場合のエラーレスポンスを作成する
-     *
-     * @param e       JsonParseException
-     * @param request WebRequest
-     * @return エラーレスポンス
-     */
+    /// 入力エラー（リクエストメッセージのJSONが不正な構文でパースに失敗）の場合のエラーレスポンスを作成する
+    ///
+    /// @param e       JsonParseException
+    /// @param request WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createRequestParseErrorResponse(final StreamReadException e,
         final WebRequest request) {
-        ArrayList<String> errorDetails = new ArrayList<>();
+        var errorDetails = new ArrayList<String>();
         String localizedMessage = messageSource.getMessage(WebFrameworkMessageIds.W_FW_ONEXCP_2001,
             null,
             request.getLocale());
@@ -160,19 +144,17 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             .details(errorDetails).build();
     }
 
-    /**
-     * 入力エラー（リクエストメッセージからResourceオブジェクトへの変換に失敗）の場合のエラーレスポンスを作成する
-     *
-     * @param invalidFields JsonMappingExceptinonからエラーの原因となフィールドのリストを取得したもの
-     * @param e             JsonMappingException
-     * @param request       WebRequest
-     * @return エラーレスポンス
-     */
+    /// 入力エラー（リクエストメッセージからResourceオブジェクトへの変換に失敗）の場合のエラーレスポンスを作成する
+    ///
+    /// @param invalidFields DatabindExceptionからエラーの原因となフィールドのリストを取得したもの
+    /// @param e             DatabindException
+    /// @param request       WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createRequestMappingErrorResponse(final List<InvalidFormatField> invalidFields,
         final DatabindException e, final WebRequest request) {
 
-        ArrayList<String> errorDetails = new ArrayList<>();
+        var errorDetails = new ArrayList<String>();
         invalidFields.forEach(field -> {
             ErrorType errorType = field.getErrorType();
             // 規定されないフィールドの場合
@@ -202,18 +184,16 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             .details(errorDetails).build();
     }
 
-    /**
-     * 入力エラー（Validationエラー）の場合のエラーレスポンスを作成する
-     *
-     * @param bindingResult BindingResult
-     * @param request       WebRequest
-     * @return エラーレスポンス
-     */
+    /// 入力エラー（Validationエラー）の場合のエラーレスポンスを作成する
+    ///
+    /// @param bindingResult BindingResult
+    /// @param request       WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createValidationErrorResponse(final BindingResult bindingResult,
         final WebRequest request) {
         // 入力エラーの情報を詳細情報に格納
-        ArrayList<String> errorDetails = new ArrayList<>();
+        var errorDetails = new ArrayList<String>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             String localizedMessage = messageSource.getMessage(fieldError, request.getLocale());
             errorDetails.add(localizedMessage);
@@ -239,13 +219,11 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             .build();
     }
 
-    /**
-     * BindingResultからオブジェクト名に対する日本語ラベルを取得する
-     *
-     * @param bindingResult BindingResult
-     * @param request       WebRequest
-     * @return オブジェクト名に対する日本語ラベル
-     */
+    /// BindingResultからオブジェクト名に対する日本語ラベルを取得する
+    ///
+    /// @param bindingResult BindingResult
+    /// @param request       WebRequest
+    /// @return オブジェクト名に対する日本語ラベル
     private String getObjectLabel(final BindingResult bindingResult, final WebRequest request) {
 
         // オブジェクト名を取得
@@ -275,26 +253,22 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         return messageSource.getMessage(targetClassFQDN, null, objectName, request.getLocale());
     }
 
-    /**
-     * 業務エラーのエラーレスポンスを作成する
-     *
-     * @param e       BusinessException
-     * @param request WebRequest
-     * @return エラーレスポンス
-     */
+    /// 業務エラーのエラーレスポンスを作成する
+    ///
+    /// @param e       BusinessException
+    /// @param request WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createBusinessErrorResponse(final BusinessException e, final WebRequest request) {
         return createGeneralErrorResponse(e, request);
     }
 
-    /**
-     * 警告エラーのエラーレスポンスを作成する
-     *
-     * @param e          Exception
-     * @param statusCode ステータスコード
-     * @param request    WebRequest
-     * @return エラーレスポンス
-     */
+    /// 警告エラーのエラーレスポンスを作成する
+    ///
+    /// @param e          Exception
+    /// @param statusCode ステータスコード
+    /// @param request    WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createWarnErrorResponse(final Exception e, final HttpStatusCode statusCode,
         final WebRequest request) {
@@ -303,25 +277,21 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
             .message(status.name()).build();
     }
 
-    /**
-     * システムエラーのエラーレスポンスを作成する
-     *
-     * @param e       SystemException
-     * @param request WebRequest
-     * @return エラーレスポンス
-     */
+    /// システムエラーのエラーレスポンスを作成する
+    ///
+    /// @param e       SystemException
+    /// @param request WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createSystemErrorResponse(final SystemException e, final WebRequest request) {
         return createGeneralErrorResponse(e, request);
     }
 
-    /**
-     * 予期せぬ例外によるエラーの場合のエラーレスポンスを作成する
-     *
-     * @param e       例外
-     * @param request WebRequest
-     * @return エラーレスポンス
-     */
+    /// 予期せぬ例外によるエラーの場合のエラーレスポンスを作成する
+    ///
+    /// @param e       例外
+    /// @param request WebRequest
+    /// @return エラーレスポンス
     @Override
     public Object createUnexpectedErrorResponse(final Exception e, final WebRequest request) {
         // 呼び出し元に例外の情報を必要以上に返却しないようデフォルトのメッセージを返却
@@ -330,13 +300,11 @@ public class DefaultErrorResponseCreator implements ErrorResponseCreator {
         return ErrorResponse.builder().code(unexpectedErrorMessageId).message(message).build();
     }
 
-    /**
-     * 業務エラー、システムエラーといった一般的なエラーのエラーレスポンスを作成する
-     *
-     * @param e       ErrorCodeProviderインタフェースをもつ例外
-     * @param request WebRequest
-     * @return エラーレスポンス
-     */
+    /// 業務エラー、システムエラーといった一般的なエラーのエラーレスポンスを作成する
+    ///
+    /// @param e       ErrorCodeProviderインタフェースをもつ例外
+    /// @param request WebRequest
+    /// @return エラーレスポンス
     private ErrorResponse createGeneralErrorResponse(final ErrorCodeProvider e,
         final WebRequest request) {
         // 例外が持つエラーコードとエラーコードにもとづくメッセージを返却

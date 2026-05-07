@@ -1,19 +1,15 @@
 package com.example.fw.common.exception;
 
-/**
- * エラーコードの情報を提供するインタフェース
- *
- */
+/// エラーコードの情報を提供するインタフェース
 public interface ErrorCodeProvider {
-    /**
-     * エラーコード
-     * @return
-     */
+
+    /// エラーコードを取得する
+    ///
+    /// @return エラーコード
     String getCode();
 
-    /**
-     * エラーコードに対応するメッセージの置換文字列
-     * @return
-     */
+    /// エラーコードに対応するメッセージの置換文字列を取得する
+    ///
+    /// @return 置換文字列
     String[] getArgs();
 }
