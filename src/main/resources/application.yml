@@ -30,7 +30,6 @@ spring:
   datasource:
     hikari:
       auto-commit: false
-
 # Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration
 # Default Disabled For Local Development
   cloud:
@@ -39,7 +38,13 @@ spring:
         enabled: false
       secretsmanager:
         enabled: false
-      
+# Spring docs default false
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
 # Spring Cloud for AWS Micrometer CloudWatch Integration Common Configuration
 # Default Disabled For Local Development
 management:
@@ -80,4 +85,4 @@ example:
 # Tomcat Access Log
 #  logback:
 #    access:
-#      enabled: false   
+#      enabled: false

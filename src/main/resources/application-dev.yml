@@ -14,7 +14,12 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
-
+# Spring docs enabled  for local development
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
 # Spring Boot Actuator
 management:
   endpoints:
@@ -31,7 +36,7 @@ management:
 #    metrics:
 #      export:
 #        enabled: true
-                         
+
 logging:
   level:
     org.springframework: INFO
