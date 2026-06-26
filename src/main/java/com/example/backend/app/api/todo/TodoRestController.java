@@ -2,7 +2,6 @@ package com.example.backend.app.api.todo;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -14,16 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.example.backend.domain.message.MessageIds;
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.service.todo.TodoService;
 import com.example.fw.common.exception.TransactionTimeoutBusinessException;
 import com.example.fw.common.rdb.utils.DatabaseAccessUtils;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,14 +39,16 @@ public class TodoRestController {
 
     /// Todoリストを取得する
     ///
+    /// @param userId ユーザID
     /// @return Todoリスト
     @Operation(summary = "Todoリスト取得", description = "Todoリストを取得する。")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TodoResource> getTodos() {
+    public List<TodoResource> getTodos(@Parameter(name = "user_id", description = "ユーザID") //
+    @RequestParam(name = "user_id", required = false) String userId) {
         try {
             // @Transactionalのtimeout属性を指定した処理でトランザクションタイムアウト時に業務例外とする実装例
-            Collection<Todo> todos = todoService.findAll();
+            Collection<Todo> todos = todoService.findAllByUserId(userId);
             return todoMapper.modelsToResources(todos);
         } catch (DataAccessException e) {
             // PostgreSQLのトランザクションタイムアウトエラーなら業務例外に変換しスロー
@@ -63,11 +63,12 @@ public class TodoRestController {
     /// 指定したTodo IDに対応するTodoを取得する
     ///
     /// @param todoId Todo ID
-    /// @return Todo
+    /// @return IDに対応するTodo
     @Operation(summary = "Todo取得", description = "指定したTodo IDに対応するTodoを取得する。")
     @GetMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
-    public TodoResource getTodo(@Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
+    public TodoResource getTodo(
+            @Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
         Todo todo = todoService.findOne(todoId);
         return todoMapper.modelToResource(todo);
     }
@@ -79,8 +80,8 @@ public class TodoRestController {
     @Operation(summary = "Todo登録", description = "Todoを登録する。")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TodoResource postTodos(
-            @Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
+    public TodoResource postTodos(@Parameter(
+            description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
         Todo createdTodo = todoService.create(todoMapper.resourceToModel(todoResource));
         return todoMapper.modelToResource(createdTodo);
     }
@@ -92,8 +93,8 @@ public class TodoRestController {
     @Operation(summary = "バッチ処理用Todo登録", description = "バッチ処理向けに登録件数をチェックせずにTodoを登録する。")
     @PostMapping("batch")
     @ResponseStatus(HttpStatus.CREATED)
-    public TodoResource postTodosForBatch(
-            @Parameter(description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
+    public TodoResource postTodosForBatch(@Parameter(
+            description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
         Todo createdTodo = todoService.createForBatch(todoMapper.resourceToModel(todoResource));
         return todoMapper.modelToResource(createdTodo);
     }
@@ -105,7 +106,8 @@ public class TodoRestController {
     @Operation(summary = "Todo完了", description = "指定したTodo IDのTodoを完了状態に更新する。")
     @PutMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
-    public TodoResource putTodo(@Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
+    public TodoResource putTodo(
+            @Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
         Todo finishedTodo = todoService.finish(todoId);
         return todoMapper.modelToResource(finishedTodo);
     }

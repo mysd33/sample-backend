@@ -3,10 +3,8 @@ package com.example.backend.app.api.todo;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-
 import com.example.fw.common.validation.CharSet;
 import com.example.fw.common.validation.RangeLength;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -20,6 +18,11 @@ public class TodoResource implements Serializable {
     // ID
     @Schema(description = "Todo ID")
     private String todoId;
+
+    // ユーザID
+    @Schema(description = "ユーザID")
+    @NotBlank
+    private String userId;
 
     // タイトル
     @Schema(description = "タイトル")

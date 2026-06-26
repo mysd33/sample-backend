@@ -4,19 +4,12 @@
 
 <mapper namespace="com.example.backend.domain.repository.TodoRepository">
 
-    <!-- マッピング定義 -->
-    <resultMap id="todoResultMap" type="Todo">
-        <id property="todoId" column="todo_id" />
-        <result property="todoTitle" column="todo_title" />
-        <result property="finished" column="finished" />
-        <result property="createdAt" column="created_at" />
-    </resultMap>
-
     <!-- １件検索 -->
-    <select id="findById" parameterType="String" resultMap="todoResultMap">
-    <![CDATA[
+    <select id="findById" parameterType="String" resultType="Todo">
+        /* TodoRepository.findById */
         SELECT
             todo_id,
+            user_id,
             todo_title,
             finished,
             created_at
@@ -24,28 +17,33 @@
             todo
         WHERE
             todo_id = #{todoId}
-    ]]>
     </select>
 
     <!-- 全件取得 -->
-    <select id="findAll" resultMap="todoResultMap">
-    <![CDATA[
+    <select id="findAllByUserId" parameterType="String" resultType="Todo">
+        /* TodoRepository.findAllByUserId */
         SELECT
             todo_id,
+            user_id,
             todo_title,
             finished,
             created_at
         FROM
             todo
-    ]]>
+        <where>
+            <if test="userId != null">
+            user_id = #{userId}
+            </if>
+        </where>
     </select>
 
     <!-- 登録 -->
     <insert id="create" parameterType="Todo">
-    <![CDATA[
+        /* TodoRepository.create */
         INSERT INTO todo
         (
             todo_id,
+            user_id,
             todo_title,
             finished,
             created_at
@@ -53,16 +51,16 @@
         VALUES
         (
             #{todoId},
+            #{userId},
             #{todoTitle},
             #{finished},
             #{createdAt}
         )
-    ]]>
     </insert>
 
     <!-- 更新 -->
     <update id="update" parameterType="Todo">
-    <![CDATA[
+        /* TodoRepository.update */
         UPDATE todo
         SET
             todo_title = #{todoTitle},
@@ -70,30 +68,28 @@
             created_at = #{createdAt}
         WHERE
             todo_id = #{todoId}
-    ]]>
     </update>
 
     <!-- 削除 -->
     <delete id="delete" parameterType="Todo">
-    <![CDATA[
+        /* TodoRepository.delete */
         DELETE FROM
             todo
         WHERE
             todo_id = #{todoId}
-    ]]>
     </delete>
 
     <!-- 完了件数取得-->
-    <select id="countByFinished" parameterType="Boolean"
-        resultType="Long">
-    <![CDATA[
+    <select id="countByFinished" resultType="_long">
+        /* TodoRepository.countByFinished */
         SELECT
             COUNT(*)
         FROM
             todo
         WHERE
+            user_id = #{userId}
+        AND
             finished = #{finished}
-    ]]>
     </select>
 
 </mapper>

@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
 import com.example.backend.domain.model.Todo;
 import com.example.backend.domain.repository.TodoRepository;
 
@@ -18,8 +17,8 @@ public class TodoRepositoryStub implements TodoRepository {
     }
 
     @Override
-    public Collection<Todo> findAll() {
-        return TODO_MAP.values();
+    public Collection<Todo> findAllByUserId(String userId) {
+        return TODO_MAP.values().stream().filter(todo -> todo.getUserId().equals(userId)).toList();
     }
 
     @Override
@@ -34,15 +33,16 @@ public class TodoRepositoryStub implements TodoRepository {
     }
 
     @Override
-    public void delete(Todo todo) {
+    public boolean delete(Todo todo) {
         TODO_MAP.remove(todo.getTodoId());
+        return true;
     }
 
     @Override
-    public long countByFinished(boolean finished) {
+    public long countByFinished(String userId, boolean finished) {
         var count = 0L;
         for (Todo todo : TODO_MAP.values()) {
-            if (finished == todo.isFinished()) {
+            if (userId.equals(todo.getUserId()) && finished == todo.isFinished()) {
                 count++;
             }
         }

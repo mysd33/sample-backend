@@ -3,10 +3,8 @@ package com.example.backend.domain.service.todo;
 import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.example.backend.domain.message.CommonMessageIds;
 import com.example.backend.domain.message.MessageIds;
@@ -15,7 +13,6 @@ import com.example.backend.domain.repository.TodoRepository;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,23 +32,21 @@ public class TodoServiceImpl implements TodoService {
     @Override
     // クエリタイムアウトを2秒に設定する例
     @Transactional(readOnly = true, timeout = TRANSACTION_TIMEOUT)
-    public Collection<Todo> findAll() {
+    public Collection<Todo> findAllByUserId(String userId) {
         appLogger.info(CommonMessageIds.I_CMN_0001);
-        return todoRepository.findAll();
+        return todoRepository.findAllByUserId(userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     // @Transactional(readOnly = true, timeout=1) // トランザクションタイムアウトを1秒に設定する例
     public Todo findOne(String todoId) {
-        return todoRepository.findById(todoId).orElseThrow(() -> //
-        // 対象Todoがない場合、業務エラー
-        new BusinessException(MessageIds.W_EX_5001));
+        return doFindOne(todoId);
     }
 
     @Override
     public Todo create(Todo todo) {
-        var unfinishedCount = todoRepository.countByFinished(false);
+        var unfinishedCount = todoRepository.countByFinished(todo.getUserId(), false);
         if (unfinishedCount >= MAX_UNFINISHED_COUNT) {
             // 未完了のTodoが、5件以上の場合、業務エラー
             throw new BusinessException(MessageIds.W_EX_5002, String.valueOf(MAX_UNFINISHED_COUNT));
@@ -63,7 +58,6 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Todo createForBatch(Todo todo) {
         doCreate(todo);
-
         return todo;
     }
 
@@ -78,7 +72,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo finish(String todoId) {
-        Todo todo = findOne(todoId);
+        Todo todo = doFindOne(todoId);
         if (todo.isFinished()) {
             // すでに終了している場合、業務エラー
             throw new BusinessException(MessageIds.W_EX_5003, todoId);
@@ -90,8 +84,14 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public void delete(String todoId) {
-        Todo todo = findOne(todoId);
+        Todo todo = doFindOne(todoId);
         todoRepository.delete(todo);
     }
 
+
+    private Todo doFindOne(String todoId) {
+        return todoRepository.findById(todoId).orElseThrow(() -> //
+        // 対象Todoがない場合、業務エラー
+        new BusinessException(MessageIds.W_EX_5001));
+    }
 }

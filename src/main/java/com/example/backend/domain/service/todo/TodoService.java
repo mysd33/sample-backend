@@ -1,7 +1,6 @@
 package com.example.backend.domain.service.todo;
 
 import java.util.Collection;
-
 import com.example.backend.domain.model.Todo;
 
 /// TodoServiceのインタフェース
@@ -12,10 +11,11 @@ public interface TodoService {
     /// @return Todo
     Todo findOne(String todoId);
 
-    /// Todoを全件取得する
-    ///
+    /// 対象のユーザのTodoを全件取得する
+    /// 
+    /// @param userId ユーザID
     /// @return Todoの全件リスト
-    Collection<Todo> findAll();
+    Collection<Todo> findAllByUserId(String userId);
 
     /// Todoを作成する
     ///
