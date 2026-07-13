@@ -1,10 +1,5 @@
 package com.example.backend;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import com.example.backend.domain.message.MessageIds;
 import com.example.fw.common.systemdate.SystemDate;
 import com.example.fw.common.systemdate.config.SystemDateConfig;
@@ -14,21 +9,28 @@ import com.example.fw.web.aspect.LogAspect;
 import com.example.fw.web.conversion.RestAPISpecialCharConvertConfig;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
 import com.example.fw.web.validation.config.ValidatorConfig;
-// springdoc-openapiの内部io.swagger.v3.core.jacksonはJackson2を使用しているため
-// Jackson2のObjectMapperをインポートする
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-
 import io.swagger.v3.core.jackson.ModelResolver;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+// springdoc-openapiの内部io.swagger.v3.core.jacksonはJackson2を使用しているため
+// Jackson2のObjectMapperをインポートする
 
 /// アプリケーション層の設定クラス
 @Configuration
 //システム日時機能、Tomcatアクセスログ機能の追加、入力チェック拡張機能の追加
-@Import({ SystemDateConfig.class, TomcatAccessLogConfig.class, ValidatorConfig.class,
-        // REST APIの特殊文字のコードポイント変換機能の追加
-        RestAPISpecialCharConvertConfig.class })
+@Import({SystemDateConfig.class, TomcatAccessLogConfig.class, ValidatorConfig.class,
+    // REST APIの特殊文字のコードポイント変換機能の追加
+    RestAPISpecialCharConvertConfig.class})
 public class AppConfig {
 
     /// エラーレスポンス作成クラス
@@ -45,10 +47,10 @@ public class AppConfig {
 
         // Builderパターンを使用した場合の記載例
         return DefaultErrorResponseCreator.builder().messageSource(messageSource)
-                .inputErrorMessageId(MessageIds.W_EX_2001)//
-                .unexpectedErrorMessageId(MessageIds.E_EX_9001)//
-                .requestBodyValidationErrorMessageId(MessageIds.W_EX_2002)//
-                .build();
+            .inputErrorMessageId(MessageIds.W_EX_2001)//
+            .unexpectedErrorMessageId(MessageIds.E_EX_9001)//
+            .requestBodyValidationErrorMessageId(MessageIds.W_EX_2002)//
+            .build();
     }
 
     /// ロギング機能
@@ -69,7 +71,16 @@ public class AppConfig {
     /// Springdoc-openapiの定義
     @Bean
     OpenAPI springDocOpenAPI() {
-        return new OpenAPI().info(new Info().title("Todo APIドキュメント").description("Todo管理のためのAPIです。").version("v1.0"));
+        return new OpenAPI()
+            .info(new Info().title("Todo APIドキュメント").description("Todo管理のためのAPIです。")
+                .version("v1.0"))
+            // Swagger UIでBasic認証のボタンとAuthorizationヘッダーを付与するためのグローバル設定
+            .components(new Components()
+                .addSecuritySchemes("basicAuth",
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("basic")))
+            .addSecurityItem(new SecurityRequirement().addList("basicAuth"));
     }
 
 }

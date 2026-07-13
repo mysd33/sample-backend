@@ -14,6 +14,12 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
+  # Spring Security Basic Authentication
+  security:
+    user:
+      name: ${BACKEND_BASIC_AUTH_USERNAME:user}
+      password: ${BACKEND_BASIC_AUTH_PASSWORD:password}
+
 # Spring docs enabled  for local development
 springdoc:
   swagger-ui:
@@ -25,12 +31,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*" 
+        include: "*"
   info:
     os:
       enabled: true
     java:
-      enabled: true    
+      enabled: true
 # Spring Cloud for AWS Micrometer CloudWatch Metrics Integration Enabled if local testing is required
 #  cloudwatch:
 #    metrics:
@@ -42,21 +48,26 @@ logging:
     org.springframework: INFO
     org.springframework.jdbc: INFO
     com.example: DEBUG
-    com.example.fw.web.aspect.LogAspect: TRACE		
+    com.example.fw.web.aspect.LogAspect: TRACE
 #    software.amazon.awssdk: DEBUG
 # 拡張フレームワーク機能の設定
 example:
-# Dynamic Routing DataSource
+  # Dynamic Routing DataSource
   datasource:
     read:
       url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      driver-class-name: org.h2.Driver 
+      driver-class-name: org.h2.Driver
       username: sa
       password:
     write:
       url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-      driver-class-name: org.h2.Driver 
+      driver-class-name: org.h2.Driver
       username: sa
       password:
     dynamic-routing:
       enabled: true
+
+  # 業務APのプロパティ
+  # Spring Security Debug Mode
+  security:
+    debug: true
