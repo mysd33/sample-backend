@@ -14,6 +14,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 /// SpringSecurityの設定クラス
@@ -25,15 +29,40 @@ public class SecurityConfig {
     @Value("${example.security.debug:false}")
     private boolean webSecurityDebug;
 
+    // Basic認証ユーザー設定（application-dev.yml の spring.security.user.* を参照）
+    @Value("${spring.security.user.name:user}")
+    private String basicAuthUsername;
+
+    @Value("${spring.security.user.password:password}")
+    private String basicAuthPassword;
+
     /// Spring Securityのデバッグモードの設定
     @Bean
     WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.debug(webSecurityDebug);
     }
 
+    /// Basic認証用のUserDetailsService
+    /// spring.security.user.* プロパティをもとにインメモリユーザーを作成する
+    /// （Basic認証と、OAuth2の認可を共存させると、
+    /// spring-boot-starter-oauth2-resource-serverの存在により
+    ///   UserDetailsServiceAutoConfigurationがスキップされるため明示定義が必要）
+    @Bean
+    UserDetailsService userDetailsService() {
+        String password = basicAuthPassword;
+        // エンコードプレフィックスがない場合は{noop}を付与
+        if (!password.startsWith("{")) {
+            password = "{noop}" + password;
+        }
+        var userDetails = User.withUsername(basicAuthUsername)
+            .password(password)
+            .roles("USER") // TODO: ロール
+            .build();
+        return new InMemoryUserDetailsManager(userDetails);
+    }
+
     /// Spring Securityによる認証・認可の設定
     @Bean
-    //@ConditionalOnProperty(name = "example.oidc.enabled", havingValue = "false", matchIfMissing = true)
     SecurityFilterChain securityFilterChain(HttpSecurity http) {
         // デフォルトの認可設定
         http.authorizeHttpRequests(
@@ -49,6 +78,7 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**").permitAll()
                 // Springdoc-openapiのドキュメントへ認証なしでアクセス許可
                 .requestMatchers("/swagger-ui.html").permitAll()
+                .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated() // それ以外は認証が必要
         );
         return http.build();
@@ -64,6 +94,7 @@ public class SecurityConfig {
             // 認可設定
             .authorizeHttpRequests(
                 authz -> authz //
+                    // TODO: Scope todoによるアクセス制御？
                     .anyRequest().authenticated() // 認証が必要
             );
         return http.build();
@@ -72,12 +103,18 @@ public class SecurityConfig {
     /// Spring SecurityによるBasic認証でのAPI認可の設定(v1 api)
     @Bean
     @Order(2)
-    SecurityFilterChain securityFilterChainForV1Api(HttpSecurity http) {
+    SecurityFilterChain securityFilterChainForV1Api(HttpSecurity http,
+        UserDetailsService userDetailsService) {
         // v1のAPIは、Basic認証による認可設定を基本とする
         http.securityMatcher("/api/v1/**")
             .httpBasic(Customizer.withDefaults())
+            // UserDetailsServiceを明示的に設定（Spring Security 7 複数チェーン対応）
+            .userDetailsService(userDetailsService)
             // REST APIはCSRF保護不要（各フィルタチェーンは独立しているため個別に設定が必要）
             .csrf(AbstractHttpConfigurer::disable)
+            // REST APIはステートレスにする（セッション不使用）
+            .sessionManagement(
+                session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             // 認可設定
             .authorizeHttpRequests(
                 authz -> authz //
