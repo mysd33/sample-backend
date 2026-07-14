@@ -4,7 +4,6 @@ import static org.springframework.boot.security.autoconfigure.web.servlet.PathRe
 import static org.springframework.boot.security.autoconfigure.web.servlet.PathRequest.toStaticResources;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,13 +55,24 @@ public class SecurityConfig {
     }
 
     /// Spring SecurityによるOAuth2.0でのAPI認可の設定(v2 api)
-    //TODO: 実装
+    @Bean
+    @Order(3)
+    SecurityFilterChain securityFilterChainForV2Api(HttpSecurity http) {
+        // v2のAPIは、OAuth2.0による認可設定を基本とする
+        http.securityMatcher("/api/v2/**")
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+            // 認可設定
+            .authorizeHttpRequests(
+                authz -> authz //
+                    .anyRequest().authenticated() // 認証が必要
+            );
+        return http.build();
+    }
 
     /// Spring SecurityによるBasic認証でのAPI認可の設定(v1 api)
     @Bean
     @Order(2)
-    @ConditionalOnProperty(name = "example.oidc.enabled", havingValue = "false", matchIfMissing = true)
-    SecurityFilterChain securityFilterChainForApiV1(HttpSecurity http) {
+    SecurityFilterChain securityFilterChainForV1Api(HttpSecurity http) {
         // v1のAPIは、Basic認証による認可設定を基本とする
         http.securityMatcher("/api/v1/**")
             .httpBasic(Customizer.withDefaults())

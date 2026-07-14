@@ -124,6 +124,21 @@
         }        
         ```
 
+## OIDC認証・認可
+> [!WARNING]
+> 昔に作成した[サンプルコード](https://github.com/mysd33/sample-springsecurity-oauth2)を最新のSpring Bootに対応しつつ、ただいま実装中。  
+> 現状、端末ローカル実行での起動時（devプロファイル）のみに対応。AWS実行時の本番環境相当のプロファイル（production）は今後対応予定。
+
+* Spring Security OAuth2.0 Client、Resource Serverを利用して、OIDC/OAuth2.0による認証・認可を実装する。
+
+* Backendアプリケーションでは、Resource Serverとして、アクセストークンによるAPI認可を実装する。
+* BFFアプリケーションでのOIDCによるユーザ認証・認可については[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照。
+
+### Keycloak
+
+* Keycloakのインストール、設定については[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照のこと。
+
+
 ## OpenAPI
 * Springdoc-openapiにより、RestControllerの実装からAPIドキュメントをリバースエンジニアリングできる
     * アプリケーションを起動し、以下のURLへアクセスするとそれぞれjson、yaml、html形式のドキュメントを表示する。

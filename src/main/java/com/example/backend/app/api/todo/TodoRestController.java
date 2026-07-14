@@ -1,7 +1,17 @@
 package com.example.backend.app.api.todo;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
+import com.example.backend.domain.message.MessageIds;
+import com.example.backend.domain.model.Todo;
+import com.example.backend.domain.service.todo.TodoService;
+import com.example.fw.common.exception.TransactionTimeoutBusinessException;
+import com.example.fw.common.rdb.utils.DatabaseAccessUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Collection;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -16,24 +26,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.amazonaws.xray.spring.aop.XRayEnabled;
-import com.example.backend.domain.message.MessageIds;
-import com.example.backend.domain.model.Todo;
-import com.example.backend.domain.service.todo.TodoService;
-import com.example.fw.common.exception.TransactionTimeoutBusinessException;
-import com.example.fw.common.rdb.utils.DatabaseAccessUtils;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 
 /// Todoを扱うREST APIのRestControllerクラス
 @Tag(name = "Todo", description = "Todo API")
 @XRayEnabled
 @RestController
-@RequestMapping("/api/v1/todos")
+@RequestMapping({"/api/v1/todos", "/api/v2/todos"})
 @RequiredArgsConstructor
 public class TodoRestController {
+
     private final TodoService todoService;
     private final TodoMapper todoMapper;
 
@@ -54,7 +55,8 @@ public class TodoRestController {
             // PostgreSQLのトランザクションタイムアウトエラーなら業務例外に変換しスロー
             if (DatabaseAccessUtils.isQueryTimeout(e)) {
                 // BusinessExceptionでラップしてリスロー
-                throw new TransactionTimeoutBusinessException(e, MessageIds.W_EX_5004, "Todoリスト取得");
+                throw new TransactionTimeoutBusinessException(e, MessageIds.W_EX_5004,
+                    "Todoリスト取得");
             }
             throw e; // それ以外は、そのまま元の例外をスロー
         }
@@ -68,7 +70,7 @@ public class TodoRestController {
     @GetMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
     public TodoResource getTodo(
-            @Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
+        @Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
         Todo todo = todoService.findOne(todoId);
         return todoMapper.modelToResource(todo);
     }
@@ -81,7 +83,7 @@ public class TodoRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TodoResource postTodos(@Parameter(
-            description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
+        description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
         Todo createdTodo = todoService.create(todoMapper.resourceToModel(todoResource));
         return todoMapper.modelToResource(createdTodo);
     }
@@ -94,7 +96,7 @@ public class TodoRestController {
     @PostMapping("batch")
     @ResponseStatus(HttpStatus.CREATED)
     public TodoResource postTodosForBatch(@Parameter(
-            description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
+        description = "登録するTodo") @RequestBody @Validated TodoResource todoResource) {
         Todo createdTodo = todoService.createForBatch(todoMapper.resourceToModel(todoResource));
         return todoMapper.modelToResource(createdTodo);
     }
@@ -107,7 +109,7 @@ public class TodoRestController {
     @PutMapping("{todoId}")
     @ResponseStatus(HttpStatus.OK)
     public TodoResource putTodo(
-            @Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
+        @Parameter(description = "Todo ID") @PathVariable @UUID String todoId) {
         Todo finishedTodo = todoService.finish(todoId);
         return todoMapper.modelToResource(finishedTodo);
     }
