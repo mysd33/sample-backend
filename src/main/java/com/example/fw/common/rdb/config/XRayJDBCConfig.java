@@ -23,6 +23,7 @@ public class XRayJDBCConfig {
 
     /// 単一データソースの場合
     @Deprecated(forRemoval = true)
+    @Profile("xray")
     @Configuration
     @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
     static class SingleDataSource {
@@ -51,6 +52,7 @@ public class XRayJDBCConfig {
 
     /// 動的データソースルーティングの場合
     @Deprecated(forRemoval = true)
+    @Profile("xray")
     @Configuration
     @ConditionalOnProperty(prefix = DynamicRoutingDataSourceConfig.DYNAMIC_ROUTING_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     static class DynamicDataSource {
