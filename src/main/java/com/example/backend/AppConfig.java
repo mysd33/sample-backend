@@ -9,6 +9,8 @@ import com.example.fw.web.aspect.LogAspect;
 import com.example.fw.web.conversion.RestAPISpecialCharConvertConfig;
 import com.example.fw.web.servlet.config.TomcatAccessLogConfig;
 import com.example.fw.web.validation.config.ValidatorConfig;
+// springdoc-openapiの内部io.swagger.v3.core.jacksonはJackson2を使用しているため
+// Jackson2のObjectMapperをインポートする
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.swagger.v3.core.jackson.ModelResolver;
@@ -21,9 +23,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-// springdoc-openapiの内部io.swagger.v3.core.jacksonはJackson2を使用しているため
-// Jackson2のObjectMapperをインポートする
 
 /// アプリケーション層の設定クラス
 @Configuration
