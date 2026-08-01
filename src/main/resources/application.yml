@@ -3,10 +3,11 @@ spring:
     name: sample-backend
   profiles:
     active:
-    - dev
-    - log_default  #logging in default format
-#    - log_container  #logging in json format
-#    - xray  #X-Ray Enabled
+      - dev
+      - log_default  #logging in default format
+      #    - log_container  #logging in json format
+      - oidc  #OIDC Configuration Enabled
+  #    - xray  #X-Ray Enabled
   messages:
     basename: messages,messages-fw-common,messages-fw-web, messages-common
   jackson:
@@ -14,24 +15,24 @@ spring:
     # Resourceオブジェクトに存在しないフィールドがJSONに指定されていた場合、エラーとする
     deserialization:
       fail-on-unknown-properties: true
-# Graceful Shutdown
+  # Graceful Shutdown
   lifecycle:
     timeout-per-shutdown-phase: 20s
   thymeleaf:
     check-template-location: false
-# Virtual Thread                  
+  # Virtual Thread
   threads:
     virtual:
       enabled: true
-# Transaction Rollback
+  # Transaction Rollback
   transaction:
     rollback-on-commit-failure: true
-# HikariCP AutoCommit false
+  # HikariCP AutoCommit false
   datasource:
     hikari:
       auto-commit: false
-# Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration
-# Default Disabled For Local Development
+  # Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration
+  # Default Disabled For Local Development
   cloud:
     aws:
       parameterstore:
@@ -53,11 +54,11 @@ management:
       export:
         enabled: false
         step: 10s
-# Disabled Tracing Exporting By Zipkin
+  # Disabled Tracing Exporting By Zipkin
   tracing:
     export:
       zipkin:
-        enabled: false 
+        enabled: false
 
 # Mybatis
 mybatis:
@@ -67,18 +68,18 @@ mybatis:
 
 # 拡張フレームワーク機能の設定
 example:
-# Dynamic Routing DataSource (disabled on Sample AP Default)
+  # Dynamic Routing DataSource (disabled on Sample AP Default)
   datasource:
     dynamic-routing:
       enabled: false
-# Dynamic Routing DataSource HikariCP AutoCommit false
+    # Dynamic Routing DataSource HikariCP AutoCommit false
     read:
       hikari:
         auto-commit: false
     write:
       hikari:
         auto-commit: false
-# X-Ray SDK(not ADOT)
+  # X-Ray SDK(not ADOT)
   xray:
     tracing-filter-name: ${spring.application.name}
 

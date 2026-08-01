@@ -1,0 +1,15 @@
+# Spring Security OAuth2 Resource Server JWT Configuration
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/demo
+logging:
+  level:
+    org.springframework.security.oauth2: TRACE
+
+# OIDC/OAuth認証機能の有効
+example:
+  oidc:
+    enabled: true
