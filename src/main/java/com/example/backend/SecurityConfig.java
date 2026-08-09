@@ -96,7 +96,8 @@ public class SecurityConfig {
             // 認可設定
             .authorizeHttpRequests(
                 authz -> authz //
-                    // TODO: Scope todoによるアクセス制御？
+                    // アクセストークンのスコープがtodoのみアクセス可能
+                    .requestMatchers("/api/v2/todos/**").hasAnyAuthority("SCOPE_todo")
                     .anyRequest().authenticated() // 認証が必要
             );
         return http.build();
@@ -112,7 +113,7 @@ public class SecurityConfig {
             .httpBasic(Customizer.withDefaults())
             // UserDetailsServiceを明示的に設定（Spring Security 7 複数チェーン対応）
             .userDetailsService(userDetailsService)
-            // REST APIはCSRF保護不要（各フィルタチェーンは独立しているため個別に設定が必要）
+            // CSRF保護不要
             .csrf(AbstractHttpConfigurer::disable)
             // REST APIはステートレスにする（セッション不使用）
             .sessionManagement(
