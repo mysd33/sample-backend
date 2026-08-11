@@ -40,7 +40,7 @@ public class SecurityConfig {
     @Value("${spring.security.user.password:password}")
     private String basicAuthPassword;
 
-    @Value("${spring.security.user.role:USER}")
+    @Value("${spring.security.user.role:GENERAL}")
     private String basicAuthRole;
 
     /// Spring Securityのデバッグモードの設定
