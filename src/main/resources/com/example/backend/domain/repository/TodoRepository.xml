@@ -1,95 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.backend.domain.repository.TodoRepository">
 
-    <!-- １件検索 -->
-    <select id="findById" parameterType="String" resultType="Todo">
-        /* TodoRepository.findById */
-        SELECT
-            todo_id,
-            user_id,
-            todo_title,
-            finished,
-            created_at
-        FROM
-            todo
-        WHERE
-            todo_id = #{todoId}
-    </select>
+  <!-- １件検索 -->
+  <select id="findOne" parameterType="String" resultType="Todo">
+    /* TodoRepository.findById */
+    SELECT todo_id,
+           user_id,
+           todo_title,
+           finished,
+           created_at
+    FROM todo
+    WHERE todo_id = #{todoId}
+  </select>
 
-    <!-- 全件取得 -->
-    <select id="findAllByUserId" parameterType="String" resultType="Todo">
-        /* TodoRepository.findAllByUserId */
-        SELECT
-            todo_id,
-            user_id,
-            todo_title,
-            finished,
-            created_at
-        FROM
-            todo
-        <where>
-            <if test="userId != null">
-            user_id = #{userId}
-            </if>
-        </where>
-    </select>
+  <!-- １件検索（ユーザID指定あり） -->
+  <select id="findOneByUserId" parameterType="String" resultType="Todo">
+    /* TodoRepository.findById */
+    SELECT todo_id,
+           user_id,
+           todo_title,
+           finished,
+           created_at
+    FROM todo
+    WHERE todo_id = #{todoId}
+      AND user_id = #{userId}
+  </select>
 
-    <!-- 登録 -->
-    <insert id="create" parameterType="Todo">
-        /* TodoRepository.create */
-        INSERT INTO todo
-        (
-            todo_id,
-            user_id,
-            todo_title,
-            finished,
-            created_at
-        )
-        VALUES
-        (
-            #{todoId},
+
+  <!-- 全件取得 -->
+  <select id="findAllByUserId" parameterType="String" resultType="Todo">
+    /* TodoRepository.findAllByUserId */
+    SELECT
+    todo_id,
+    user_id,
+    todo_title,
+    finished,
+    created_at
+    FROM
+    todo
+    <where>
+      <if test="userId != null">
+        user_id = #{userId}
+      </if>
+    </where>
+  </select>
+
+  <!-- 指定した完了ステータスの件数を取得 -->
+  <select id="countByFinishedStatus" resultType="_long">
+    /* TodoRepository.countByFinished */
+    SELECT COUNT(todo_id)
+    FROM todo
+    WHERE user_id = #{userId}
+      AND finished = #{finished}
+  </select>
+
+  <!-- 登録 -->
+  <insert id="create" parameterType="Todo">
+    /* TodoRepository.create */
+    INSERT INTO todo
+    (todo_id,
+     user_id,
+     todo_title,
+     finished,
+     created_at)
+    VALUES (#{todoId},
             #{userId},
             #{todoTitle},
             #{finished},
-            #{createdAt}
-        )
-    </insert>
+            #{createdAt})
+  </insert>
 
-    <!-- 更新 -->
-    <update id="update" parameterType="Todo">
-        /* TodoRepository.update */
-        UPDATE todo
-        SET
-            todo_title = #{todoTitle},
-            finished = #{finished},
-            created_at = #{createdAt}
-        WHERE
-            todo_id = #{todoId}
-    </update>
+  <!-- 更新 -->
+  <update id="update" parameterType="Todo">
+    /* TodoRepository.update */
+    UPDATE todo
+    SET todo_title = #{todoTitle},
+        finished   = #{finished},
+        created_at = #{createdAt}
+    WHERE todo_id = #{todoId}
+      AND user_id = #{userId}
+  </update>
 
-    <!-- 削除 -->
-    <delete id="delete" parameterType="Todo">
-        /* TodoRepository.delete */
-        DELETE FROM
-            todo
-        WHERE
-            todo_id = #{todoId}
-    </delete>
+  <!-- 完了状態に更新 -->
+  <update id="updateFinishedById" parameterType="Todo">
+    /* TodoRepository.updateFinishedById */
+    UPDATE todo
+    SET finished = true
+    WHERE todo_id = #{todoId}
+      AND user_id = #{userId}
+  </update>
 
-    <!-- 完了件数取得-->
-    <select id="countByFinished" resultType="_long">
-        /* TodoRepository.countByFinished */
-        SELECT
-            COUNT(*)
-        FROM
-            todo
-        WHERE
-            user_id = #{userId}
-        AND
-            finished = #{finished}
-    </select>
+  <!-- 削除 -->
+  <delete id="delete" parameterType="Todo">
+    /* TodoRepository.delete */
+    DELETE
+    FROM todo
+    WHERE todo_id = #{todoId}
+      AND user_id = #{userId}
+  </delete>
+
+  <!-- 削除 -->
+  <delete id="deleteById">
+    /* TodoRepository.deleteById */
+    DELETE
+    FROM todo
+    WHERE todo_id = #{todoId}
+      AND user_id = #{userId}
+  </delete>
+
 
 </mapper>
