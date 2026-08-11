@@ -17,7 +17,7 @@ spring:
   # Spring Security Basic Authentication
   security:
     user:
-      name: ${BACKEND_BASIC_AUTH_USERNAME:user}
+      name: ${BACKEND_BASIC_AUTH_USERNAME:systemuser}
       password: ${BACKEND_BASIC_AUTH_PASSWORD:password}
 
 # Spring docs enabled  for local development

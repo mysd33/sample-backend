@@ -3,10 +3,12 @@ package com.example.backend;
 import static org.springframework.boot.security.autoconfigure.web.servlet.PathRequest.toH2Console;
 import static org.springframework.boot.security.autoconfigure.web.servlet.PathRequest.toStaticResources;
 
+import com.example.fw.web.auth.config.AuthConfigPackage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.security.autoconfigure.actuate.web.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -23,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 /// SpringSecurityの設定クラス
 @Configuration
+@ComponentScan(basePackageClasses = {AuthConfigPackage.class})
 @EnableWebSecurity
 public class SecurityConfig {
 
@@ -31,11 +34,14 @@ public class SecurityConfig {
     private boolean webSecurityDebug;
 
     // Basic認証ユーザー設定（application-dev.yml の spring.security.user.* を参照）
-    @Value("${spring.security.user.name:user}")
+    @Value("${spring.security.user.name:systemuser}")
     private String basicAuthUsername;
 
     @Value("${spring.security.user.password:password}")
     private String basicAuthPassword;
+
+    @Value("${spring.security.user.role:USER}")
+    private String basicAuthRole;
 
     /// Spring Securityのデバッグモードの設定
     @Bean
@@ -57,7 +63,7 @@ public class SecurityConfig {
         }
         var userDetails = User.withUsername(basicAuthUsername)
             .password(password)
-            .roles("USER") // TODO: ロール
+            .roles(basicAuthRole)
             .build();
         return new InMemoryUserDetailsManager(userDetails);
     }
