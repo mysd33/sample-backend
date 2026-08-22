@@ -103,7 +103,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                 authz -> authz //
                     // アクセストークンのスコープがtodoのみアクセス可能
-                    .requestMatchers("/api/v2/todos/**").hasAnyAuthority("SCOPE_todo")
+                    .requestMatchers("/api/v2/todos/**").hasAuthority("SCOPE_todo")
                     .anyRequest().authenticated() // 認証が必要
             );
         return http.build();
