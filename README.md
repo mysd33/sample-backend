@@ -163,6 +163,12 @@
     * 取得したアクセストークンをV2のAPI呼び出し時にAuthorizationヘッダに付与して呼び出す。
     * 本アプリケーション（Backendアプリケーション）では、Resource Serverとして、アクセストークンによるAPI認可を実施する。
 * BFFアプリケーションでのOIDCによるユーザ認証・認可および操作方法は[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#7-oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照。
+* Backendアプリケーションでも、Introspectionエンドポイントへのアクセスを行うため、以下の環境変数の設定をする。
+    * [application-oidc.yml](./src/main/resources/application-oidc.yml)
+      に規定された以下の環境変数を設定することで、KeycloakのOIDC認証を利用できるようになる。EclipseやIntelliJ等のIDEから起動する場合には、IDEの環境変数設定で設定するとよい。
+        * 環境変数`KEYCLOAK_CLIENT_ID` 指定したクライアントID（`sample-backend-oidc`）を設定
+        * 環境変数`KEYCLOAK_CLIENT_SECRET` 生成されたクライアントシークレットを設定
+
 
 ## 7. プロファイル「production」でのローカル実行
 * 「production」に切り替えるには、例えばJVM引数を「-Dspring.profiles.active=production」に変更するか、環境変数「SPRING_PROFILES_ACTIVE=production」を設定する等で起動する。

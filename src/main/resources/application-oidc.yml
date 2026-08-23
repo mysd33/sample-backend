@@ -3,11 +3,18 @@ spring:
   security:
     oauth2:
       resourceserver:
+        # アクセストークンをJWT検証する場合の設定
         jwt:
           issuer-uri: http://localhost:8180/realms/demo
+        # アクセストークンをイントロスペクションエンドポイントで検証する場合の設定
+        opaquetoken:
+          introspection-uri: http://localhost:8180/realms/demo/protocol/openid-connect/token/introspect
+          client-id: ${KEYCLOAK_CLIENT_ID}
+          client-secret: ${KEYCLOAK_CLIENT_SECRET}
 logging:
   level:
     org.springframework.security.oauth2: TRACE
+    org.springframework.web.client: TRACE
 
 # OIDC/OAuth認証機能の有効
 example:
