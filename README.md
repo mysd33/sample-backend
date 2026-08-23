@@ -1,6 +1,6 @@
 # SpringBootのBackendアプリケーションサンプル
 
-## 概要
+## 1. 概要
 * TODOを管理するREST APIを提供するSpringBootのサンプルアプリケーションである。
 * TODOの取得、TODOの登録、TODOの完了、TODOの削除を行える。
 * 別プロジェクト、別リポジトリで作成している、BFF(Backend For Frontend)のサンプルアプリケーション(sampe-bff)、非同期処理/バッチのサンプルアプリケーション（sample-batch）からAPIを利用している。
@@ -10,30 +10,34 @@
 
 ![ソフトウェアアーキテクチャ](img/architecture.png)
 
-## プロジェクト構成
-* sample-bff
-    * 別のプロジェクト。当該名称のリポジトリを参照のこと。Spring BootのWebブラウザアプリケーション（Backend for Frontend）で、ユーザがログイン後、TODOやユーザを管理する画面を提供する。また、画面やAPIからsample-batchへの非同期実行依頼も可能である。
+## 2. プロジェクト構成
+* [sample-bff](https://github.com/mysd33/sample-bff)
+    * 別プロジェクト。当該名称のリポジトリを参照のこと。Spring BootのWebブラウザアプリケーション（Backend for Frontend）で、ユーザがログイン後、TODOやユーザを管理する画面を提供する。また、画面やAPIからsample-batchへの非同期実行依頼も可能である。
         * デフォルトでは「spring.profiles.active」プロパティが「dev」になっている。プロファイルdevの場合は、RDB永続化にはH2DBによる組み込みDB、セッション外部化は無効化、SQS接続はsample-batch側で組み込みで起動するElasticMQへ送信するようになっている。
         * プロファイルproductionの場合は、RDB永続化にはPostgreSQL(AWS上はAurora等）、セッション外部化はRedis(ローカル時はRedis on Docker、AWS上はElastiCache for Redis)、SQS接続はSQSへ送信するようになっている。
-* sample-backend（またはsample-backend-dynamodb)
+* [sample-backend](https://github.com/mysd33/sample-backend)（または[sample-backend-dynamodb](https://github.com/mysd33/sample-backend-dynamodb)）
     * 本プロジェクト。Spring BootのREST APIアプリケーションで、sample-webやsample-batchが送信したREST APIのメッセージを受信し処理することが可能である。
         * sample-backendは永続化にRDBを使っているが、sample-backend-dynamodbは同じAPのDynamoDB版になっている。
         * デフォルトでは「spring.profiles.active」プロパティが「dev」になっている。プロファイルdevの場合は、RDB永続化にはH2DBによる組み込みDBになっている。また、sample-backend-dynamodbプロジェクトの場合は、AP起動時にDynamoDBの代わりに、DynamoDB Localを組み込みで起動し、接続するようになっている。
         * プロファイルproductionの場合は、RDB永続化にはPostgreSQL(AWS上はAurora等）になっている。また、sample-backend-dynamodbプロジェクトの場合は、DynamoDBに接続するようになっている。
-* sample-batch
+* [sample-batch](https://github.com/mysd33/sample-batch)
     * 別プロジェクト。当該名称のリポジトリを参照のこと。Spring JMSを使ったSpring Bootの非同期処理アプリケーションで、sample-webやsample-schedulelaunchが送信した非同期実行依頼のメッセージをSQSを介して受信し処理することが可能である。
         * デフォルトでは「spring.profiles.active」プロパティが「dev」になっている。プロファイルdevの場合は、AP起動時にSQSの代わりにElasticMQを組み込みで起動し、リッスンするようになっている。また、RDB永続化にはH2DBによる組み込みDBになっている。
         * プロファイルproductionの場合は、SQSをリッスンするようになっている。また、RDB永続化にはPostgreSQL(AWS上はAurora等）になっている。
-* sample-schedulelaunch
+* [sample-schedulelaunch](https://github.com/mysd33/sample-schedulelaunch)
     * 別プロジェクト。当該名称のリポジトリを参照のこと。SpringBootのCLIアプリケーションで、実行時に引数または環境変数で指定したスケジュール起動バッチ定義IDに対応するジョブの非同期実行依頼を実施し、SQSを介して、sample-batchアプリケーションのジョブを実行する。スケジュールによるバッチ起動を想定したアプリケーション。
         * デフォルトでは「spring.profiles.active」プロパティが「dev」になっている。プロファイルdevの場合は、SQS接続はsample-batch側で組み込みで起動するElasticMQへ送信するようになっている。
         * プロファイルproductionの場合は、SQS接続はSQSへ送信するようになっている。
 
-## REST API一覧
+* その他、本APとは連携しないので図に掲載がないが、StepFunctionsのステートマシンを使用してジョブの実行順序制御を行うバッチAPのサンプルプロジェクトとして以下があるので、参考にするとよい。
+    * [sample-batch-jobflow](https://github.com/mysd33/sample-batch-jobflow)
+
+## 3. REST API一覧
 * todoテーブルで管理しているデータを操作するためのREST APIを作成している
 * APIを以下に示す。
     * パス内に含まれている{todoId}は、TodoリソースのIdを示すパス変数
     
+* v1のAPI一覧（Basic認証によるAPI）
     | API名 | HTTPメソッド | パス | ステータスコード | 説明 |
     | ---- | ---- | ---- | ---- | --- |
     | Todo一覧の取得 | GET | /api/v1/todos | 200(OK) | Todoリソースを全件取得する。 |
@@ -43,15 +47,33 @@
     | Todoの完了 | PUT  | /api/v1/todos/{todoId} | 200(OK) | Todoリソースを完了状態に更新する。 |
     | Todoの削除 | DELETE | /api/v1/todos/{todoId} | 204(No Content) | Todoリソースを削除する。 |
 
-## 事前準備
-* 以下のライブラリを用いているので、EclipseのようなIDEを利用する場合には、プラグインのインストールが必要
+* v2のAPI一覧（OAuthによるAPI認可が必要なAPI）
+    | API名 | HTTPメソッド | パス | ステータスコード | 説明 |
+    | ---- | ---- | ---- | ---- | --- |
+    | Todo一覧の取得 | GET | /api/v2/todos | 200(OK) | Todoリソースを全件取得する。 |
+    | Todoの取得 | GET | /api/v2/todos/{todoId} | 200(OK) | Todoリソースを一件取得する。
+    | Todoの登録 | POST | /api/v2/todos | 201(Created) | Todoリソースを新規作成する。 |
+    | Todoの登録(バッチAP用) | POST | /api/v2/todos/batch | 201(Created) | Todoリソースを新規作成する。バッチAP用に未完了のTODOを6件以上登録できないチェックを外している。 |
+    | Todoの完了 | PUT  | /api/v2/todos/{todoId} | 200(OK) | Todoリソースを完了状態に更新する。 |
+    | Todoの削除 | DELETE | /api/v2/todos/{todoId} | 204(No Content) | Todoリソースを削除する。 |
+
+## 4. 事前準備
+* 以下のライブラリを用いているので、EclipseやIntelliJのようなIDEを利用する場合には、プラグインのインストールが必要
     * [Lombok](https://projectlombok.org/)
         * [Eclipseへのプラグインインストール](https://projectlombok.org/setup/eclipse)
         * [IntelliJへのプラグインインストール](https://projectlombok.org/setup/intellij)
     * [Mapstruct](https://mapstruct.org/)
         * [EclipseやIntelliJへのプラグインインストール](https://mapstruct.org/documentation/ide-support/)
 
-## EclipseやIntelliJ等での動作確認
+## 5. IDEでのアプリ起動
+* EclipseやIntelliJ等のIDEで、Spring Bootアプリケーションを起動する。
+    1. Backend AP（sample-backend）の起動
+        * sample-backendをSpringBoot Applicationとして起動。
+    2. Web AP（sample-bff）の起動
+        * sample-bffをSpringBoot Applicationとして起動。
+    3. 非同期AP（sample-batch）の起動
+        * sample-batchをSpringBoot Applicationとして起動。
+        
 * APIの動作確認のため、PostmanやTarend REST ClientのようなREST APIクライントツールが必要
     * [Postman API Client](https://www.postman.com/product/api-client/)
     * [Tarend REST Client(DHC REST Client)](https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm)
@@ -64,7 +86,12 @@
             status: "UP"
         }    
         ``` 
-* REST APIクライアントツールを使って、APIを呼び出す。
+* REST APIクライアントツールを使って、V1のAPIを呼び出す。
+    * クライアントツールを使うときには、Basic認証のユーザ名とパスワードを設定する必要がある。  
+    * デフォルトの設定の場合は以下
+        * ユーザ名: systemuser
+        * パスワード: password
+
     * TODOの登録1
         * POST http://localhost:8000/api/v1/todos
         * BODY 
@@ -124,22 +151,101 @@
         }        
         ```
 
-## OIDC認証・認可
+## 6. OIDC認証・認可
 > [!WARNING]
 > 昔に作成した[サンプルコード](https://github.com/mysd33/sample-springsecurity-oauth2)を最新のSpring Bootに対応しつつ、ただいま実装中。  
 > 現状、端末ローカル実行での起動時（devプロファイル）のみに対応。AWS実行時の本番環境相当のプロファイル（production）は今後対応予定。
 
-* Spring Security OAuth2.0 Client、Resource Serverを利用して、OIDC/OAuth2.0による認証・認可を実装する。
+* Spring Security OAuth2.0 Resource Serverを利用して、OIDC/OAuth2.0によるAPI認可を実装する。
+* V2のAPIは、OAuth2.0による認可が必要なAPIであるので、sample-bffのアプリから呼び出して動作確認するとよい。
+    * BFFアプリケーションでKeycloakによるOIDC認証・認可を実施し、アクセストークンを取得する。
+        * OAuth2.0によるv2のAPI呼び出しはKeycloakでのログイン時のみで、認証およびGoogle,GitHubでの認証は、v1のBasic認証による呼び出しになるので注意。
+    * 取得したアクセストークンをV2のAPI呼び出し時にAuthorizationヘッダに付与して呼び出す。
+    * 本アプリケーション（Backendアプリケーション）では、Resource Serverとして、アクセストークンによるAPI認可を実施する。
+* BFFアプリケーションでのOIDCによるユーザ認証・認可および操作方法は[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#7-oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照。
 
-* Backendアプリケーションでは、Resource Serverとして、アクセストークンによるAPI認可を実装する。
-* BFFアプリケーションでのOIDCによるユーザ認証・認可については[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照。
+## 7. プロファイル「production」でのローカル実行
+* 「production」に切り替えるには、例えばJVM引数を「-Dspring.profiles.active=production」に変更するか、環境変数「SPRING_PROFILES_ACTIVE=production」を設定する等で起動する。
 
-### Keycloak
+> [!WARNING]
+> 以降の手順が、最新化できていないので、今後見直し予定。
 
-* Keycloakのインストール、設定については[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照のこと。
+### 7.1. PostgreSQLのローカル起動
+* Profileが「production」に切り替えてSpringBootアプリケーションを実行する場合、DBがPostgreSQLで動作する設定になっているため、事前にPostgreSQLを起動する必要がある。
+```sh
+#Postgres SQLの起動
+docker run --name test-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres
+#Postgresのコンテナにシェルで入って、psqlコマンドで接続
+docker exec -i -t test-postgres /bin/bash
+> psql -U postgres
 
+# psqlで、testdbデータベースを作成
+postgres> CREATE DATABASE testdb;
+```
 
-## OpenAPI
+## 8. X-Rayデーモンのローカル起動
+
+> [!WARNING]
+> X-Ray SDK/X-Rayデーモンは、AWS X-Ray 用の SDK と Daemon は2026年2月25日にメンテナンスモードに入り、2027年2月25日にサポート終了となるため、削除予定。
+
+* Profileに「xray」を追加してSpringBootアプリケーションを実行する場合、X-Rayにトレースデータを送信するため、X-Rayデーモンを起動しておく必要がある。
+* ローカルでのX-Rayデーモンの起動方法は以下を参照すること。
+    * デーモンのダウンロード    
+        * https://docs.aws.amazon.com/ja_jp/xray/latest/devguide/xray-daemon.html
+    * デーモンのローカル実行
+        * https://docs.aws.amazon.com/ja_jp/xray/latest/devguide/xray-daemon-local.html
+
+## 9. Dockerでのアプリ起動
+
+> [!WARNING]
+> 以降の手順が、最新化できていないので、今後見直し予定。
+
+* Mavenビルド
+```sh
+#Windows
+.\mvnw.cmd package
+#Linux/Mac
+./mvnw package
+```
+
+### 9.1. ローカルでDocker実行（Profileを「dev」でSpringBoot実行）の場合
+
+* ローカルでDockerビルド
+```sh
+docker build -t XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest .
+```
+
+* ローカルでDocker実行（Profileを「dev」でSpringBoot実行する場合）
+```sh
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_default XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+
+#logをjson形式に変更する場合
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_container XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+```
+
+### 9.2. ローカルでDocker実行（Profileを「production」でSpringBoot実行）　の場合
+
+* ローカルでDocker実行（Profileを「production」でSpringBoot実行する場合）
+    * ※Redisのローカル起動、PostgreSQLのローカル起動も必要
+```sh
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=production,log_default --env SERVER_PORT=8000 --env SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/testdb XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+
+#logをjson形式に変更する場合
+docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=production,log_container --env SERVER_PORT=8000 --env SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/testdb XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+```
+
+## 10. ECRプッシュ
+* AWS上でECSやEKS等で動作させる場合は、事前にECRへDockerイメージをプッシュしておく必要がある。
+
+```sh
+aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com
+docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
+```
+
+## 11. AWS上でのアプリ起動
+* SpringBoot APをECS/Fargate等で動作させる場合は、[ecs-on-fargate-adot-cfn-demo](https://github.com/mysd33/ecs-on-fargate-adot-cfn-demo)を参照する。
+
+## 12. OpenAPI
 * Springdoc-openapiにより、RestControllerの実装からAPIドキュメントをリバースエンジニアリングできる
     * アプリケーションを起動し、以下のURLへアクセスするとそれぞれjson、yaml、html形式のドキュメントを表示する。
     * http://localhost:8000/v3/api-docs
@@ -149,7 +255,7 @@
     * http://localhost:8000/swagger-ui.html
         * html形式（Swagger-UI）のドキュメント
 
-## （メモ）logback-access対応によるTomcatアクセスログ
+## 13. logback-access対応によるTomcatアクセスログ
 * Spring BootのデフォルトのTomcatアクセスログは、ログファイルに出力される形式であるが、logback-accessを利用することで標準出力に出力できるので、APログと一緒に、クラウド・コンテナ実行時にCloudWatch Logsへ転送することができる。
 
 * 開発端末上では、通常のテキスト形式で出力
@@ -198,63 +304,7 @@
         }
         ```
 
-## PostgreSQLのローカル起動
-* Profileが「production」に切り替えてSpringBootアプリケーションを実行する場合、DBがPostgreSQLで動作する設定になっているため、事前にPostgreSQLを起動する必要がある。
-```sh
-#Postgres SQLの起動
-docker run --name test-postgres -p 5432:5432 -e POSTGRES_PASSWORD=password -d postgres
-#Postgresのコンテナにシェルで入って、psqlコマンドで接続
-docker exec -i -t test-postgres /bin/bash
-> psql -U postgres
-
-# psqlで、testdbデータベースを作成
-postgres> CREATE DATABASE testdb;
-```
-
-## X-Rayデーモンのローカル起動
-* Profileに「xray」を追加してSpringBootアプリケーションを実行する場合、X-Rayにトレースデータを送信するため、X-Rayデーモンを起動しておく必要がある。
-* ローカルでのX-Rayデーモンの起動方法は以下を参照すること。
-    * デーモンのダウンロード    
-        * https://docs.aws.amazon.com/ja_jp/xray/latest/devguide/xray-daemon.html
-    * デーモンのローカル実行
-        * https://docs.aws.amazon.com/ja_jp/xray/latest/devguide/xray-daemon-local.html
-
-## Dockerでのアプリ起動
-* Mavenビルド
-```sh
-#Windows
-.\mvnw.cmd package
-#Linux/Mac
-./mvnw package
-```
-* ローカルでDockerビルド
-```sh
-docker build -t XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest .
-```
-
-* ローカルでDocker実行（Profileを「dev」でSpringBoot実行する場合）
-```sh
-docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_default XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
-
-#logをjson形式に変更する場合
-docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=dev,log_container XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
-```
-
-* ローカルでDocker実行（Profileを「production」でSpringBoot実行する場合）
-    * ※Redisのローカル起動、PostgreSQLのローカル起動も必要
-```sh
-docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=production,log_default --env SERVER_PORT=8000 --env SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/testdb XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
-
-#logをjson形式に変更する場合
-docker run -d -p 8000:8000 --name samplebackend --env SPRING_PROFILES_ACTIVE=production,log_container --env SERVER_PORT=8000 --env SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/testdb XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
-```
-
-* ECRプッシュ
-```sh
-aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com
-docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:latest
-```
-## ソフトウェアフレームワーク
+## 14. ソフトウェアフレームワーク
 * 本サンプルアプリケーションでは、ソフトウェアフレームワーク実装例も同梱している。簡単のため、アプリケーションと同じプロジェクトでソース管理している。
 * ソースコードはcom.example.fwパッケージ配下に格納されている。    
     * 本格的な開発を実施する場合には、業務アプリケーションと別のGitリポジトリとして管理し、CodeArtifactやSonatype NEXUSといったライブラリリポジトリサーバでjarを管理し、pom.xmlから参照するようにすべきであるし、テストやCI/CD等もちゃんとすべきであるが、ここでは、あえて同じプロジェクトに格納してノウハウを簡単に参考にしてもらいやすいようにしている。
@@ -263,7 +313,9 @@ docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:lat
 | 分類 | 機能 | 機能概要と実現方式 | 拡張実装 | 拡張実装の格納パッケージ |
 | ---- | ---- | ---- | ---- | ---- |
 | オンライン | オンラインAP制御 | SpringMVCの機能を利用し、ユーザからの要求受信、ビジネスロジック実行、応答返却まで一連の定型的な処理を実行を制御する。 | - | - |
-|  | 認証・認可| Spring Securityを利用し、DBで管理するユーザ情報をもとに認証、認可を行う。 | - | - |
+| | ユーザ認証・認可（フォーム認証） | Spring Securityを利用し、DBで管理するユーザ情報をもとにフォーム認証、認可を行う。 | - | - |
+| | ユーザ認証・認可（OIDC/OAuth2.0）      | Spring Security OAuth2 Clientの機能でOIDCによるユーザ認証、認可を行う。 | - | - |
+| | API認可（OAuth2.0） | Spring Security OAuth2 Resource Serverの機能でバックエンドのAPIの認可を行う。 | - | - |
 | | 集約例外ハンドリング | SpringMVCのControllerAdviceやAOPを利用し、エラー（例外）発生時、エラーログの出力、DBのロールバック、エラー画面やエラー電文の返却といった共通的なエラーハンドリングを実施する。 | ○ | com.example.fw.web.aspect |
 | | トランザクション管理 | Spring Frameworkのトランザクション管理機能を利用して、@Transactionalアノテーションによる宣言的トランザクションを実現する機能を提供する。 | - | - |
 | | ヘルスチェック | Spring Boot Actuatorを利用して、ヘルスチェックエンドポイントを提供する。その他、Micrometerメトリックの情報提供も行う。 | - | - |
@@ -291,5 +343,4 @@ docker push XXXXXXXXXXXX.dkr.ecr.ap-northeast-1.amazonaws.com/sample-backend:lat
 
 | 分類 | 機能 | 機能概要と実現方式 | 拡張実装 | 拡張実装の格納パッケージ |
 | ---- | ---- | ---- | ---- | ---- |
-| オンライン | OIDC認証 | Spring Securityの機能でOIDCの認証を行う。 | - | - |
 | オン・バッチ共通 | テストコード作成支援 | JUnit、Mockito、Springのテスト機能を利用して、単体テストコードや結合テストコードの実装を支援する機能を提供する。 | - | - |
