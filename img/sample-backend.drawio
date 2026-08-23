@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.7.4 Chrome/106.0.5249.199 Electron/21.3.3 Safari/537.36">
   <diagram id="UCERD7Z1GJiwis_1Q3Cq" name="ページ1">
-    <mxGraphModel dx="115" dy="825" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="131" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -39,7 +39,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="P_nkvUdgJNJ3yenYTRyG-6" connectable="0" parent="P_nkvUdgJNJ3yenYTRyG-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="OIDC/OAuth2.0&lt;div&gt;による認証&lt;/div&gt;" vertex="1">
+        <mxCell id="P_nkvUdgJNJ3yenYTRyG-6" connectable="0" parent="P_nkvUdgJNJ3yenYTRyG-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="OIDC/OAuth2.0&lt;div&gt;による認証、&lt;/div&gt;&lt;div&gt;ユーザ情報取得&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.1704" y="-2" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -65,7 +65,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="P_nkvUdgJNJ3yenYTRyG-9" connectable="0" parent="P_nkvUdgJNJ3yenYTRyG-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="アクセストークン検証&lt;div&gt;のための公開鍵取得&lt;/div&gt;" vertex="1">
+        <mxCell id="P_nkvUdgJNJ3yenYTRyG-9" connectable="0" parent="P_nkvUdgJNJ3yenYTRyG-8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="アクセストークン検証&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;のための&lt;br&gt;公開鍵取得&lt;/span&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;または&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Introspectionエンドポイントのアクセス&lt;/span&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry relative="1" x="-0.641" y="3" as="geometry">
             <mxPoint x="3" y="20" as="offset" />
           </mxGeometry>
