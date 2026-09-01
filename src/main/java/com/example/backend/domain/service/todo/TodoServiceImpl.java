@@ -8,8 +8,8 @@ import com.example.backend.domain.repository.TodoRepository;
 import com.example.fw.common.exception.BusinessException;
 import com.example.fw.common.logging.ApplicationLogger;
 import com.example.fw.common.logging.LoggerFactory;
+import com.example.fw.common.systemdate.SystemDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +27,9 @@ public class TodoServiceImpl implements TodoService {
     private static final ApplicationLogger appLogger = LoggerFactory.getApplicationLogger(log);
     private static final int TRANSACTION_TIMEOUT = 2;
     private static final long MAX_UNFINISHED_COUNT = 5;
-
     private final TodoRepository todoRepository;
+    private final SystemDate systemDate;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -73,7 +74,7 @@ public class TodoServiceImpl implements TodoService {
     /// Todoを作成する内部処理
     private void doCreate(Todo todo) {
         var todoId = UUID.randomUUID().toString();
-        var createdAt = new Date();
+        var createdAt = systemDate.now();
         todo.setTodoId(todoId);
         todo.setCreatedAt(createdAt);
         todo.setFinished(false);

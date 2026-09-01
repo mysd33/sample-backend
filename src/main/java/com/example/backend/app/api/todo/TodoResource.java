@@ -1,19 +1,15 @@
 package com.example.backend.app.api.todo;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.Date;
 import com.example.fw.common.validation.CharSet;
 import com.example.fw.common.validation.RangeLength;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /// Todoリソースクラス
 @Data
-public class TodoResource implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -8098772003890701846L;
+public class TodoResource {
 
     // ID
     @Schema(description = "Todo ID")
@@ -38,7 +34,7 @@ public class TodoResource implements Serializable {
     // 作成日時
     @Schema(description = "作成日時")
     // @JsonPropertyDescription("作成日時") // @Schemaのdescrptionがあれば定義不要
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     // TODO: 入れ子のリソースでのテスト。後で削除
     // @Schema(description = "ほげ")
