@@ -1,10 +1,8 @@
-package com.example.fw.web.conversion;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+package com.example.fw.web.conversion.api.config;
 
 import com.example.fw.common.utils.JapaneseStringUtils;
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
@@ -23,8 +21,10 @@ public class RestAPISpecialCharConvertConfig {
     }
 
     public static class SpecialCharDeserializer extends ValueDeserializer<String> {
+
         @Override
-        public String deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
+        public String deserialize(JsonParser p, DeserializationContext ctxt)
+            throws JacksonException {
             String value = p.getValueAsString();
             return JapaneseStringUtils.convertCodePoints(value);
         }

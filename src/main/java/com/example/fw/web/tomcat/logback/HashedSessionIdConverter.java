@@ -1,19 +1,18 @@
-package com.example.fw.web.servlet.logback;
+package com.example.fw.web.tomcat.logback;
 
+import ch.qos.logback.access.common.pattern.AccessConverter;
+import ch.qos.logback.access.common.spi.IAccessEvent;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
-
 import org.apache.commons.lang3.StringUtils;
-
-import ch.qos.logback.access.common.pattern.AccessConverter;
-import ch.qos.logback.access.common.spi.IAccessEvent;
 
 /// セッションIDをハッシュ化して出力する[AccessConverter]。<br>
 ///
 /// セッションIDが平文でログに出力されると、セキュリティ上好ましくないことから、セッションIDをハッシュ化して出力する。<br>
 public class HashedSessionIdConverter extends AccessConverter {
+
     // ハッシュアルゴリズム
     private static final String SHA_256 = "SHA-256";
     // Spring Session利用の場合は、CookieよりSESSIONを取得する必要がある

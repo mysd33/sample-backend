@@ -1,7 +1,7 @@
-package com.example.fw.web.servlet.config;
+package com.example.fw.web.tomcat.config;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
-import com.example.fw.web.servlet.logback.LogMDCFilter;
+import com.example.fw.web.tomcat.logback.LogMDCFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

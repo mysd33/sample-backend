@@ -1,4 +1,4 @@
-package com.example.fw.web.servlet.logback;
+package com.example.fw.web.tomcat.logback;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

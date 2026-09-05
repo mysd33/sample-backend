@@ -5,58 +5,59 @@
 
   <!-- https://logback.qos.ch/manual/layouts.html#customConversionSpecifier -->
   <!-- %HS: Hashed SessionID Custom Conveter -->
-  <conversionRule conversionWord="HS" class="com.example.fw.web.servlet.logback.HashedSessionIdConverter"/>
+  <conversionRule conversionWord="HS"
+    class="com.example.fw.web.tomcat.logback.HashedSessionIdConverter"/>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <!-- https://logback.qos.ch/manual/filters.html#evaluatorFilter -->
     <filter class="EvaluatorFilter">
       <evaluator class="RequestURIEventEvaluator">
-      <regex>^/webjars/|^/css/|^/js/|^/favicon.ico|^/actuator|^/h2-console</regex>
+        <regex>^/webjars/|^/css/|^/js/|^/favicon.ico|^/actuator|^/h2-console</regex>
       </evaluator>
       <onMatch>DENY</onMatch>
       <onMismatch>NEUTRAL</onMismatch>
-    </filter>  
+    </filter>
     <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
       <providers>
-      <!-- https://github.com/logfellow/logstash-logback-encoder?tab=readme-ov-file#accessevent-patterns -->
-      <!-- https://logback.qos.ch/manual/layouts.html#AccessPatternLayout -->
-      <!-- %t: Date and time
-           %h: Remote host
-           %a: Remote IP address
-           %i{X-Forwarded-For}: ALB forwards the original client IP address in the X-Forwarded-For header
-           %r: Request URL
-           %s: HTTP status code
-           %D: elapsed time in milliseconds
-           %S: Session ID(JSESSSIONID)
-           %reqCookie{SESSION}: Session ID (Not JSESSIONID but SESSION on Spring Session Default Configuration)
-                                https://docs.spring.io/spring-session/reference/configuration/common.html#custom-cookie-options
-           %HS: Hashed Session ID(JSESSIONID or SESSION)
-           %v: Server name
-           %I: Thread Name
-           %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
-           %i{User-Agent}: User agent
-      -->
+        <!-- https://github.com/logfellow/logstash-logback-encoder?tab=readme-ov-file#accessevent-patterns -->
+        <!-- https://logback.qos.ch/manual/layouts.html#AccessPatternLayout -->
+        <!-- %t: Date and time
+             %h: Remote host
+             %a: Remote IP address
+             %i{X-Forwarded-For}: ALB forwards the original client IP address in the X-Forwarded-For header
+             %r: Request URL
+             %s: HTTP status code
+             %D: elapsed time in milliseconds
+             %S: Session ID(JSESSSIONID)
+             %reqCookie{SESSION}: Session ID (Not JSESSIONID but SESSION on Spring Session Default Configuration)
+                                  https://docs.spring.io/spring-session/reference/configuration/common.html#custom-cookie-options
+             %HS: Hashed Session ID(JSESSIONID or SESSION)
+             %v: Server name
+             %I: Thread Name
+             %i{X-Amzn-Trace-Id}: ALB forwards the Trace ID in the X-Amzn-Trace-Id header
+             %i{User-Agent}: User agent
+        -->
         <pattern>
           <pattern>
             {
-              "type": "tomcat access log",
-              "@timestamp": "%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}",
-              "remote_host": "%h",
-              "remote_ip": "%a",
-              "x_forwared_for": "%i{X-Forwarded-For}",
-              "request_url": "%r",
-              "http_status": "%s",
-              "elapsed_time": "%D ms",
-              "hashed_session_id": "%HS",
-              "server_name": "%v",
-              "thread_name": "%I",
-              "x_amzn_trace_id": "%i{X-Amzn-Trace-Id}",
-              "user_agent": "%i{User-Agent}"
+            "type": "tomcat access log",
+            "@timestamp": "%t{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}",
+            "remote_host": "%h",
+            "remote_ip": "%a",
+            "x_forwared_for": "%i{X-Forwarded-For}",
+            "request_url": "%r",
+            "http_status": "%s",
+            "elapsed_time": "%D ms",
+            "hashed_session_id": "%HS",
+            "server_name": "%v",
+            "thread_name": "%I",
+            "x_amzn_trace_id": "%i{X-Amzn-Trace-Id}",
+            "user_agent": "%i{User-Agent}"
             }
           </pattern>
-        </pattern>      
+        </pattern>
       </providers>
     </encoder>
-  </appender>  
-  <appender-ref ref="STDOUT" />
+  </appender>
+  <appender-ref ref="STDOUT"/>
 </configuration>
