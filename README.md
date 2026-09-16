@@ -152,9 +152,19 @@
         ```
 
 ## 6. OIDC認証・認可
-> [!WARNING]
-> 昔に作成した[サンプルコード](https://github.com/mysd33/sample-springsecurity-oauth2)を最新のSpring Bootに対応しつつ、ただいま実装中。  
-> 現状、端末ローカル実行での起動時（devプロファイル）のみに対応。AWS実行時の本番環境相当のプロファイル（production）は今後対応予定。
+> [!NOTE]
+> OIDC認証・認可の機能を無効化する場合には、`application.yml`の設定で、spring.profiles.activeのoidcの設定をコメントアウトするか-Dspring.profiles.activeでoidc未指定で起動する。
+>
+> ```yaml
+> spring:
+>   application:
+>     name: sample-bff
+>   profiles:
+>     active:
+>       - dev
+>       - log_default
+>       - oidc
+> ```
 
 * Spring Security OAuth2.0 Resource Serverを利用して、OIDC/OAuth2.0によるAPI認可を実装する。
 * V2のAPIは、OAuth2.0による認可が必要なAPIであるので、sample-bffのアプリから呼び出して動作確認するとよい。
