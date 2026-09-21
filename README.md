@@ -151,9 +151,10 @@
         }        
         ```
 
-## 6. OIDC認証・認可
+## 6. OAuth2.0によるAPI認可
+
 > [!NOTE]
-> OIDC認証・認可の機能を無効化する場合には、`application.yml`の設定で、spring.profiles.activeのoidcの設定をコメントアウトするか-Dspring.profiles.activeでoidc未指定で起動する。
+> OAuth2.0のAPI認可の機能を無効化する場合には、`application.yml`の設定で、spring.profiles.activeの`dev_oidc`の設定をコメントアウトするか-Dspring.profiles.activeでdev_oidc未指定で起動する。
 >
 > ```yaml
 > spring:
@@ -163,7 +164,7 @@
 >     active:
 >       - dev
 >       - log_default
->       - oidc
+>       - dev_oidc
 > ```
 
 * Spring Security OAuth2.0 Resource Serverを利用して、OIDC/OAuth2.0によるAPI認可を実装する。
@@ -174,7 +175,7 @@
     * 本アプリケーション（Backendアプリケーション）では、Resource Serverとして、アクセストークンによるAPI認可を実施する。
 * BFFアプリケーションでのOIDCによるユーザ認証・認可および操作方法は[sample-bffプロジェクト](https://github.com/mysd33/sample-bff#7-oidc%E8%AA%8D%E8%A8%BC%E8%AA%8D%E5%8F%AF)を参照。
 * Backendアプリケーションでも、Introspectionエンドポイントへのアクセスを行うため、以下の環境変数の設定をする。
-    * [application-oidc.yml](./src/main/resources/application-oidc.yml)
+    * [application-oidc.yml](./src/main/resources/application-dev_oidc.yml)
       に規定された以下の環境変数を設定することで、KeycloakのOIDC認証を利用できるようになる。EclipseやIntelliJ等のIDEから起動する場合には、IDEの環境変数設定で設定するとよい。
         * 環境変数`KEYCLOAK_CLIENT_ID` 指定したクライアントID（`sample-backend-oidc`）を設定
         * 環境変数`KEYCLOAK_CLIENT_SECRET` 生成されたクライアントシークレットを設定
