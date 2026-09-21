@@ -1,4 +1,4 @@
-# Spring Security OAuth2 Resource Server JWT Configuration
+# Spring Security OAuth2 Resource Server Configuration for Development Environment
 spring:
   security:
     oauth2:
@@ -11,10 +11,7 @@ spring:
           introspection-uri: http://localhost:8180/realms/demo/protocol/openid-connect/token/introspect
           client-id: ${KEYCLOAK_CLIENT_ID}
           client-secret: ${KEYCLOAK_CLIENT_SECRET}
-  config:
-    import:
-      - optional:aws-parameterstore:/config/${PROJECT_NAME}/${ENV_NAME}/oidc/common/;/config/${PROJECT_NAME}/${ENV_NAME}/oidc/${spring.application.name}/
-      - optional:aws-secretsmanager:${KEYCLOAK_SECRETS_NAME}?prefix=spring.security.oauth2.resourceserver.opaquetoken.
+
 logging:
   level:
     org.springframework.security.oauth2: TRACE
