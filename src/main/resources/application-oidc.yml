@@ -13,7 +13,7 @@ spring:
           client-secret: ${KEYCLOAK_CLIENT_SECRET}
   config:
     import:
-      - optional:aws-parameterstore:/config/${PROJECT_NAME}/${ENV_NAME}/common/;/config/${PROJECT_NAME}/${ENV_NAME}/${spring.application.name}/
+      - optional:aws-parameterstore:/config/${PROJECT_NAME}/${ENV_NAME}/oidc/common/;/config/${PROJECT_NAME}/${ENV_NAME}/oidc/${spring.application.name}/
       - optional:aws-secretsmanager:${KEYCLOAK_SECRETS_NAME}?prefix=spring.security.oauth2.resourceserver.opaquetoken.
 logging:
   level:
