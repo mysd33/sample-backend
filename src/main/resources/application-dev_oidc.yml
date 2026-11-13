@@ -6,6 +6,9 @@ spring:
         # アクセストークンをJWT検証する場合の設定
         jwt:
           issuer-uri: http://localhost:8180/realms/demo
+          # audクレームの検証を行う場合の設定（audiencesの値は、KeycloakのクライアントIDと一致させる必要）
+          audiences:
+            - ${spring.security.oauth2.resourceserver.opaquetoken.client-id}
         # アクセストークンをイントロスペクションエンドポイントで検証する場合の設定
         opaquetoken:
           introspection-uri: http://localhost:8180/realms/demo/protocol/openid-connect/token/introspect
@@ -17,7 +20,10 @@ logging:
     org.springframework.security.oauth2: TRACE
     org.springframework.web.client: TRACE
 
-# OIDC/OAuth認証機能の有効
 example:
-  oidc:
+  oauth2:
+    # OIDC/OAuth認証機能の有効化
     enabled: true
+    resourceserver:
+      opaque-token:
+        enabled: true

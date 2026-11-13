@@ -18,6 +18,12 @@ spring:
     user:
       name: ${example.api.backend.basic-auth.username}
       password: ${example.api.backend.basic-auth.password}
+    oauth2:
+      resourceserver:
+        jwt:
+          # audクレームの検証を行う場合の設定（audiencesの値は、KeycloakのクライアントIDと一致させる必要）
+          audiences:
+            - ${spring.security.oauth2.resourceserver.opaquetoken.client-id}
 
   # Spring Cloud for AWS Parameter Store Integration & Secrets Manager Integration Enabled
   cloud:
@@ -70,6 +76,9 @@ example:
       driver-class-name: org.postgresql.Driver
   #      hikari:
   #        maximum-pool-size: 30
-  # OIDC/OAuth認証機能の有効
-  oidc:
+  oauth2:
+    # OIDC/OAuth認証機能の有効化
     enabled: true
+    resourceserver:
+      opaque-token:
+        enabled: true

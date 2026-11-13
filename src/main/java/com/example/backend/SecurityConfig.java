@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.core.authorization.OAuth2AuthorizationManagers;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -91,22 +92,43 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /// Spring SecurityによるOAuth2.0でのAPI認可の設定(v2 api)
+    /// Spring SecurityによるOAuth2.0でのAPI認可の設定(v2 api) (アクセストークンをJWTで検証する場合)
     @Bean
     @Order(3)
-    @ConditionalOnProperty(name = "example.oidc.enabled", havingValue = "true", matchIfMissing = false)
-    SecurityFilterChain securityFilterChainForV2Api(HttpSecurity http) {
+    @ConditionalOnProperty(name = "example.oauth2.enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "example.oauth2.resourceserver.opaque-token.enabled", havingValue = "false")
+    SecurityFilterChain securityFilterChainForV2ApiJWTVerification(HttpSecurity http) {
         // v2のAPIは、OAuth2.0による認可設定を基本とする
         http.securityMatcher("/api/v2/**")
-            // アクセストークンをJWT検証する場合はコメントを外す
-            //.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-            // アクセストークンをイントロスペクションエンドポイントで検証する場合の設定（JWT検証の場合はコメントアウトする）
+            // アクセストークンをJWT検証
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+            // 認可設定
+            .authorizeHttpRequests(
+                authz -> authz //
+                    // アクセストークンのスコープがtodoのみアクセス可能
+                    .requestMatchers("/api/v2/todos/**")
+                    .access(OAuth2AuthorizationManagers.hasScope("todo"))
+                    .anyRequest().authenticated() // 認証が必要
+            );
+        return http.build();
+    }
+
+    /// Spring SecurityによるOAuth2.0でのAPI認可の設定(v2 api) (アクセストークンをイントロスペクションエンドポイントで検証する場合)
+    @Bean
+    @Order(3)
+    @ConditionalOnProperty(name = {"example.oauth2.enabled",
+        "example.oauth2.resourceserver.opaque-token.enabled"}, havingValue = "true")
+    SecurityFilterChain securityFilterChainForV2ApiOpaqueTokenVerification(HttpSecurity http) {
+        // v2のAPIは、OAuth2.0による認可設定を基本とする
+        http.securityMatcher("/api/v2/**")
+            // アクセストークンをイントロスペクションエンドポイントで検証する場合の設定
             .oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(Customizer.withDefaults()))
             // 認可設定
             .authorizeHttpRequests(
                 authz -> authz //
                     // アクセストークンのスコープがtodoのみアクセス可能
-                    .requestMatchers("/api/v2/todos/**").hasAuthority("SCOPE_todo")
+                    .requestMatchers("/api/v2/todos/**")
+                    .access(OAuth2AuthorizationManagers.hasScope("todo"))
                     .anyRequest().authenticated() // 認証が必要
             );
         return http.build();
